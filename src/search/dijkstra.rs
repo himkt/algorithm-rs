@@ -1,37 +1,35 @@
 use std::collections::BinaryHeap;
 
-const INF: i32 = 1001001001;
+const INF: usize = 1001001001;
 
 
 #[derive(Debug,Clone)]
 pub struct Dijkstra {
-    graph: Vec<Vec<(usize, i32)>>,
+    graph: Vec<Vec<(usize, usize)>>,
 }
 
 impl Dijkstra {
-    pub fn new(graph: Vec<Vec<(usize, i32)>>) -> Self {
+    pub fn new(graph: Vec<Vec<(usize, usize)>>) -> Self {
         Self {
             graph,
         }
     }
 
-    pub fn search(&mut self, src: usize) -> Vec<i32> {
+    pub fn search(&mut self, src: usize) -> Vec<usize> {
         let mut dist = vec![INF; self.graph.len()];
         dist[src] = 0;
 
         let mut queue = BinaryHeap::new();
         queue.push((std::cmp::Reverse(0), src));
 
-        while !queue.is_empty() {
-            let cur = queue.pop().unwrap();
-
-            if dist[cur.1] < cur.0.0 {
+        while let Some((current_cost, current_v)) = queue.pop() {
+            if dist[current_v] < current_cost.0 {
                 continue;
             }
 
-            for (v, cost) in self.graph[cur.1].clone() {
-                if dist[v] > cur.0.0 + cost {
-                    dist[v] = cur.0.0 + cost;
+            for (v, cost) in self.graph[current_v].clone() {
+                if dist[v] > current_cost.0 + cost {
+                    dist[v] = current_cost.0 + cost;
                     queue.push((std::cmp::Reverse(dist[v]), v));
                 }
             }
