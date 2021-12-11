@@ -1,6 +1,3 @@
-
-
-
 #[derive(Debug,Clone)]
 pub struct UnionFind {
     parents: Vec<usize>
@@ -9,34 +6,27 @@ pub struct UnionFind {
 #[allow(clippy::needless_range_loop)]
 impl UnionFind {
     pub fn new(n: usize) -> Self {
-        let mut parents = Vec::<usize>::new();
-        parents.resize(n, 0);
-
-        for i in 0..n {
-            parents[i] = i;
-        }
-
         Self {
-            parents
+            parents: (0..=n).collect()
         }
     }
 
     pub fn find(&mut self, x: usize) -> usize {
-        let p = self.parents[x];
-        if p == x {
-            return x;
+        if self.parents[x] == x {
+            x
         }
-
-        self.parents[x] = p;
-        self.find(p)
+        else {
+            self.parents[x] = self.find(self.parents[x]);
+            self.parents[x]
+        }
     }
 
     pub fn unite(&mut self, x: usize, y: usize) {
-        let px = self.parents[x];
-        let py = self.parents[y];
+        let px = self.find(x);
+        let py = self.find(y);
 
         if px != py {
-            self.parents[py] = px;
+            self.parents[x] = py;
         }
     }
 }
@@ -54,6 +44,11 @@ mod test_union_find {
             assert_ne!(uf.find(0), uf.find(2));
             uf.unite(0, 2);
             assert_eq!(uf.find(0), uf.find(2));
+            uf.unite(3, 4);
+            assert_ne!(uf.find(0), uf.find(3));
+            uf.unite(0, 3);
+            assert_eq!(uf.find(0), uf.find(3));
+            assert_eq!(uf.find(0), uf.find(4));
 
         }
     }
