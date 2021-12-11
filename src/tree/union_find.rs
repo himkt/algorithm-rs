@@ -1,13 +1,15 @@
 #[derive(Debug,Clone)]
 pub struct UnionFind {
-    parents: Vec<usize>
+    parents: Vec<usize>,
+    ranks: Vec<usize>
 }
 
 #[allow(clippy::needless_range_loop)]
 impl UnionFind {
     pub fn new(n: usize) -> Self {
         Self {
-            parents: (0..=n).collect()
+            parents: (0..n).collect(),
+            ranks: vec![1usize; n]
         }
     }
 
@@ -22,12 +24,22 @@ impl UnionFind {
     }
 
     pub fn unite(&mut self, x: usize, y: usize) {
-        let px = self.find(x);
-        let py = self.find(y);
+        let mut px = self.find(x);
+        let mut py = self.find(y);
 
-        if px != py {
-            self.parents[x] = py;
+        if px == py {
+            return;
         }
+
+        if self.ranks[px] > self.ranks[py] {
+            std::mem::swap(&mut px, &mut py);
+        }
+
+        if self.ranks[px] == self.ranks[py] {
+            self.ranks[py] += 1;
+        }
+
+        self.parents[px] = py;
     }
 }
 
