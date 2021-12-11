@@ -21,12 +21,13 @@ impl UnionFind {
         }
     }
 
-    pub fn find(&self, x: usize) -> usize {
+    pub fn find(&mut self, x: usize) -> usize {
         let p = self.parents[x];
         if p == x {
             return x;
         }
 
+        self.parents[x] = p;
         self.find(p)
     }
 
