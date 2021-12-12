@@ -16,12 +16,12 @@ impl Default for RSQ {
 impl RSQ {
     pub fn new() -> Self {
         Self {
-            v: vec![0; 2*RSQ::SEQ_LEN+1]
+            v: vec![0; 2*RSQ::SEQ_LEN]
         }
     }
 
     pub fn add(&mut self, mut index: usize, value: i64) {
-        index += RSQ::SEQ_LEN;
+        index += RSQ::SEQ_LEN - 1;
         self.v[index] += value;
 
         loop {
@@ -32,8 +32,8 @@ impl RSQ {
     }
 
     pub fn sum(&self, mut l: usize, mut r: usize) -> i64 {
-        l += RSQ::SEQ_LEN;
-        r += RSQ::SEQ_LEN + 1;
+        l += RSQ::SEQ_LEN - 1;
+        r += RSQ::SEQ_LEN;
 
         let mut ans = 0;
 
@@ -58,7 +58,7 @@ impl RSQ {
         let mut rsq = RSQ::new();
         for (index, value) in (0..v.len()).zip(v.into_iter()) {
             let idx = RSQ::SEQ_LEN + index;
-            rsq.v[idx+1] = value;
+            rsq.v[idx] = value;
         }
 
         rsq
