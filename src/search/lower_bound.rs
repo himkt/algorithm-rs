@@ -1,31 +1,23 @@
-pub trait BinarySearch<T> {
-    fn lower_bound(&self, query: T) -> usize;
-}
+pub fn lower_bound(range: std::ops::Range<usize>, prop: &dyn Fn(usize) -> bool) -> usize {
+    if prop(range.start) {
+        range.start
+    }
+    else {
+        let mut ng = range.start;
+        let mut ok = range.end;
 
+        while ok - ng > 1 {
+            let middle = ng + (ok - ng) / 2;
 
-impl<T: Ord> BinarySearch<T> for [T] {
-    fn lower_bound(&self, query: T) -> usize {
-        let mut left  = 0;
-        let mut right = self.len();
-
-        // update here
-        let check = |mid| {
-            self[mid] >= query
-        };
-
-        while left < right {
-            let mid = left + (right - left) / 2;
-
-            if check(mid) {
-                right = mid;
+            if prop(middle) {
+                ok = middle;
             }
             else {
-                left = mid + 1;
+                ng = middle;
             }
-
         }
 
-        left
+        ok
     }
 }
 
@@ -34,12 +26,12 @@ impl<T: Ord> BinarySearch<T> for [T] {
 mod test_lower_bound {
     #[test]
     fn it_works() {
-        use crate::search::lower_bound::BinarySearch;
+        use crate::search::lower_bound::lower_bound;
         {
             let vs: Vec<usize> = vec![0, 1, 2, 3, 5, 7, 10];
-            assert_eq!(vs.lower_bound(1), 1);
-            assert_eq!(vs.lower_bound(3), 3);
-            assert_eq!(vs.lower_bound(7), 5);
+            assert_eq!(lower_bound(0..vs.len(), &|x| 1 <= vs[x]), 1);
+            assert_eq!(lower_bound(0..vs.len(), &|x| 3 <= vs[x]), 3);
+            assert_eq!(lower_bound(0..vs.len(), &|x| 7 <= vs[x]), 5);
         }
     }
 }
