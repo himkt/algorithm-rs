@@ -4,3 +4,4 @@ pub mod search;
 pub mod num;
 pub mod string;
 pub mod tree;
+pub mod graph;
