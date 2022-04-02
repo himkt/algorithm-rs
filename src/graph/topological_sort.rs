@@ -1,6 +1,6 @@
 use std::{collections::BinaryHeap, cmp::Reverse};
 
-struct TopologicalSort {
+pub struct TopologicalSort {
     g: Vec<Vec<usize>>,
     deg: Vec<usize>,
 }
