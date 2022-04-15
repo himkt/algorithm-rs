@@ -48,41 +48,43 @@ impl Point {
 }
 
 
-pub struct ConvexHull {
-    ps: Vec<Point>,
-    n: usize,
-}
+pub fn convex_hull(ps: Vec<(i64, i64)>) -> Vec<(i64, i64)> {
+    let n = ps.len();
 
+    let mut ps: Vec<Point> = ps.iter().map(|&(x, y)| Point {x, y} ).collect();
+    ps.sort();
 
-impl ConvexHull {
-    pub fn new(ps: Vec<Point>) -> Self {
-        let n: usize = ps.len();
-        ConvexHull { ps, n }
+    let mut k = 0;
+    let mut deque: VecDeque<Point> = VecDeque::new();
+
+    for &pi in &ps {
+        while k > 1 && (deque[k-1] - deque[k-2]).det(pi - deque[k-1]) <= 0 {
+            deque.pop_back();
+            k -= 1;
+        }
+        deque.push_back(pi);
+        k += 1;
     }
 
-    pub fn construct(&mut self) -> Vec<Point> {
-        self.ps.sort_unstable();
-
-        let mut k = 0;
-        let mut deque: VecDeque<Point> = VecDeque::new();
-
-        for i in 0..self.n {
-            while k > 1 && (deque[k-1] - deque[k-2]).det(self.ps[i] - deque[k-1]) <= 0 {
-                k -= 1;
-            }
-            deque.push_back(self.ps[i]);
+    let t = k;
+    for i in (0..n-2).rev() {
+        let pi = ps[i];
+        while k > t && (deque[k-1] - deque[k-2]).det(pi - deque[k-1]) <= 0 {
+            deque.pop_back();
+            k -= 1;
         }
-
-        let t = k;
-        for i in (0..self.n-2).rev() {
-            while k > t && (deque[k-1] - deque[k-2]).det(self.ps[i] - deque[k-1]) <= 0 {
-                k -= 1;
-            }
-            deque.push_back(self.ps[i]);
-        }
-
-        deque.into_iter().collect()
+        deque.push_back(pi);
+        k += 1;
     }
+
+    let mut ret: Vec<(i64, i64)> = deque
+        .into_iter()
+        .take(k-1)
+        .map(|pair| (pair.x, pair.y))
+        .collect();
+
+    ret.sort_unstable();
+    ret
 }
 
 
@@ -93,15 +95,9 @@ mod test_convex_hull {
         use crate::geometry::convex_hull;
 
         {
-            let p1 = convex_hull::Point { x: 0, y: 0 };
-            let p2 = convex_hull::Point { x: 2, y: 2 };
-            let p3 = convex_hull::Point { x: 3, y: 1 };
-            let p4 = convex_hull::Point { x: 1, y: 4 };
-            let p5 = convex_hull::Point { x: 4, y: 4 };
-            let ps = vec![p1, p2, p3, p4, p5];
-            let mut builder = convex_hull::ConvexHull::new(ps);
-            let convex_hull = builder.construct();
-            println!("{:?}", convex_hull);
+            let ps = vec![(0, 0), (2, 2), (3, 1), (1, 4), (4, 4)];
+            let hull = convex_hull::convex_hull(ps);
+            assert_eq!(hull, vec![(0, 0), (1, 4), (3, 1), (4, 4)]);
         }
     }
 }
