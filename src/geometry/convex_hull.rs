@@ -43,7 +43,7 @@ impl PartialEq for Point {
 
 impl Point {
     pub fn det(self, _rhs: Point) -> i64 {
-        self.x*_rhs.y - self.y*_rhs.x
+        self.x * _rhs.y - self.y * _rhs.x
     }
 }
 
@@ -67,7 +67,7 @@ pub fn convex_hull(ps: Vec<(i64, i64)>) -> Vec<(i64, i64)> {
     }
 
     let t = k;
-    for i in (0..n-2).rev() {
+    for i in (0..n-1).rev() {
         let pi = ps[i];
         while k > t && (deque[k-1] - deque[k-2]).det(pi - deque[k-1]) <= 0 {
             deque.pop_back();
@@ -98,6 +98,14 @@ mod test_convex_hull {
             let ps = vec![(0, 0), (2, 2), (3, 1), (1, 4), (4, 4)];
             let hull = convex_hull::convex_hull(ps);
             assert_eq!(hull, vec![(0, 0), (1, 4), (3, 1), (4, 4)]);
+
+            let ps = vec![(0, 0), (2, 2), (4, 4)];
+            let hull = convex_hull::convex_hull(ps);
+            assert_eq!(hull, vec![(0, 0), (4, 4)]);
+
+            let ps = vec![(0, 0), (0, 1), (0, 2), (1, 1)];
+            let hull = convex_hull::convex_hull(ps);
+            assert_eq!(hull, vec![(0, 0), (0, 2), (1, 1)]);
         }
     }
 }
