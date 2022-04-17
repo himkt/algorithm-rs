@@ -1,57 +1,11 @@
-use std::{collections::VecDeque, ops::Sub, cmp::Ordering};
-
-#[derive(Debug, Copy, Clone, Eq)]
-pub struct Point {
-    x: i64,
-    y: i64,
-}
-
-
-impl Sub for Point {
-    type Output = Self;
-
-    fn sub(self, _rhs: Point) -> Self {
-        Self { x: self.x - _rhs.x, y: self.y - _rhs.y }
-    }
-}
-
-
-impl Ord for Point {
-    fn cmp(&self, other: &Self) -> Ordering {
-        if self.x != other.x {
-            return self.x.cmp(&other.x);
-        }
-
-        self.y.cmp(&other.y)
-    }
-}
-
-
-impl PartialOrd for Point {
-    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
-        Some(self.cmp(other))
-    }
-}
-
-
-impl PartialEq for Point {
-    fn eq(&self, other: &Self) -> bool {
-        self.x == other.x && self.y == other.y
-    }
-}
-
-
-impl Point {
-    pub fn det(self, _rhs: Point) -> i64 {
-        self.x * _rhs.y - self.y * _rhs.x
-    }
-}
+use std::collections::VecDeque;
+use crate::geometry::common::Point;
 
 
 pub fn convex_hull(ps: Vec<(i64, i64)>) -> Vec<(i64, i64)> {
     let n = ps.len();
 
-    let mut ps: Vec<Point> = ps.iter().map(|&(x, y)| Point {x, y} ).collect();
+    let mut ps: Vec<Point> = ps.iter().map(|&(x, y)| Point (x, y) ).collect();
     ps.sort();
 
     let mut k = 0;
@@ -80,7 +34,7 @@ pub fn convex_hull(ps: Vec<(i64, i64)>) -> Vec<(i64, i64)> {
     let mut ret: Vec<(i64, i64)> = deque
         .into_iter()
         .take(k-1)
-        .map(|pair| (pair.x, pair.y))
+        .map(|pair| (pair.0, pair.1))
         .collect();
 
     ret.sort_unstable();
