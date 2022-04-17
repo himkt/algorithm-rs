@@ -24,6 +24,6 @@ mod test_plane {
 
         assert!(line.contains(Point(4, 6)));
         assert!(line.contains(Point(-2, -3)));
-        assert!(line.contains(Point(1, 1)));
+        assert!(!line.contains(Point(1, 1)));
     }
 }
