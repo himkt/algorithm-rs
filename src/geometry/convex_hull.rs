@@ -1,5 +1,5 @@
 use std::collections::VecDeque;
-use crate::geometry::common::Point;
+use crate::geometry::point::Point;
 
 
 pub fn convex_hull(ps: Vec<(i64, i64)>) -> Vec<(i64, i64)> {

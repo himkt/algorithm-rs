@@ -1,2 +1,2 @@
-pub mod common;
+pub mod point;
 pub mod convex_hull;
