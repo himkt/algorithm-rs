@@ -23,14 +23,14 @@ impl Dijkstra {
         let mut queue = BinaryHeap::new();
         queue.push((std::cmp::Reverse(0), src));
 
-        while let Some((current_cost, current_v)) = queue.pop() {
-            if dist[current_v] < current_cost.0 {
+        while let Some((std::cmp::Reverse(current_cost), current_v)) = queue.pop() {
+            if dist[current_v] < current_cost {
                 continue;
             }
 
-            for (v, cost) in self.graph[current_v].clone() {
-                if dist[v] > current_cost.0 + cost {
-                    dist[v] = current_cost.0 + cost;
+            for &(v, cost) in self.graph[current_v].iter() {
+                if dist[v] > current_cost + cost {
+                    dist[v] = current_cost + cost;
                     queue.push((std::cmp::Reverse(dist[v]), v));
                 }
             }
@@ -61,6 +61,20 @@ mod test_dijkstra {
 
             let mut dijkstra = dijkstra::Dijkstra::new(graph);
             assert_eq!(dijkstra.search(0), vec![0, 2, 5, 7, 12, 8, 17]);
+        }
+
+        {
+            let mut graph = vec![vec![]; 7];
+            graph[0].push((1, 1));
+            graph[0].push((6, 10));
+            graph[1].push((2, 5));
+            graph[1].push((3, 2));
+            graph[3].push((4, 2));
+            graph[4].push((5, 3));
+            graph[5].push((6, 3));
+
+            let mut dijkstra = dijkstra::Dijkstra::new(graph);
+            assert_eq!(dijkstra.search(0), vec![0, 1, 6, 3, 5, 8, 10]);
         }
     }
 }
