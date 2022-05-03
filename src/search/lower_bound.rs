@@ -1,24 +1,18 @@
 pub fn lower_bound(range: std::ops::Range<usize>, prop: &dyn Fn(usize) -> bool) -> usize {
-    if prop(range.start) {
-        range.start
-    }
-    else {
-        let mut ng = range.start;
-        let mut ok = range.end;
+    if prop(range.start) { return range.start; }
 
-        while ok - ng > 1 {
-            let middle = ng + (ok - ng) / 2;
+    let mut ng = range.start;
+    let mut ok = range.end;
 
-            if prop(middle) {
-                ok = middle;
-            }
-            else {
-                ng = middle;
-            }
+    while ok - ng > 1 {
+        let middle = ng + (ok - ng) / 2;
+        match prop(middle) {
+            true => { ok = middle },
+            false => { ng = middle },
         }
-
-        ok
     }
+
+    ok
 }
 
 
