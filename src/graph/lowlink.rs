@@ -1,6 +1,5 @@
 #[derive(Debug,Clone)]
 pub struct Lowlink {
-    n: usize,
     graph: Vec<Vec<usize>>,
     used: Vec<bool>,
     ord: Vec<usize>,
@@ -17,32 +16,31 @@ impl Lowlink {
         let low: Vec<usize> = vec![0; n];
         let bridges: Vec<(usize, usize)> = vec![];
 
-        Self {
-            n,
+        let mut lowlink = Self {
             graph,
             used,
             ord,
             low,
             bridges,
-        }
-    }
+        };
 
-    pub fn search(&mut self) {
-        let mut k: usize = 0;
+        let mut k = 0;
 
-        for u in 0..self.n {
-            if self.used[u] {
+        for u in 0..n {
+            if lowlink.used[u] {
                 continue;
             }
-            k = self.dfs(u, k, None);
+            k = lowlink.dfs(u, k, None);
         }
+
+        lowlink
     }
 
     pub fn dfs(&mut self, u: usize, mut k: usize, p: Option<usize>) -> usize {
         self.used[u] = true;
 
         self.ord[u] = k;
-        self.low[u] = self.ord[u];
+        self.low[u] = k;
         k += 1;
 
         for i in 0..self.graph[u].len() {
@@ -54,7 +52,6 @@ impl Lowlink {
 
                 if self.ord[u] < self.low[v] {
                     self.bridges.push((u.min(v), u.max(v)));
-
                 }
             }
             else if p.is_some() && v != p.unwrap() {
@@ -65,7 +62,7 @@ impl Lowlink {
         k
     }
 
-    pub fn num_bridges(&mut self) -> usize {
+    pub fn num_bridges(&self) -> usize {
         self.bridges.len()
     }
 }
@@ -75,13 +72,16 @@ impl Lowlink {
 mod test_lowlink {
     use crate::graph::lowlink::Lowlink;
 
-    pub fn build_graph(n: usize, edges: Vec<(usize, usize)>) -> Vec<Vec<usize>> {
+    fn build_graph(
+        n: usize, edges: Vec<(usize, usize)>
+    ) -> Vec<Vec<usize>> {
+
         let mut graph = vec![vec![]; n];
+
         for (u, v) in edges {
             graph[u].push(v);
             graph[v].push(u);
         }
-
         graph
     }
 
@@ -98,9 +98,10 @@ mod test_lowlink {
         ];
 
         let graph = build_graph(7, edges);
-        let mut lowlink = Lowlink::new(graph);
-        lowlink.search();
+        let lowlink = Lowlink::new(graph);
 
+        assert_eq!(lowlink.ord, vec![0, 6, 1, 2, 3, 4, 5]);
+        assert_eq!(lowlink.low, vec![0, 6, 1, 2, 2, 2, 5]);
         assert_eq!(lowlink.num_bridges(), 4);
     }
 
@@ -113,9 +114,10 @@ mod test_lowlink {
         ];
 
         let graph = build_graph(3, edges);
-        let mut lowlink = Lowlink::new(graph);
-        lowlink.search();
+        let lowlink = Lowlink::new(graph);
 
+        assert_eq!(lowlink.ord, vec![0, 1, 2]);
+        assert_eq!(lowlink.low, vec![0, 0, 0]);
         assert_eq!(lowlink.num_bridges(), 0);
     }
 
@@ -130,9 +132,30 @@ mod test_lowlink {
         ];
 
         let graph = build_graph(6, edges);
-        let mut lowlinke = Lowlink::new(graph);
-        lowlinke.search();
+        let lowlinke = Lowlink::new(graph);
 
+        assert_eq!(lowlinke.ord, vec![0, 1, 2, 3, 4, 5]);
+        assert_eq!(lowlinke.low, vec![0, 1, 2, 3, 4, 5]);
         assert_eq!(lowlinke.num_bridges(), 5);
+    }
+
+    #[test]
+    fn it_works_hand() {
+        let edges = vec![
+            (0, 1),
+            (1, 2),
+            (1, 3),
+            (2, 4),
+            (4, 5),
+            (4, 6),
+            (5, 6),
+        ];
+
+        let graph = build_graph(7, edges);
+        let lowlink = Lowlink::new(graph);
+
+        assert_eq!(lowlink.ord, vec![0, 1, 2, 6, 3, 4, 5]);
+        assert_eq!(lowlink.low, vec![0, 1, 2, 6, 3, 3, 3]);
+        assert_eq!(lowlink.num_bridges(), 4);
     }
 }
