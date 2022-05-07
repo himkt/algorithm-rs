@@ -1,2 +1,2 @@
-pub mod rsq;
 pub mod raq;
+pub mod rsq;

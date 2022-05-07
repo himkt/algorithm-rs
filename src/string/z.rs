@@ -10,7 +10,9 @@ pub fn z(s: &str) -> Vec<usize> {
     let mut j = 0;
 
     while i < len {
-        while i + j < len && s[j] == s[i+j] { j += 1 }
+        while i + j < len && s[j] == s[i + j] {
+            j += 1
+        }
         ans[i] = j;
 
         if j == 0 {
@@ -20,7 +22,7 @@ pub fn z(s: &str) -> Vec<usize> {
 
         let mut k = 1;
         while i + k < len && k + ans[k] < j {
-            ans[i+k] = ans[k];
+            ans[i + k] = ans[k];
             k += 1
         }
 
@@ -30,7 +32,6 @@ pub fn z(s: &str) -> Vec<usize> {
 
     ans
 }
-
 
 #[cfg(test)]
 mod test_z_algorithm {

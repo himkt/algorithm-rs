@@ -6,7 +6,6 @@ pub fn gcd(a: i64, b: i64) -> i64 {
     }
 }
 
-
 #[cfg(test)]
 mod test_gcd {
     #[test]

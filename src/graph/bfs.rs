@@ -1,16 +1,13 @@
 use std::collections::VecDeque;
 
-
 const INF: usize = 1001001001;
 
-
-#[derive(Debug,Clone)]
+#[derive(Debug, Clone)]
 pub struct BFS {
     graph: Vec<Vec<usize>>,
     seen: Vec<bool>,
     dist: Vec<usize>,
 }
-
 
 impl BFS {
     pub fn new(graph: Vec<Vec<usize>>) -> Self {
@@ -40,8 +37,6 @@ impl BFS {
         }
     }
 }
-
-
 
 #[cfg(test)]
 mod test_bfs {

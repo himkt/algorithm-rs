@@ -12,14 +12,13 @@ pub fn com(n: i64, mut r: i64) -> i64 {
     }
 
     let mut res = 1;
-    for i in 1..(r+1) {
+    for i in 1..(r + 1) {
         res *= n - i + 1;
         res /= i;
     }
 
     res
 }
-
 
 #[cfg(test)]
 mod test_combination {

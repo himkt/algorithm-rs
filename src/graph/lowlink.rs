@@ -1,4 +1,4 @@
-#[derive(Debug,Clone)]
+#[derive(Debug, Clone)]
 pub struct Lowlink {
     graph: Vec<Vec<usize>>,
     used: Vec<bool>,
@@ -53,8 +53,7 @@ impl Lowlink {
                 if self.ord[u] < self.low[v] {
                     self.bridges.push((u.min(v), u.max(v)));
                 }
-            }
-            else if p.is_some() && v != p.unwrap() {
+            } else if p.is_some() && v != p.unwrap() {
                 self.low[u] = self.low[u].min(self.ord[v]);
             }
         }
@@ -67,15 +66,11 @@ impl Lowlink {
     }
 }
 
-
 #[cfg(test)]
 mod test_lowlink {
     use crate::graph::lowlink::Lowlink;
 
-    fn build_graph(
-        n: usize, edges: Vec<(usize, usize)>
-    ) -> Vec<Vec<usize>> {
-
+    fn build_graph(n: usize, edges: Vec<(usize, usize)>) -> Vec<Vec<usize>> {
         let mut graph = vec![vec![]; n];
 
         for (u, v) in edges {
@@ -87,15 +82,7 @@ mod test_lowlink {
 
     #[test]
     fn it_works() {
-        let edges = vec![
-            (0, 2),
-            (1, 6),
-            (2, 3),
-            (3, 4),
-            (3, 5),
-            (4, 5),
-            (5, 6),
-        ];
+        let edges = vec![(0, 2), (1, 6), (2, 3), (3, 4), (3, 5), (4, 5), (5, 6)];
 
         let graph = build_graph(7, edges);
         let lowlink = Lowlink::new(graph);
@@ -107,11 +94,7 @@ mod test_lowlink {
 
     #[test]
     fn it_works_without_bridge() {
-        let edges = vec![
-            (0, 1),
-            (0, 2),
-            (1, 2),
-        ];
+        let edges = vec![(0, 1), (0, 2), (1, 2)];
 
         let graph = build_graph(3, edges);
         let lowlink = Lowlink::new(graph);
@@ -123,13 +106,7 @@ mod test_lowlink {
 
     #[test]
     fn it_works_with_all_edges_are_bridges() {
-        let edges = vec![
-            (0, 1),
-            (1, 2),
-            (2, 3),
-            (3, 4),
-            (4, 5),
-        ];
+        let edges = vec![(0, 1), (1, 2), (2, 3), (3, 4), (4, 5)];
 
         let graph = build_graph(6, edges);
         let lowlinke = Lowlink::new(graph);
@@ -141,15 +118,7 @@ mod test_lowlink {
 
     #[test]
     fn it_works_hand() {
-        let edges = vec![
-            (0, 1),
-            (1, 2),
-            (1, 3),
-            (2, 4),
-            (4, 5),
-            (4, 6),
-            (5, 6),
-        ];
+        let edges = vec![(0, 1), (1, 2), (1, 3), (2, 4), (4, 5), (4, 6), (5, 6)];
 
         let graph = build_graph(7, edges);
         let lowlink = Lowlink::new(graph);

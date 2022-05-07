@@ -18,14 +18,13 @@ pub fn modcom(n: usize, k: usize, div: usize) -> usize {
     inv[1] = 1;
 
     for i in 2..upper {
-        fact[i] = fact[i-1] * i % div;
+        fact[i] = fact[i - 1] * i % div;
         inv[i] = div - inv[div % i] * (div / i) % div;
-        finv[i] = finv[i-1] * inv[i] % div;
+        finv[i] = finv[i - 1] * inv[i] % div;
     }
 
     fact[n] * (finv[k] * finv[n - k] % div) % div
 }
-
 
 #[cfg(test)]
 mod test_combination {

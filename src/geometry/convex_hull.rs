@@ -1,18 +1,17 @@
-use std::collections::VecDeque;
 use crate::geometry::point::Point;
-
+use std::collections::VecDeque;
 
 pub fn convex_hull(ps: Vec<(i64, i64)>) -> Vec<(i64, i64)> {
     let n = ps.len();
 
-    let mut ps: Vec<Point> = ps.iter().map(|&(x, y)| Point (x, y) ).collect();
+    let mut ps: Vec<Point> = ps.iter().map(|&(x, y)| Point(x, y)).collect();
     ps.sort();
 
     let mut k = 0;
     let mut deque: VecDeque<Point> = VecDeque::new();
 
     for &pi in &ps {
-        while k > 1 && (deque[k-1] - deque[k-2]).det(pi - deque[k-1]) <= 0 {
+        while k > 1 && (deque[k - 1] - deque[k - 2]).det(pi - deque[k - 1]) <= 0 {
             deque.pop_back();
             k -= 1;
         }
@@ -21,9 +20,9 @@ pub fn convex_hull(ps: Vec<(i64, i64)>) -> Vec<(i64, i64)> {
     }
 
     let t = k;
-    for i in (0..n-1).rev() {
+    for i in (0..n - 1).rev() {
         let pi = ps[i];
-        while k > t && (deque[k-1] - deque[k-2]).det(pi - deque[k-1]) <= 0 {
+        while k > t && (deque[k - 1] - deque[k - 2]).det(pi - deque[k - 1]) <= 0 {
             deque.pop_back();
             k -= 1;
         }
@@ -33,14 +32,13 @@ pub fn convex_hull(ps: Vec<(i64, i64)>) -> Vec<(i64, i64)> {
 
     let mut ret: Vec<(i64, i64)> = deque
         .into_iter()
-        .take(k-1)
+        .take(k - 1)
         .map(|pair| (pair.0, pair.1))
         .collect();
 
     ret.sort_unstable();
     ret
 }
-
 
 #[cfg(test)]
 mod test_convex_hull {

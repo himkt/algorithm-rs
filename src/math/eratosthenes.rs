@@ -17,11 +17,10 @@ pub fn eratosthenes_sieve(n: usize) -> Vec<bool> {
     s
 }
 
-
 #[cfg(test)]
 mod test_eratosthenes_sieve {
     #[test]
-    fn it_works () {
+    fn it_works() {
         use crate::math::eratosthenes::eratosthenes_sieve;
         let primes = eratosthenes_sieve(10);
 
