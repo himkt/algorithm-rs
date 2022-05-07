@@ -1,5 +1,5 @@
 pub struct Bitset<T: Copy> {
-    curr: u32,
+    curr: usize,
     array: Vec<T>,
     len: usize,
 }

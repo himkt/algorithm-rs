@@ -1,7 +1,5 @@
 pub mod collection;
-pub mod misc;
-pub mod search;
-pub mod num;
+pub mod math;
 pub mod string;
 pub mod tree;
 pub mod graph;
