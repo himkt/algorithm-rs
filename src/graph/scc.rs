@@ -120,7 +120,7 @@ mod test_scc {
         let graph = build_graph(6, edges);
 
         let mut scc = SCC::new(graph);
-        assert_eq!(scc.scc(), 4);
+        assert_eq!(scc.scc(), 3);
         assert_eq!(scc.cmp, vec![3, 1, 2, 3, 1, 0]);
     }
 }
