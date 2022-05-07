@@ -6,12 +6,11 @@ pub fn gcd(a: i64, b: i64) -> i64 {
     }
 }
 
-
 #[cfg(test)]
 mod test_gcd {
     #[test]
     fn it_works() {
-        use crate::num::gcd::gcd;
+        use crate::math::gcd::gcd;
 
         {
             assert_eq!(gcd(15, 5), 5);

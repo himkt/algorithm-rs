@@ -1,10 +1,10 @@
-#[derive(Debug,Clone)]
+#[derive(Debug, Clone)]
 pub struct RAQ {
     v: Vec<i64>,
 }
 
 impl RAQ {
-    const SEQ_LEN: usize = 1<<18;
+    const SEQ_LEN: usize = 1 << 18;
 }
 
 impl Default for RAQ {
@@ -16,7 +16,7 @@ impl Default for RAQ {
 impl RAQ {
     pub fn new() -> Self {
         Self {
-            v: vec![0; 2*RAQ::SEQ_LEN]
+            v: vec![0; 2 * RAQ::SEQ_LEN],
         }
     }
 
@@ -28,7 +28,9 @@ impl RAQ {
 
         loop {
             index /= 2;
-            if index == 0 { break; }
+            if index == 0 {
+                break;
+            }
             sum += self.v[index];
         }
 
@@ -47,7 +49,7 @@ impl RAQ {
             l /= 2;
 
             if r % 2 == 1 {
-                self.v[r-1] += value;
+                self.v[r - 1] += value;
                 r -= 1;
             }
             r /= 2;
@@ -84,7 +86,7 @@ mod test_segment_tree {
     fn it_works_from() {
         use crate::tree::segment_tree::raq::RAQ;
         {
-            let vs = vec![1i64; 1<<2];
+            let vs = vec![1i64; 1 << 2];
             let mut rsq = RAQ::from(vs);
             rsq.add(1, 2, 1);
             rsq.add(2, 3, 2);

@@ -1,4 +1,4 @@
-pub fn mod_combination(n: usize, k: usize, div: usize) -> usize {
+pub fn modcom(n: usize, k: usize, div: usize) -> usize {
     let mut fact = Vec::<usize>::new();
     let mut inv = Vec::<usize>::new();
     let mut finv = Vec::<usize>::new();
@@ -18,28 +18,27 @@ pub fn mod_combination(n: usize, k: usize, div: usize) -> usize {
     inv[1] = 1;
 
     for i in 2..upper {
-        fact[i] = fact[i-1] * i % div;
+        fact[i] = fact[i - 1] * i % div;
         inv[i] = div - inv[div % i] * (div / i) % div;
-        finv[i] = finv[i-1] * inv[i] % div;
+        finv[i] = finv[i - 1] * inv[i] % div;
     }
 
     fact[n] * (finv[k] * finv[n - k] % div) % div
 }
 
-
 #[cfg(test)]
 mod test_combination {
     #[test]
     fn it_works() {
-        use crate::misc::combination::combination;
+        use crate::math::modcom::modcom;
         {
-            assert_eq!(combination(6, 0), 1);
-            assert_eq!(combination(6, 1), 6);
-            assert_eq!(combination(6, 2), 15);
-            assert_eq!(combination(6, 3), 20);
-            assert_eq!(combination(6, 4), 15);
-            assert_eq!(combination(6, 5), 6);
-            assert_eq!(combination(6, 6), 1);
+            assert_eq!(modcom(6, 0, 7), 1);
+            assert_eq!(modcom(6, 1, 7), 6);
+            assert_eq!(modcom(6, 2, 7), 1);
+            assert_eq!(modcom(6, 3, 7), 6);
+            assert_eq!(modcom(6, 4, 7), 1);
+            assert_eq!(modcom(6, 5, 7), 6);
+            assert_eq!(modcom(6, 6, 7), 1);
         }
     }
 }

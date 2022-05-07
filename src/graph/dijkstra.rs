@@ -1,19 +1,15 @@
 use std::collections::BinaryHeap;
 
-
 const INF: usize = 1001001001;
 
-
-#[derive(Debug,Clone)]
+#[derive(Debug, Clone)]
 pub struct Dijkstra {
     graph: Vec<Vec<(usize, usize)>>,
 }
 
 impl Dijkstra {
     pub fn new(graph: Vec<Vec<(usize, usize)>>) -> Self {
-        Self {
-            graph,
-        }
+        Self { graph }
     }
 
     pub fn search(&mut self, src: usize) -> Vec<usize> {
@@ -40,12 +36,11 @@ impl Dijkstra {
     }
 }
 
-
 #[cfg(test)]
 mod test_dijkstra {
     #[test]
     fn it_works() {
-        use crate::search::dijkstra;
+        use crate::graph::dijkstra;
         {
             let mut graph = vec![vec![]; 7];
             graph[0].push((1, 2));

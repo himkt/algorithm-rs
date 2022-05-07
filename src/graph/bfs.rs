@@ -1,16 +1,13 @@
 use std::collections::VecDeque;
 
-
 const INF: usize = 1001001001;
 
-
-#[derive(Debug,Clone)]
+#[derive(Debug, Clone)]
 pub struct BFS {
     graph: Vec<Vec<usize>>,
     seen: Vec<bool>,
     dist: Vec<usize>,
 }
-
 
 impl BFS {
     pub fn new(graph: Vec<Vec<usize>>) -> Self {
@@ -41,14 +38,12 @@ impl BFS {
     }
 }
 
-
-
 #[cfg(test)]
 mod test_bfs {
     #[test]
     fn it_works() {
-        use crate::search::bfs::BFS;
-        use crate::search::bfs::INF;
+        use crate::graph::bfs::BFS;
+        use crate::graph::bfs::INF;
         {
             let mut graph = vec![vec![]; 5];
             graph[0].push(1);

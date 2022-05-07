@@ -3,7 +3,7 @@ pub fn modpow(a: usize, b: usize, m: usize) -> usize {
     let mut p = a;
 
     for i in 0..30 {
-        if b & (1<<i) != 0 {
+        if b & (1 << i) != 0 {
             ans *= p;
             ans %= m;
         }
@@ -15,17 +15,16 @@ pub fn modpow(a: usize, b: usize, m: usize) -> usize {
     ans
 }
 
-
 #[cfg(test)]
 mod test_modpow {
     #[test]
     fn it_works() {
-        use crate::num::modpow::modpow;
+        use crate::math::modpow::modpow;
 
         {
             assert_eq!(modpow(2, 10, 1_000_000_007), 1024);
-            assert_eq!(modpow(2,  3, 1_000_000_007), 8);
-            assert_eq!(modpow(5,  8, 1_000_000_007), 390625)
+            assert_eq!(modpow(2, 3, 1_000_000_007), 8);
+            assert_eq!(modpow(5, 8, 1_000_000_007), 390625)
         }
     }
 }

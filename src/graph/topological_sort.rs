@@ -1,10 +1,9 @@
-use std::{collections::BinaryHeap, cmp::Reverse};
+use std::{cmp::Reverse, collections::BinaryHeap};
 
 pub struct TopologicalSort {
     g: Vec<Vec<usize>>,
     deg: Vec<usize>,
 }
-
 
 impl TopologicalSort {
     pub fn new(g: Vec<Vec<usize>>, deg: Vec<usize>) -> Self {
@@ -37,13 +36,11 @@ impl TopologicalSort {
 
         if ans.len() == self.deg.len() {
             ans
-        }
-        else {
+        } else {
             vec![]
         }
     }
 }
-
 
 #[cfg(test)]
 mod test_topological_sort {

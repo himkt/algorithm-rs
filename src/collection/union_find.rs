@@ -1,7 +1,7 @@
-#[derive(Debug,Clone)]
+#[derive(Debug, Clone)]
 pub struct UnionFind {
     parents: Vec<usize>,
-    sizes: Vec<usize>
+    sizes: Vec<usize>,
 }
 
 #[allow(clippy::needless_range_loop)]
@@ -9,15 +9,14 @@ impl UnionFind {
     pub fn new(n: usize) -> Self {
         Self {
             parents: (0..n).collect(),
-            sizes: vec![1usize; n]
+            sizes: vec![1usize; n],
         }
     }
 
     pub fn find(&mut self, x: usize) -> usize {
         if self.parents[x] == x {
             x
-        }
-        else {
+        } else {
             self.parents[x] = self.find(self.parents[x]);
             self.parents[x]
         }
@@ -45,20 +44,17 @@ impl UnionFind {
     }
 }
 
-
 #[cfg(test)]
 mod test_union_find {
     #[test]
     fn it_works() {
-        use crate::tree::union_find::UnionFind;
+        use crate::collection::union_find::UnionFind;
         const N: usize = 5;
 
         {
             // helper
             fn sizes(uf: &mut UnionFind) -> Vec<usize> {
-                (0..N)
-                    .map(|i| uf.size(i))
-                    .collect()
+                (0..N).map(|i| uf.size(i)).collect()
             }
 
             let mut uf = UnionFind::new(N);
@@ -87,7 +83,6 @@ mod test_union_find {
             assert_eq!(uf.find(0), uf.find(3));
             assert_eq!(uf.find(0), uf.find(4));
             assert_eq!(sizes(&mut uf), [5, 5, 5, 5, 5]);
-
         }
     }
 }

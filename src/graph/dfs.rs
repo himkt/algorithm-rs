@@ -1,6 +1,6 @@
 const INF: usize = 1001001001;
 
-#[derive(Debug,Clone)]
+#[derive(Debug, Clone)]
 pub struct DFS {
     graph: Vec<Vec<usize>>,
     seen: Vec<bool>,
@@ -31,18 +31,17 @@ impl DFS {
         self.dist[v] = self.dist[v].min(dist);
 
         for i in 0..self.graph[v].len() {
-            self.dfs(self.graph[v][i], dist+1);
+            self.dfs(self.graph[v][i], dist + 1);
         }
     }
 }
-
 
 #[cfg(test)]
 mod test_dfs {
     #[test]
     fn it_works() {
-        use crate::search::dfs::DFS;
-        use crate::search::dfs::INF;
+        use crate::graph::dfs::DFS;
+        use crate::graph::dfs::INF;
         {
             let mut graph = vec![vec![]; 5];
             graph[0].push(1);

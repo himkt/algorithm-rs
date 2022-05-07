@@ -5,7 +5,7 @@ pub struct Line(pub Point, pub Point);
 impl Line {
     pub fn contains(&self, p: Point) -> bool {
         let d = self.1 - self.0;
-        let e = p      - self.0;
+        let e = p - self.0;
         d.1 * e.0 == d.0 * e.1
     }
 }
@@ -13,7 +13,7 @@ impl Line {
 #[cfg(test)]
 mod test_plane {
     #[test]
-    fn it_works_line () {
+    fn it_works_line() {
         use crate::geometry::line::Line;
         use crate::geometry::line::Point;
 
