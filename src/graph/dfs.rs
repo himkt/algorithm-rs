@@ -41,8 +41,8 @@ impl DFS {
 mod test_dfs {
     #[test]
     fn it_works() {
-        use crate::search::dfs::DFS;
-        use crate::search::dfs::INF;
+        use crate::graph::dfs::DFS;
+        use crate::graph::dfs::INF;
         {
             let mut graph = vec![vec![]; 5];
             graph[0].push(1);

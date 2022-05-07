@@ -22,7 +22,7 @@ pub fn eratosthenes_sieve(n: usize) -> Vec<bool> {
 mod test_eratosthenes_sieve {
     #[test]
     fn it_works () {
-        use crate::num::eratosthenes::eratosthenes_sieve;
+        use crate::math::eratosthenes::eratosthenes_sieve;
         let primes = eratosthenes_sieve(10);
 
         println!("{:?}", primes);

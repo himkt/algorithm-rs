@@ -20,7 +20,7 @@ pub fn modpow(a: usize, b: usize, m: usize) -> usize {
 mod test_modpow {
     #[test]
     fn it_works() {
-        use crate::num::modpow::modpow;
+        use crate::math::modpow::modpow;
 
         {
             assert_eq!(modpow(2, 10, 1_000_000_007), 1024);

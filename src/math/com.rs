@@ -25,7 +25,7 @@ pub fn com(n: i64, mut r: i64) -> i64 {
 mod test_combination {
     #[test]
     fn it_works() {
-        use crate::misc::com::com;
+        use crate::math::com::com;
         {
             assert_eq!(com(6, 0), 1);
             assert_eq!(com(6, 1), 6);

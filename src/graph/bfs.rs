@@ -47,8 +47,8 @@ impl BFS {
 mod test_bfs {
     #[test]
     fn it_works() {
-        use crate::search::bfs::BFS;
-        use crate::search::bfs::INF;
+        use crate::graph::bfs::BFS;
+        use crate::graph::bfs::INF;
         {
             let mut graph = vec![vec![]; 5];
             graph[0].push(1);

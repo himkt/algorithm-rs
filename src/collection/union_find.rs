@@ -50,7 +50,7 @@ impl UnionFind {
 mod test_union_find {
     #[test]
     fn it_works() {
-        use crate::tree::union_find::UnionFind;
+        use crate::collection::union_find::UnionFind;
         const N: usize = 5;
 
         {

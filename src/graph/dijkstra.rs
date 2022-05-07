@@ -45,7 +45,7 @@ impl Dijkstra {
 mod test_dijkstra {
     #[test]
     fn it_works() {
-        use crate::search::dijkstra;
+        use crate::graph::dijkstra;
         {
             let mut graph = vec![vec![]; 7];
             graph[0].push((1, 2));

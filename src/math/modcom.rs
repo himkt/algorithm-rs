@@ -31,7 +31,7 @@ pub fn modcom(n: usize, k: usize, div: usize) -> usize {
 mod test_combination {
     #[test]
     fn it_works() {
-        use crate::misc::modcom::modcom;
+        use crate::math::modcom::modcom;
         {
             assert_eq!(modcom(6, 0, 7), 1);
             assert_eq!(modcom(6, 1, 7), 6);
