@@ -1,0 +1,3 @@
+(function() {var implementors = {};
+implementors["algorithm_rs"] = [{"text":"impl <a class=\"trait\" href=\"https://doc.rust-lang.org/1.60.0/core/ops/arith/trait.Add.html\" title=\"trait core::ops::arith::Add\">Add</a>&lt;<a class=\"struct\" href=\"algorithm_rs/geometry/point/struct.Point.html\" title=\"struct algorithm_rs::geometry::point::Point\">Point</a>&gt; for <a class=\"struct\" href=\"algorithm_rs/geometry/point/struct.Point.html\" title=\"struct algorithm_rs::geometry::point::Point\">Point</a>","synthetic":false,"types":["algorithm_rs::geometry::point::Point"]}];
+if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()
