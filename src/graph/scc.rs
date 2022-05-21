@@ -43,18 +43,19 @@ impl SCC {
             if self.fused[u] {
                 continue;
             }
+
             self.fdfs(u);
         }
 
         let mut k = 0;
-        let m = self.vs.len();
 
-        for i in (0..m).rev() {
+        for i in (0..self.vs.len()).rev() {
             let u = self.vs[i];
 
             if self.rused[u] {
                 continue;
             }
+
             self.rdfs(u, k);
             k += 1;
         }
@@ -71,6 +72,7 @@ impl SCC {
             if self.fused[v] {
                 continue;
             }
+
             self.fdfs(v);
         }
 
@@ -87,6 +89,7 @@ impl SCC {
             if self.rused[v] {
                 continue;
             }
+
             self.rdfs(v, k);
         }
     }
@@ -103,6 +106,7 @@ mod test_scc {
         for (u, v) in edges {
             graph[u].push(v);
         }
+
         graph
     }
 

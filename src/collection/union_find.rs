@@ -13,18 +13,18 @@ impl UnionFind {
         }
     }
 
-    pub fn find(&mut self, x: usize) -> usize {
+    pub fn parent(&mut self, x: usize) -> usize {
         if self.parents[x] == x {
             x
         } else {
-            self.parents[x] = self.find(self.parents[x]);
+            self.parents[x] = self.parent(self.parents[x]);
             self.parents[x]
         }
     }
 
     pub fn unite(&mut self, x: usize, y: usize) {
-        let mut px = self.find(x);
-        let mut py = self.find(y);
+        let mut px = self.parent(x);
+        let mut py = self.parent(y);
 
         if px == py {
             return;
@@ -39,7 +39,7 @@ impl UnionFind {
     }
 
     pub fn size(&mut self, x: usize) -> usize {
-        let x = self.find(x);
+        let x = self.parent(x);
         self.sizes[x]
     }
 }
@@ -61,27 +61,27 @@ mod test_union_find {
             assert_eq!(sizes(&mut uf), [1, 1, 1, 1, 1]);
 
             uf.unite(0, 1);
-            assert_eq!(uf.find(0), uf.find(1));
-            assert_ne!(uf.find(0), uf.find(2));
+            assert_eq!(uf.parent(0), uf.parent(1));
+            assert_ne!(uf.parent(0), uf.parent(2));
             assert_eq!(sizes(&mut uf), [2, 2, 1, 1, 1]);
 
             // check noop
             uf.unite(0, 1);
-            assert_eq!(uf.find(0), uf.find(1));
-            assert_ne!(uf.find(0), uf.find(2));
+            assert_eq!(uf.parent(0), uf.parent(1));
+            assert_ne!(uf.parent(0), uf.parent(2));
             assert_eq!(sizes(&mut uf), [2, 2, 1, 1, 1]);
 
             uf.unite(0, 2);
-            assert_eq!(uf.find(0), uf.find(2));
+            assert_eq!(uf.parent(0), uf.parent(2));
             assert_eq!(sizes(&mut uf), [3, 3, 3, 1, 1]);
 
             uf.unite(3, 4);
-            assert_ne!(uf.find(0), uf.find(3));
+            assert_ne!(uf.parent(0), uf.parent(3));
             assert_eq!(sizes(&mut uf), [3, 3, 3, 2, 2]);
 
             uf.unite(0, 3);
-            assert_eq!(uf.find(0), uf.find(3));
-            assert_eq!(uf.find(0), uf.find(4));
+            assert_eq!(uf.parent(0), uf.parent(3));
+            assert_eq!(uf.parent(0), uf.parent(4));
             assert_eq!(sizes(&mut uf), [5, 5, 5, 5, 5]);
         }
     }

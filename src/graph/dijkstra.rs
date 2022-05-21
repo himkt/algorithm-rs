@@ -1,4 +1,4 @@
-use std::collections::BinaryHeap;
+use std::{collections::BinaryHeap, cmp::Reverse};
 
 const INF: usize = 1001001001;
 
@@ -17,9 +17,9 @@ impl Dijkstra {
         dist[src] = 0;
 
         let mut queue = BinaryHeap::new();
-        queue.push((std::cmp::Reverse(0), src));
+        queue.push((Reverse(0), src));
 
-        while let Some((std::cmp::Reverse(current_cost), current_v)) = queue.pop() {
+        while let Some((Reverse(current_cost), current_v)) = queue.pop() {
             if dist[current_v] < current_cost {
                 continue;
             }
@@ -27,7 +27,7 @@ impl Dijkstra {
             for &(v, cost) in self.graph[current_v].iter() {
                 if dist[v] > current_cost + cost {
                     dist[v] = current_cost + cost;
-                    queue.push((std::cmp::Reverse(dist[v]), v));
+                    queue.push((Reverse(dist[v]), v));
                 }
             }
         }

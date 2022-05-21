@@ -26,7 +26,6 @@ impl DFS {
             return;
         }
 
-        println!("visit {}", v);
         self.seen[v] = true;
         self.dist[v] = self.dist[v].min(dist);
 
