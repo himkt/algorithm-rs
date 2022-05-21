@@ -27,7 +27,9 @@ impl TopologicalSort {
                 if self.deg[nv] == 0 {
                     continue;
                 }
+
                 self.deg[nv] -= 1;
+
                 if self.deg[nv] == 0 {
                     s.push(Reverse(nv));
                 }

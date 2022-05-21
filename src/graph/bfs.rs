@@ -25,13 +25,14 @@ impl BFS {
 
         while !queue.is_empty() {
             let (cur, dist) = queue.pop_front().unwrap();
+
             if self.seen[cur] {
                 continue;
             }
 
             self.seen[cur] = true;
             self.dist[cur] = self.dist[cur].min(dist);
-            for &next in &self.graph[cur] {
+            for &next in self.graph[cur].iter() {
                 queue.push_back((next, self.dist[cur] + 1));
             }
         }

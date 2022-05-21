@@ -8,16 +8,14 @@ impl<T: Copy> Iterator for Bitset<T> {
     type Item = Vec<T>;
 
     fn next(&mut self) -> Option<Vec<T>> {
-        if self.curr >= 1 << self.len {
+        if self.curr == (1 << self.len) {
             return None;
         }
 
         let mut ret = Vec::<T>::new();
-        let r_array = self.array.clone();
-        for (i, ai) in r_array.iter().enumerate() {
-            let patch = self.curr >> i & 1;
-            if patch == 1 {
-                ret.push(*ai);
+        for (i, &ai) in self.array.iter().enumerate() {
+            if (self.curr >> i & 1) == 1 {
+                ret.push(ai);
             }
         }
 

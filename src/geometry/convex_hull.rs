@@ -4,7 +4,11 @@ use std::collections::VecDeque;
 pub fn convex_hull(ps: Vec<(i64, i64)>) -> Vec<(i64, i64)> {
     let n = ps.len();
 
-    let mut ps: Vec<Point> = ps.iter().map(|&(x, y)| Point(x, y)).collect();
+    let mut ps: Vec<Point> = ps
+        .iter()
+        .map(|&(x, y)| Point(x, y))
+        .collect();
+
     ps.sort();
 
     let mut k = 0;
