@@ -129,6 +129,10 @@
 <span id="124">124</span>
 <span id="125">125</span>
 <span id="126">126</span>
+<span id="127">127</span>
+<span id="128">128</span>
+<span id="129">129</span>
+<span id="130">130</span>
 </pre><pre class="rust"><code><span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">SCC</span> {
     <span class="ident">fgraph</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span><span class="op">&gt;</span>,
     <span class="ident">rgraph</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span><span class="op">&gt;</span>,
@@ -174,18 +178,19 @@
             <span class="kw">if</span> <span class="self">self</span>.<span class="ident">fused</span>[<span class="ident">u</span>] {
                 <span class="kw">continue</span>;
             }
+
             <span class="self">self</span>.<span class="ident">fdfs</span>(<span class="ident">u</span>);
         }
 
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">k</span> <span class="op">=</span> <span class="number">0</span>;
-        <span class="kw">let</span> <span class="ident">m</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">vs</span>.<span class="ident">len</span>();
 
-        <span class="kw">for</span> <span class="ident">i</span> <span class="kw">in</span> (<span class="number">0</span>..<span class="ident">m</span>).<span class="ident">rev</span>() {
+        <span class="kw">for</span> <span class="ident">i</span> <span class="kw">in</span> (<span class="number">0</span>..<span class="self">self</span>.<span class="ident">vs</span>.<span class="ident">len</span>()).<span class="ident">rev</span>() {
             <span class="kw">let</span> <span class="ident">u</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">vs</span>[<span class="ident">i</span>];
 
             <span class="kw">if</span> <span class="self">self</span>.<span class="ident">rused</span>[<span class="ident">u</span>] {
                 <span class="kw">continue</span>;
             }
+
             <span class="self">self</span>.<span class="ident">rdfs</span>(<span class="ident">u</span>, <span class="ident">k</span>);
             <span class="ident">k</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
         }
@@ -202,6 +207,7 @@
             <span class="kw">if</span> <span class="self">self</span>.<span class="ident">fused</span>[<span class="ident">v</span>] {
                 <span class="kw">continue</span>;
             }
+
             <span class="self">self</span>.<span class="ident">fdfs</span>(<span class="ident">v</span>);
         }
 
@@ -218,6 +224,7 @@
             <span class="kw">if</span> <span class="self">self</span>.<span class="ident">rused</span>[<span class="ident">v</span>] {
                 <span class="kw">continue</span>;
             }
+
             <span class="self">self</span>.<span class="ident">rdfs</span>(<span class="ident">v</span>, <span class="ident">k</span>);
         }
     }
@@ -234,6 +241,7 @@
         <span class="kw">for</span> (<span class="ident">u</span>, <span class="ident">v</span>) <span class="kw">in</span> <span class="ident">edges</span> {
             <span class="ident">graph</span>[<span class="ident">u</span>].<span class="ident">push</span>(<span class="ident">v</span>);
         }
+
         <span class="ident">graph</span>
     }
 

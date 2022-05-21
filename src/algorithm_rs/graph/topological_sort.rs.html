@@ -65,6 +65,8 @@
 <span id="60">60</span>
 <span id="61">61</span>
 <span id="62">62</span>
+<span id="63">63</span>
+<span id="64">64</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">cmp::Reverse</span>, <span class="ident">collections::BinaryHeap</span>};
 
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">TopologicalSort</span> {
@@ -94,7 +96,9 @@
                 <span class="kw">if</span> <span class="self">self</span>.<span class="ident">deg</span>[<span class="ident">nv</span>] <span class="op">==</span> <span class="number">0</span> {
                     <span class="kw">continue</span>;
                 }
+
                 <span class="self">self</span>.<span class="ident">deg</span>[<span class="ident">nv</span>] <span class="op">-</span><span class="op">=</span> <span class="number">1</span>;
+
                 <span class="kw">if</span> <span class="self">self</span>.<span class="ident">deg</span>[<span class="ident">nv</span>] <span class="op">==</span> <span class="number">0</span> {
                     <span class="ident">s</span>.<span class="ident">push</span>(<span class="ident">Reverse</span>(<span class="ident">nv</span>));
                 }

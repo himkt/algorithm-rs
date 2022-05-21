@@ -59,7 +59,6 @@
 <span id="54">54</span>
 <span id="55">55</span>
 <span id="56">56</span>
-<span id="57">57</span>
 </pre><pre class="rust"><code><span class="kw">const</span> <span class="ident">INF</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">1001001001</span>;
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>)]</span>
@@ -88,7 +87,6 @@
             <span class="kw">return</span>;
         }
 
-        <span class="macro">println!</span>(<span class="string">&quot;visit {}&quot;</span>, <span class="ident">v</span>);
         <span class="self">self</span>.<span class="ident">seen</span>[<span class="ident">v</span>] <span class="op">=</span> <span class="bool-val">true</span>;
         <span class="self">self</span>.<span class="ident">dist</span>[<span class="ident">v</span>] <span class="op">=</span> <span class="self">self</span>.<span class="ident">dist</span>[<span class="ident">v</span>].<span class="ident">min</span>(<span class="ident">dist</span>);
 
