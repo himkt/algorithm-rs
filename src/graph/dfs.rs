@@ -1,4 +1,5 @@
-const INF: usize = 1001001001;
+const INF: usize = 100_000_000_000_000_000;
+
 
 #[derive(Debug, Clone)]
 pub struct DFS {
