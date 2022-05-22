@@ -24,11 +24,8 @@ impl RSQ {
         index += RSQ::SEQ_LEN - 1;
         self.v[index] += value;
 
-        loop {
+        while index > 0 {
             index /= 2;
-            if index == 0 {
-                break;
-            }
             self.v[index] = self.v[index * 2] + self.v[index * 2 + 1];
         }
     }
