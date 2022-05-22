@@ -26,11 +26,8 @@ impl RAQ {
         let mut sum = 0;
         sum += self.v[index];
 
-        loop {
+        while index > 0 {
             index /= 2;
-            if index == 0 {
-                break;
-            }
             sum += self.v[index];
         }
 
