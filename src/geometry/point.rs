@@ -1,9 +1,9 @@
 use std::ops::{Add, Sub, Mul, Div};
 
 
+// FIXME (himkt): Eq for Point<f64> won't work as expected.
 #[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
 pub struct Point<T>(pub T, pub T);
-
 
 impl<T: Add<T, Output=T>> std::ops::Add<Point<T>> for Point<T> {
     type Output = Point<T>;
