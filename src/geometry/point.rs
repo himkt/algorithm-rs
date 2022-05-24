@@ -38,3 +38,31 @@ impl<T: Mul<T, Output=T> + Sub<T, Output=T>> Point<T> {
         self.0 * _rhs.1 - self.1 * _rhs.0
     }
 }
+
+
+#[cfg(test)]
+mod test_point {
+    use crate::geometry::point::Point;
+
+    #[test]
+    fn it_works_i64() {
+        let p1: Point<i64> = Point(4, 6);
+        let p2 = Point(6, 4);
+
+        assert_eq!(p1 + p2, Point(10, 10));
+        assert_eq!(p1 - p2, Point(-2, 2));
+        assert_eq!(p1 * 4, Point(16, 24));
+        assert_eq!(p1 / 2, Point(2, 3));
+    }
+
+    #[test]
+    fn it_works_f64() {
+        let p1: Point<f64> = Point(4.0, 6.0);
+        let p2 = Point(6.0, 4.0);
+
+        assert_eq!(p1 + p2, Point(10.0, 10.0));
+        assert_eq!(p1 - p2, Point(-2.0, 2.0));
+        assert_eq!(p1 * 4.0, Point(16.0, 24.0));
+        assert_eq!(p1 / 2.0, Point(2.0, 3.0));
+    }
+}
