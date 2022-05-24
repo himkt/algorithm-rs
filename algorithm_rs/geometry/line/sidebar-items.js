@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["Line",""]]});
+initSidebarItems({"struct":[["Line",""]],"trait":[["LineContain",""],["LineDistance",""]]});
