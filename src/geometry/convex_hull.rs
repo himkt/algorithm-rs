@@ -4,15 +4,15 @@ use std::collections::VecDeque;
 pub fn convex_hull(ps: Vec<(i64, i64)>) -> Vec<(i64, i64)> {
     let n = ps.len();
 
-    let mut ps: Vec<Point> = ps
+    let mut ps: Vec<Point<i64>> = ps
         .iter()
-        .map(|&(x, y)| Point(x, y))
+        .map(|&(x, y)| Point::<i64>(x, y))
         .collect();
 
     ps.sort();
 
     let mut k = 0;
-    let mut deque: VecDeque<Point> = VecDeque::new();
+    let mut deque: VecDeque<Point<i64>> = VecDeque::new();
 
     for &pi in &ps {
         while k > 1 && (deque[k - 1] - deque[k - 2]).det(pi - deque[k - 1]) <= 0 {
@@ -43,6 +43,7 @@ pub fn convex_hull(ps: Vec<(i64, i64)>) -> Vec<(i64, i64)> {
     ret.sort_unstable();
     ret
 }
+
 
 #[cfg(test)]
 mod test_convex_hull {
