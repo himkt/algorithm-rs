@@ -33,8 +33,8 @@ impl<T: Copy + Div<T, Output=T>> std::ops::Div<T> for Point<T> {
     }
 }
 
-impl<T: Mul<T, Output=T> + Add<T, Output=T>> Point<T> {
+impl<T: Mul<T, Output=T> + Sub<T, Output=T>> Point<T> {
     pub fn det(self, _rhs: Point<T>) -> T {
-        self.0 * _rhs.1 + self.1 * _rhs.0
+        self.0 * _rhs.1 - self.1 * _rhs.0
     }
 }
