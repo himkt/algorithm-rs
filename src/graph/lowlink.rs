@@ -71,16 +71,6 @@ mod test_lowlink {
     use crate::graph::graph::GraphBuilder;
     use crate::graph::lowlink::Lowlink;
 
-    fn build_graph(n: usize, edges: Vec<(usize, usize)>) -> Vec<Vec<usize>> {
-        let mut graph = vec![vec![]; n];
-
-        for (u, v) in edges {
-            graph[u].push(v);
-            graph[v].push(u);
-        }
-        graph
-    }
-
     #[test]
     fn it_works() {
 
