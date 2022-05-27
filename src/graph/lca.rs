@@ -69,22 +69,21 @@ impl LCA {
 
 #[cfg(test)]
 mod test_lca {
+    use crate::graph::graph::GraphBuilder;
     use crate::graph::lca::LCA;
 
     #[test]
     fn it_works() {
-        let graph = vec![
-            vec![1, 2],
-            vec![3, 4],
-            vec![5, 6],
-            vec![7],
-            vec![],
-            vec![],
-            vec![],
-            vec![],
-        ];
+        let mut graph = GraphBuilder::new(8, false);
+        graph.connect(0, 1);
+        graph.connect(0, 2);
+        graph.connect(1, 3);
+        graph.connect(1, 4);
+        graph.connect(3, 5);
+        graph.connect(3, 6);
+        graph.connect(4, 7);
 
-        let mut lca = LCA::new(graph);
+        let mut lca = LCA::new(graph.graph);
         lca.init();
 
         assert_eq!(lca.lca(0, 1), 0);
@@ -98,15 +97,13 @@ mod test_lca {
 
     #[test]
     fn it_works_line() {
-        let graph = vec![
-            vec![1],
-            vec![2],
-            vec![3],
-            vec![4],
-            vec![],
-        ];
+        let mut graph = GraphBuilder::new(5, false);
+        graph.connect(0, 1);
+        graph.connect(1, 2);
+        graph.connect(2, 3);
+        graph.connect(3, 4);
 
-        let mut lca = LCA::new(graph);
+        let mut lca = LCA::new(graph.graph);
         lca.init();
 
         assert_eq!(lca.lca(0, 0), 0);

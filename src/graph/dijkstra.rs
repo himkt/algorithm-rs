@@ -8,6 +8,7 @@ pub struct Dijkstra {
     graph: Vec<Vec<(usize, usize)>>,
 }
 
+
 impl Dijkstra {
     pub fn new(graph: Vec<Vec<(usize, usize)>>) -> Self {
         Self { graph }
@@ -37,39 +38,43 @@ impl Dijkstra {
     }
 }
 
+
 #[cfg(test)]
 mod test_dijkstra {
+
     #[test]
     fn it_works() {
-        use crate::graph::dijkstra;
-        {
-            let mut graph = vec![vec![]; 7];
-            graph[0].push((1, 2));
-            graph[0].push((2, 5));
-            graph[1].push((2, 4));
-            graph[1].push((3, 6));
-            graph[1].push((4, 10));
-            graph[2].push((3, 2));
-            graph[3].push((5, 1));
-            graph[4].push((5, 5));
-            graph[4].push((6, 5));
-            graph[5].push((6, 9));
+        use crate::graph::graph::WeightedGraphBuilder;
+        use crate::graph::dijkstra::Dijkstra;
 
-            let mut dijkstra = dijkstra::Dijkstra::new(graph);
+        {
+            let mut graph = WeightedGraphBuilder::new(7, true);
+            graph.connect(0, 1, 2);
+            graph.connect(0, 2, 5);
+            graph.connect(1, 2, 4);
+            graph.connect(1, 3, 5);
+            graph.connect(1, 4, 10);
+            graph.connect(2, 3, 2);
+            graph.connect(3, 5, 1);
+            graph.connect(4, 5, 5);
+            graph.connect(4, 6, 5);
+            graph.connect(5, 6, 9);
+
+            let mut dijkstra = Dijkstra::new(graph.graph);
             assert_eq!(dijkstra.search(0), vec![0, 2, 5, 7, 12, 8, 17]);
         }
 
         {
-            let mut graph = vec![vec![]; 7];
-            graph[0].push((1, 1));
-            graph[0].push((6, 10));
-            graph[1].push((2, 5));
-            graph[1].push((3, 2));
-            graph[3].push((4, 2));
-            graph[4].push((5, 3));
-            graph[5].push((6, 3));
+            let mut graph = WeightedGraphBuilder::new(7, true);
+            graph.connect(0, 1, 1);
+            graph.connect(0, 6, 10);
+            graph.connect(1, 2, 5);
+            graph.connect(1, 3, 2);
+            graph.connect(3, 4, 2);
+            graph.connect(4, 5, 3);
+            graph.connect(5, 6, 3);
 
-            let mut dijkstra = dijkstra::Dijkstra::new(graph);
+            let mut dijkstra = Dijkstra::new(graph.graph);
             assert_eq!(dijkstra.search(0), vec![0, 1, 6, 3, 5, 8, 10]);
         }
     }

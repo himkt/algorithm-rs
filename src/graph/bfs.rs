@@ -10,6 +10,7 @@ pub struct BFS {
     dist: Vec<usize>,
 }
 
+
 impl BFS {
     pub fn new(graph: Vec<Vec<usize>>) -> Self {
         let n = graph.len();
@@ -24,9 +25,7 @@ impl BFS {
         let mut queue = VecDeque::new();
         queue.push_back((root, 0));
 
-        while !queue.is_empty() {
-            let (cur, dist) = queue.pop_front().unwrap();
-
+        while let Some((cur, dist)) = queue.pop_front() {
             if self.seen[cur] {
                 continue;
             }
@@ -40,19 +39,23 @@ impl BFS {
     }
 }
 
+
 #[cfg(test)]
 mod test_bfs {
+
     #[test]
     fn it_works() {
+        use crate::graph::graph::GraphBuilder;
         use crate::graph::bfs::BFS;
         use crate::graph::bfs::INF;
-        {
-            let mut graph = vec![vec![]; 5];
-            graph[0].push(1);
-            graph[1].push(2);
-            graph[2].push(4);
 
-            let mut bfs = BFS::new(graph);
+        {
+            let mut graph = GraphBuilder::new(5, true);
+            graph.connect(0, 1);
+            graph.connect(1, 2);
+            graph.connect(2, 4);
+
+            let mut bfs = BFS::new(graph.graph);
             bfs.search(0);
             assert_eq!(bfs.seen, vec![true, true, true, false, true]);
             assert_eq!(bfs.dist, vec![0, 1, 2, INF, 3]);

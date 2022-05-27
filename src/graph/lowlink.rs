@@ -68,6 +68,7 @@ impl Lowlink {
 
 #[cfg(test)]
 mod test_lowlink {
+    use crate::graph::graph::GraphBuilder;
     use crate::graph::lowlink::Lowlink;
 
     fn build_graph(n: usize, edges: Vec<(usize, usize)>) -> Vec<Vec<usize>> {
@@ -82,11 +83,17 @@ mod test_lowlink {
 
     #[test]
     fn it_works() {
-        let edges = vec![(0, 2), (1, 6), (2, 3), (3, 4), (3, 5), (4, 5), (5, 6)];
 
-        let graph = build_graph(7, edges);
-        let lowlink = Lowlink::new(graph);
+        let mut graph = GraphBuilder::new(7, false);
+        graph.connect(0, 2);
+        graph.connect(1, 6);
+        graph.connect(2, 3);
+        graph.connect(3, 4);
+        graph.connect(3, 5);
+        graph.connect(4, 5);
+        graph.connect(5, 6);
 
+        let lowlink = Lowlink::new(graph.graph);
         assert_eq!(lowlink.ord, vec![0, 6, 1, 2, 3, 4, 5]);
         assert_eq!(lowlink.low, vec![0, 6, 1, 2, 2, 2, 5]);
         assert_eq!(lowlink.num_bridges(), 4);
@@ -94,11 +101,13 @@ mod test_lowlink {
 
     #[test]
     fn it_works_without_bridge() {
-        let edges = vec![(0, 1), (0, 2), (1, 2)];
 
-        let graph = build_graph(3, edges);
-        let lowlink = Lowlink::new(graph);
+        let mut graph = GraphBuilder::new(3, false);
+        graph.connect(0, 1);
+        graph.connect(0, 2);
+        graph.connect(1, 2);
 
+        let lowlink = Lowlink::new(graph.graph);
         assert_eq!(lowlink.ord, vec![0, 1, 2]);
         assert_eq!(lowlink.low, vec![0, 0, 0]);
         assert_eq!(lowlink.num_bridges(), 0);
@@ -106,10 +115,15 @@ mod test_lowlink {
 
     #[test]
     fn it_works_with_all_edges_are_bridges() {
-        let edges = vec![(0, 1), (1, 2), (2, 3), (3, 4), (4, 5)];
 
-        let graph = build_graph(6, edges);
-        let lowlinke = Lowlink::new(graph);
+        let mut graph = GraphBuilder::new(6, false);
+        graph.connect(0, 1);
+        graph.connect(1, 2);
+        graph.connect(2, 3);
+        graph.connect(3, 4);
+        graph.connect(4, 5);
+
+        let lowlinke = Lowlink::new(graph.graph);
 
         assert_eq!(lowlinke.ord, vec![0, 1, 2, 3, 4, 5]);
         assert_eq!(lowlinke.low, vec![0, 1, 2, 3, 4, 5]);
@@ -118,11 +132,17 @@ mod test_lowlink {
 
     #[test]
     fn it_works_hand() {
-        let edges = vec![(0, 1), (1, 2), (1, 3), (2, 4), (4, 5), (4, 6), (5, 6)];
 
-        let graph = build_graph(7, edges);
-        let lowlink = Lowlink::new(graph);
+        let mut graph = GraphBuilder::new(7, false);
+        graph.connect(0, 1);
+        graph.connect(1, 2);
+        graph.connect(1, 3);
+        graph.connect(2, 4);
+        graph.connect(4, 5);
+        graph.connect(4, 6);
+        graph.connect(5, 6);
 
+        let lowlink = Lowlink::new(graph.graph);
         assert_eq!(lowlink.ord, vec![0, 1, 2, 6, 3, 4, 5]);
         assert_eq!(lowlink.low, vec![0, 1, 2, 6, 3, 3, 3]);
         assert_eq!(lowlink.num_bridges(), 4);

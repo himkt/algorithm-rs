@@ -8,6 +8,7 @@ pub struct DFS {
     dist: Vec<usize>,
 }
 
+
 impl DFS {
     pub fn new(graph: Vec<Vec<usize>>) -> Self {
         let n = graph.len();
@@ -36,19 +37,22 @@ impl DFS {
     }
 }
 
+
 #[cfg(test)]
 mod test_dfs {
+
     #[test]
     fn it_works() {
+        use crate::graph::graph::GraphBuilder;
         use crate::graph::dfs::DFS;
         use crate::graph::dfs::INF;
         {
-            let mut graph = vec![vec![]; 5];
-            graph[0].push(1);
-            graph[1].push(2);
-            graph[2].push(4);
+            let mut graph = GraphBuilder::new(5, true);
+            graph.connect(0, 1);
+            graph.connect(1, 2);
+            graph.connect(2, 4);
 
-            let mut dfs = DFS::new(graph);
+            let mut dfs = DFS::new(graph.graph);
             dfs.search(0);
             assert_eq!(dfs.seen, vec![true, true, true, false, true]);
             assert_eq!(dfs.dist, vec![0, 1, 2, INF, 3]);

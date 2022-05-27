@@ -98,32 +98,22 @@ impl SCC {
 
 #[cfg(test)]
 mod test_scc {
+    use crate::graph::graph::GraphBuilder;
     use crate::graph::scc::SCC;
-
-    fn build_graph(n: usize, edges: Vec<(usize, usize)>) -> Vec<Vec<usize>> {
-        let mut graph = vec![vec![]; n];
-
-        for (u, v) in edges {
-            graph[u].push(v);
-        }
-
-        graph
-    }
 
     #[test]
     fn it_works() {
-        let edges = vec![
-            (1, 4),
-            (5, 2),
-            (3, 0),
-            (5, 5),
-            (4, 1),
-            (0, 3),
-            (4, 2),
-        ];
-        let graph = build_graph(6, edges);
 
-        let mut scc = SCC::new(graph);
+        let mut graph = GraphBuilder::new(6, true);
+        graph.connect(1, 4);
+        graph.connect(5, 2);
+        graph.connect(3, 0);
+        graph.connect(5, 5);
+        graph.connect(4, 1);
+        graph.connect(0, 3);
+        graph.connect(4, 2);
+
+        let mut scc = SCC::new(graph.graph);
         assert_eq!(scc.scc(), 4);
         assert_eq!(scc.cmp, vec![3, 1, 2, 3, 1, 0]);
     }

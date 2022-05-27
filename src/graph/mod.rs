@@ -5,3 +5,4 @@ pub mod lowlink;
 pub mod topological_sort;
 pub mod scc;
 pub mod lca;
+pub mod graph;
