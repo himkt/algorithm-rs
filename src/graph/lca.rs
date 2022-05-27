@@ -79,9 +79,9 @@ mod test_lca {
         graph.connect(0, 2);
         graph.connect(1, 3);
         graph.connect(1, 4);
-        graph.connect(3, 5);
-        graph.connect(3, 6);
-        graph.connect(4, 7);
+        graph.connect(2, 5);
+        graph.connect(2, 6);
+        graph.connect(3, 7);
 
         let mut lca = LCA::new(graph.graph);
         lca.init();
