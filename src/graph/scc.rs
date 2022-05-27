@@ -1,6 +1,9 @@
+use crate::graph::graph::Graph;
+
+
 pub struct SCC {
-    fgraph: Vec<Vec<usize>>,
-    rgraph: Vec<Vec<usize>>,
+    fgraph: Graph,
+    rgraph: Graph,
     fused: Vec<bool>,
     rused: Vec<bool>,
     cmp: Vec<usize>,
@@ -11,19 +14,19 @@ pub struct SCC {
 
 impl SCC {
     #[allow(clippy::needless_range_loop)]
-    pub fn new(graph: Vec<Vec<usize>>) -> Self {
-        let n = graph.len();
+    pub fn new(graph: Graph) -> Self {
+        let n = graph.n;
         let fused = vec![false; n];
         let rused = vec![false; n];
         let cmp = vec![0; n];
         let vs = vec![];
 
         let fgraph = graph;
+        let mut rgraph = Graph::new(n, true);
 
-        let mut rgraph = vec![vec![]; n];
         for u in 0..n {
-            for &v in fgraph[u].iter() {
-                rgraph[v].push(u);
+            for &(v, _) in fgraph.graph[u].iter() {
+                rgraph.connect_unweighted(v, u);
             }
         }
 
@@ -66,8 +69,8 @@ impl SCC {
     fn fdfs(&mut self, u: usize) {
         self.fused[u] = true;
 
-        for i in 0..self.fgraph[u].len() {
-            let v = self.fgraph[u][i];
+        for i in 0..self.fgraph.graph[u].len() {
+            let (v, _) = self.fgraph.graph[u][i];
 
             if self.fused[v] {
                 continue;
@@ -83,8 +86,8 @@ impl SCC {
         self.rused[u] = true;
         self.cmp[u] = k;
 
-        for i in 0..self.rgraph[u].len() {
-            let v = self.rgraph[u][i];
+        for i in 0..self.rgraph.graph[u].len() {
+            let (v, _) = self.rgraph.graph[u][i];
 
             if self.rused[v] {
                 continue;
@@ -98,22 +101,22 @@ impl SCC {
 
 #[cfg(test)]
 mod test_scc {
-    use crate::graph::graph::GraphBuilder;
+    use crate::graph::graph::Graph;
     use crate::graph::scc::SCC;
 
     #[test]
     fn it_works() {
 
-        let mut graph = GraphBuilder::new(6, true);
-        graph.connect(1, 4);
-        graph.connect(5, 2);
-        graph.connect(3, 0);
-        graph.connect(5, 5);
-        graph.connect(4, 1);
-        graph.connect(0, 3);
-        graph.connect(4, 2);
+        let mut graph = Graph::new(6, true);
+        graph.connect_unweighted(1, 4);
+        graph.connect_unweighted(5, 2);
+        graph.connect_unweighted(3, 0);
+        graph.connect_unweighted(5, 5);
+        graph.connect_unweighted(4, 1);
+        graph.connect_unweighted(0, 3);
+        graph.connect_unweighted(4, 2);
 
-        let mut scc = SCC::new(graph.graph);
+        let mut scc = SCC::new(graph);
         assert_eq!(scc.scc(), 4);
         assert_eq!(scc.cmp, vec![3, 1, 2, 3, 1, 0]);
     }
