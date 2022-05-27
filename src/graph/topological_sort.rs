@@ -1,53 +1,45 @@
 use crate::graph::graph::Graph;
 
-use std::{cmp::Reverse, collections::BinaryHeap};
 
 pub struct TopologicalSort {
     graph: Graph,
-    deg: Vec<usize>,
 }
 
+
+#[allow(clippy::needless_range_loop)]
 impl TopologicalSort {
     pub fn new(graph: Graph) -> Self {
-        let n: usize = graph.n;
-        let mut deg = vec![0; n];
-
-        for row in graph.graph.iter() {
-            for &(v, _) in row.iter() {
-                deg[v] += 1;
-            }
-        }
-
-        TopologicalSort { graph, deg }
+        TopologicalSort { graph }
     }
 
     pub fn sort(&mut self) -> Vec<usize> {
         let mut ans: Vec<usize> = vec![];
-        let mut s: BinaryHeap<_> = BinaryHeap::new();
+        let mut s = std::collections::BinaryHeap::new();
+        let mut degrees = self.graph.in_degrees.clone();
 
         for v in 0..self.graph.n {
-            if self.deg[v] == 0 {
-                s.push(Reverse(v));
+            if degrees[v] == 0 {
+                s.push(std::cmp::Reverse(v));
             }
         }
 
-        while let Some(Reverse(v)) = s.pop() {
+        while let Some(std::cmp::Reverse(v)) = s.pop() {
             ans.push(v);
 
             for &(nv, _) in self.graph.graph[v].iter() {
-                if self.deg[nv] == 0 {
+                if degrees[nv] == 0 {
                     continue;
                 }
 
-                self.deg[nv] -= 1;
+                degrees[nv] -= 1;
 
-                if self.deg[nv] == 0 {
-                    s.push(Reverse(nv));
+                if degrees[nv] == 0 {
+                    s.push(std::cmp::Reverse(nv));
                 }
             }
         }
 
-        if ans.len() == self.deg.len() {
+        if ans.len() == degrees.len() {
             ans
         } else {
             vec![]
