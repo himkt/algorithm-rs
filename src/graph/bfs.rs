@@ -3,13 +3,13 @@ use crate::graph::graph::Graph;
 const INF: usize = 100_000_000_000_000_000;
 
 #[derive(Debug, Clone)]
-pub struct BFS {
+pub struct BreadthFirstSearch {
     graph: Graph,
     seen: Vec<bool>,
     dist: Vec<usize>,
 }
 
-impl BFS {
+impl BreadthFirstSearch {
     pub fn new(graph: Graph) -> Self {
         let n = graph.n;
         Self {
@@ -39,7 +39,7 @@ impl BFS {
 
 #[cfg(test)]
 mod test_bfs {
-    use crate::graph::bfs::BFS;
+    use crate::graph::bfs::BreadthFirstSearch;
     use crate::graph::bfs::INF;
     use crate::graph::graph::Graph;
 
@@ -50,7 +50,7 @@ mod test_bfs {
         graph.connect_unweighted(1, 2);
         graph.connect_unweighted(2, 4);
 
-        let mut bfs = BFS::new(graph);
+        let mut bfs = BreadthFirstSearch::new(graph);
         bfs.search(0);
         assert_eq!(bfs.seen, vec![true, true, true, false, true]);
         assert_eq!(bfs.dist, vec![0, 1, 2, INF, 3]);

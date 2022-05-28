@@ -22,17 +22,16 @@ pub fn com(n: i64, mut r: i64) -> i64 {
 
 #[cfg(test)]
 mod test_combination {
+    use crate::math::com::com;
+
     #[test]
     fn it_works() {
-        use crate::math::com::com;
-        {
-            assert_eq!(com(6, 0), 1);
-            assert_eq!(com(6, 1), 6);
-            assert_eq!(com(6, 2), 15);
-            assert_eq!(com(6, 3), 20);
-            assert_eq!(com(6, 4), 15);
-            assert_eq!(com(6, 5), 6);
-            assert_eq!(com(6, 6), 1);
-        }
+        assert_eq!(com(6, 0), 1);
+        assert_eq!(com(6, 1), 6);
+        assert_eq!(com(6, 2), 15);
+        assert_eq!(com(6, 3), 20);
+        assert_eq!(com(6, 4), 15);
+        assert_eq!(com(6, 5), 6);
+        assert_eq!(com(6, 6), 1);
     }
 }

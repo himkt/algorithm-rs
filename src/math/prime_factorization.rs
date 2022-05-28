@@ -44,9 +44,10 @@ impl SequentialPrimeFactorization {
 
 #[cfg(test)]
 mod test_eratosthenes_sieve {
+    use crate::math::prime_factorization::SequentialPrimeFactorization;
+
     #[test]
     fn it_works() {
-        use crate::math::prime_factorization::SequentialPrimeFactorization;
         let prime_factorizer = SequentialPrimeFactorization::new(100);
 
         assert_eq!(prime_factorizer.factorize(1), vec![]);
