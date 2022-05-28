@@ -122,20 +122,23 @@
 <span id="117">117</span>
 <span id="118">118</span>
 <span id="119">119</span>
-</pre><pre class="rust"><code><span class="kw">const</span> <span class="ident">ROOT</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">0</span>;
+<span id="120">120</span>
+</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::graph::graph::Graph</span>;
+
+<span class="kw">const</span> <span class="ident">ROOT</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">0</span>;
 <span class="kw">const</span> <span class="ident">MAX_LOG_V</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">30</span>;
 
 
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">LCA</span> {
     <span class="ident">parents</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span><span class="op">&gt;</span>,
     <span class="ident">depth</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>,
-    <span class="ident">graph</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+    <span class="ident">graph</span>: <span class="ident">Graph</span>,
 }
 
 
 <span class="kw">impl</span> <span class="ident">LCA</span> {
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">graph</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span><span class="op">&gt;</span>) -&gt; <span class="self">Self</span> {
-        <span class="kw">let</span> <span class="ident">n</span> <span class="op">=</span> <span class="ident">graph</span>.<span class="ident">len</span>();
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">graph</span>: <span class="ident">Graph</span>) -&gt; <span class="self">Self</span> {
+        <span class="kw">let</span> <span class="ident">n</span> <span class="op">=</span> <span class="ident">graph</span>.<span class="ident">n</span>;
         <span class="kw">let</span> <span class="ident">parents</span> <span class="op">=</span> <span class="macro">vec!</span>[<span class="macro">vec!</span>[<span class="ident">ROOT</span>; <span class="ident">n</span>]; <span class="ident">MAX_LOG_V</span>];
         <span class="kw">let</span> <span class="ident">depth</span> <span class="op">=</span> <span class="macro">vec!</span>[<span class="ident">ROOT</span>; <span class="ident">n</span>];
         <span class="ident">LCA</span> { <span class="ident">parents</span>, <span class="ident">depth</span>, <span class="ident">graph</span> }
@@ -145,7 +148,7 @@
         <span class="self">self</span>.<span class="ident">dfs</span>(<span class="ident">ROOT</span>, <span class="ident">ROOT</span>, <span class="number">0</span>);
 
         <span class="kw">for</span> <span class="ident">k</span> <span class="kw">in</span> <span class="number">0</span>..<span class="ident">MAX_LOG_V</span><span class="op">-</span><span class="number">1</span> {
-            <span class="kw">for</span> <span class="ident">v</span> <span class="kw">in</span> <span class="number">0</span>..<span class="self">self</span>.<span class="ident">graph</span>.<span class="ident">len</span>() {
+            <span class="kw">for</span> <span class="ident">v</span> <span class="kw">in</span> <span class="number">0</span>..<span class="self">self</span>.<span class="ident">graph</span>.<span class="ident">n</span> {
                 <span class="self">self</span>.<span class="ident">parents</span>[<span class="ident">k</span><span class="op">+</span><span class="number">1</span>][<span class="ident">v</span>] <span class="op">=</span> <span class="self">self</span>.<span class="ident">parents</span>[<span class="ident">k</span>][<span class="self">self</span>.<span class="ident">parents</span>[<span class="ident">k</span>][<span class="ident">v</span>]];
             }
         }
@@ -155,8 +158,8 @@
         <span class="self">self</span>.<span class="ident">parents</span>[<span class="number">0</span>][<span class="ident">v</span>] <span class="op">=</span> <span class="ident">p</span>;
         <span class="self">self</span>.<span class="ident">depth</span>[<span class="ident">v</span>] <span class="op">=</span> <span class="ident">d</span>;
 
-        <span class="kw">for</span> <span class="ident">i</span> <span class="kw">in</span> <span class="number">0</span>..<span class="self">self</span>.<span class="ident">graph</span>[<span class="ident">v</span>].<span class="ident">len</span>() {
-            <span class="kw">let</span> <span class="ident">nv</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">graph</span>[<span class="ident">v</span>][<span class="ident">i</span>];
+        <span class="kw">for</span> <span class="ident">i</span> <span class="kw">in</span> <span class="number">0</span>..<span class="self">self</span>.<span class="ident">graph</span>.<span class="ident">graph</span>[<span class="ident">v</span>].<span class="ident">len</span>() {
+            <span class="kw">let</span> (<span class="ident">nv</span>, <span class="kw">_</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">graph</span>.<span class="ident">graph</span>[<span class="ident">v</span>][<span class="ident">i</span>];
 
             <span class="kw">if</span> <span class="ident">nv</span> <span class="op">!</span><span class="op">=</span> <span class="ident">p</span> {
                 <span class="self">self</span>.<span class="ident">dfs</span>(<span class="ident">nv</span>, <span class="ident">v</span>, <span class="ident">d</span> <span class="op">+</span> <span class="number">1</span>);
@@ -193,20 +196,20 @@
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">mod</span> <span class="ident">test_lca</span> {
+    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::graph::graph::Graph</span>;
     <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::graph::lca::LCA</span>;
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">it_works</span>() {
-        <span class="kw">let</span> <span class="ident">graph</span> <span class="op">=</span> <span class="macro">vec!</span>[
-            <span class="macro">vec!</span>[<span class="number">1</span>, <span class="number">2</span>],
-            <span class="macro">vec!</span>[<span class="number">3</span>, <span class="number">4</span>],
-            <span class="macro">vec!</span>[<span class="number">5</span>, <span class="number">6</span>],
-            <span class="macro">vec!</span>[<span class="number">7</span>],
-            <span class="macro">vec!</span>[],
-            <span class="macro">vec!</span>[],
-            <span class="macro">vec!</span>[],
-            <span class="macro">vec!</span>[],
-        ];
+
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">graph</span> <span class="op">=</span> <span class="ident">Graph::new</span>(<span class="number">8</span>, <span class="bool-val">false</span>);
+        <span class="ident">graph</span>.<span class="ident">connect_unweighted</span>(<span class="number">0</span>, <span class="number">1</span>);
+        <span class="ident">graph</span>.<span class="ident">connect_unweighted</span>(<span class="number">0</span>, <span class="number">2</span>);
+        <span class="ident">graph</span>.<span class="ident">connect_unweighted</span>(<span class="number">1</span>, <span class="number">3</span>);
+        <span class="ident">graph</span>.<span class="ident">connect_unweighted</span>(<span class="number">1</span>, <span class="number">4</span>);
+        <span class="ident">graph</span>.<span class="ident">connect_unweighted</span>(<span class="number">2</span>, <span class="number">5</span>);
+        <span class="ident">graph</span>.<span class="ident">connect_unweighted</span>(<span class="number">2</span>, <span class="number">6</span>);
+        <span class="ident">graph</span>.<span class="ident">connect_unweighted</span>(<span class="number">3</span>, <span class="number">7</span>);
 
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">lca</span> <span class="op">=</span> <span class="ident">LCA::new</span>(<span class="ident">graph</span>);
         <span class="ident">lca</span>.<span class="ident">init</span>();
@@ -222,13 +225,12 @@
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">it_works_line</span>() {
-        <span class="kw">let</span> <span class="ident">graph</span> <span class="op">=</span> <span class="macro">vec!</span>[
-            <span class="macro">vec!</span>[<span class="number">1</span>],
-            <span class="macro">vec!</span>[<span class="number">2</span>],
-            <span class="macro">vec!</span>[<span class="number">3</span>],
-            <span class="macro">vec!</span>[<span class="number">4</span>],
-            <span class="macro">vec!</span>[],
-        ];
+
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">graph</span> <span class="op">=</span> <span class="ident">Graph::new</span>(<span class="number">5</span>, <span class="bool-val">false</span>);
+        <span class="ident">graph</span>.<span class="ident">connect_unweighted</span>(<span class="number">0</span>, <span class="number">1</span>);
+        <span class="ident">graph</span>.<span class="ident">connect_unweighted</span>(<span class="number">1</span>, <span class="number">2</span>);
+        <span class="ident">graph</span>.<span class="ident">connect_unweighted</span>(<span class="number">2</span>, <span class="number">3</span>);
+        <span class="ident">graph</span>.<span class="ident">connect_unweighted</span>(<span class="number">3</span>, <span class="number">4</span>);
 
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">lca</span> <span class="op">=</span> <span class="ident">LCA::new</span>(<span class="ident">graph</span>);
         <span class="ident">lca</span>.<span class="ident">init</span>();
