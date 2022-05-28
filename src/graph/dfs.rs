@@ -1,16 +1,19 @@
+use crate::graph::graph::Graph;
+
 const INF: usize = 100_000_000_000_000_000;
 
 
 #[derive(Debug, Clone)]
 pub struct DFS {
-    graph: Vec<Vec<usize>>,
+    graph: Graph,
     seen: Vec<bool>,
     dist: Vec<usize>,
 }
 
+
 impl DFS {
-    pub fn new(graph: Vec<Vec<usize>>) -> Self {
-        let n = graph.len();
+    pub fn new(graph: Graph) -> Self {
+        let n = graph.n;
         Self {
             graph,
             seen: vec![false; n],
@@ -30,28 +33,31 @@ impl DFS {
         self.seen[v] = true;
         self.dist[v] = self.dist[v].min(dist);
 
-        for i in 0..self.graph[v].len() {
-            self.dfs(self.graph[v][i], dist + 1);
+        for i in 0..self.graph.graph[v].len() {
+            let (nv, _) = self.graph.graph[v][i];
+            self.dfs(nv, dist + 1);
         }
     }
 }
 
+
 #[cfg(test)]
 mod test_dfs {
+    use crate::graph::graph::Graph;
+    use crate::graph::dfs::DFS;
+    use crate::graph::dfs::INF;
+
     #[test]
     fn it_works() {
-        use crate::graph::dfs::DFS;
-        use crate::graph::dfs::INF;
-        {
-            let mut graph = vec![vec![]; 5];
-            graph[0].push(1);
-            graph[1].push(2);
-            graph[2].push(4);
 
-            let mut dfs = DFS::new(graph);
-            dfs.search(0);
-            assert_eq!(dfs.seen, vec![true, true, true, false, true]);
-            assert_eq!(dfs.dist, vec![0, 1, 2, INF, 3]);
-        }
+        let mut graph = Graph::new(5, true);
+        graph.connect_unweighted(0, 1);
+        graph.connect_unweighted(1, 2);
+        graph.connect_unweighted(2, 4);
+
+        let mut dfs = DFS::new(graph);
+        dfs.search(0);
+        assert_eq!(dfs.seen, vec![true, true, true, false, true]);
+        assert_eq!(dfs.dist, vec![0, 1, 2, INF, 3]);
     }
 }

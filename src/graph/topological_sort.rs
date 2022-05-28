@@ -1,42 +1,45 @@
-use std::{cmp::Reverse, collections::BinaryHeap};
+use crate::graph::graph::Graph;
+
 
 pub struct TopologicalSort {
-    g: Vec<Vec<usize>>,
-    deg: Vec<usize>,
+    graph: Graph,
 }
 
+
+#[allow(clippy::needless_range_loop)]
 impl TopologicalSort {
-    pub fn new(g: Vec<Vec<usize>>, deg: Vec<usize>) -> Self {
-        TopologicalSort { g, deg }
+    pub fn new(graph: Graph) -> Self {
+        TopologicalSort { graph }
     }
 
     pub fn sort(&mut self) -> Vec<usize> {
         let mut ans: Vec<usize> = vec![];
-        let mut s: BinaryHeap<_> = BinaryHeap::new();
+        let mut s = std::collections::BinaryHeap::new();
+        let mut degrees = self.graph.in_degrees.clone();
 
-        for v in 0..self.g.len() {
-            if self.deg[v] == 0 {
-                s.push(Reverse(v));
+        for v in 0..self.graph.n {
+            if degrees[v] == 0 {
+                s.push(std::cmp::Reverse(v));
             }
         }
 
-        while let Some(Reverse(v)) = s.pop() {
+        while let Some(std::cmp::Reverse(v)) = s.pop() {
             ans.push(v);
 
-            for &nv in self.g[v].iter() {
-                if self.deg[nv] == 0 {
+            for &(nv, _) in self.graph.graph[v].iter() {
+                if degrees[nv] == 0 {
                     continue;
                 }
 
-                self.deg[nv] -= 1;
+                degrees[nv] -= 1;
 
-                if self.deg[nv] == 0 {
-                    s.push(Reverse(nv));
+                if degrees[nv] == 0 {
+                    s.push(std::cmp::Reverse(nv));
                 }
             }
         }
 
-        if ans.len() == self.deg.len() {
+        if ans.len() == degrees.len() {
             ans
         } else {
             vec![]
@@ -44,21 +47,31 @@ impl TopologicalSort {
     }
 }
 
+
 #[cfg(test)]
 mod test_topological_sort {
+    use crate::graph::graph::Graph;
+    use crate::graph::topological_sort::TopologicalSort;
+
     #[test]
     fn it_works() {
-        use crate::graph::topological_sort::TopologicalSort;
-        {
-            let g: Vec<Vec<usize>> = vec![vec![], vec![0, 3], vec![3], vec![]];
-            let deg: Vec<usize> = vec![1, 0, 0, 2];
-            let mut sorter = TopologicalSort::new(g, deg);
-            assert_eq!(sorter.sort(), vec![1, 0, 2, 3]);
 
-            let g: Vec<Vec<usize>> = vec![vec![1], vec![0]];
-            let deg: Vec<usize> = vec![1, 1];
-            let mut sorter = TopologicalSort::new(g, deg);
-            assert_eq!(sorter.sort(), vec![]);
-        }
+        let mut graph = Graph::new(4, true);
+        graph.connect_unweighted(1, 0);
+        graph.connect_unweighted(1, 3);
+        graph.connect_unweighted(2, 3);
+
+        let mut sorter = TopologicalSort::new(graph);
+        assert_eq!(sorter.sort(), vec![1, 0, 2, 3]);
+    }
+
+    #[test]
+    fn it_works_circle() {
+
+        let mut graph = Graph::new(2, false);
+        graph.connect_unweighted(0, 1);
+
+        let mut sorter = TopologicalSort::new(graph);
+        assert_eq!(sorter.sort(), vec![]);
     }
 }

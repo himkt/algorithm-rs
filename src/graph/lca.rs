@@ -1,3 +1,5 @@
+use crate::graph::graph::Graph;
+
 const ROOT: usize = 0;
 const MAX_LOG_V: usize = 30;
 
@@ -5,13 +7,13 @@ const MAX_LOG_V: usize = 30;
 pub struct LCA {
     parents: Vec<Vec<usize>>,
     depth: Vec<usize>,
-    graph: Vec<Vec<usize>>,
+    graph: Graph,
 }
 
 
 impl LCA {
-    pub fn new(graph: Vec<Vec<usize>>) -> Self {
-        let n = graph.len();
+    pub fn new(graph: Graph) -> Self {
+        let n = graph.n;
         let parents = vec![vec![ROOT; n]; MAX_LOG_V];
         let depth = vec![ROOT; n];
         LCA { parents, depth, graph }
@@ -21,7 +23,7 @@ impl LCA {
         self.dfs(ROOT, ROOT, 0);
 
         for k in 0..MAX_LOG_V-1 {
-            for v in 0..self.graph.len() {
+            for v in 0..self.graph.n {
                 self.parents[k+1][v] = self.parents[k][self.parents[k][v]];
             }
         }
@@ -31,8 +33,8 @@ impl LCA {
         self.parents[0][v] = p;
         self.depth[v] = d;
 
-        for i in 0..self.graph[v].len() {
-            let nv = self.graph[v][i];
+        for i in 0..self.graph.graph[v].len() {
+            let (nv, _) = self.graph.graph[v][i];
 
             if nv != p {
                 self.dfs(nv, v, d + 1);
@@ -69,20 +71,20 @@ impl LCA {
 
 #[cfg(test)]
 mod test_lca {
+    use crate::graph::graph::Graph;
     use crate::graph::lca::LCA;
 
     #[test]
     fn it_works() {
-        let graph = vec![
-            vec![1, 2],
-            vec![3, 4],
-            vec![5, 6],
-            vec![7],
-            vec![],
-            vec![],
-            vec![],
-            vec![],
-        ];
+
+        let mut graph = Graph::new(8, false);
+        graph.connect_unweighted(0, 1);
+        graph.connect_unweighted(0, 2);
+        graph.connect_unweighted(1, 3);
+        graph.connect_unweighted(1, 4);
+        graph.connect_unweighted(2, 5);
+        graph.connect_unweighted(2, 6);
+        graph.connect_unweighted(3, 7);
 
         let mut lca = LCA::new(graph);
         lca.init();
@@ -98,13 +100,12 @@ mod test_lca {
 
     #[test]
     fn it_works_line() {
-        let graph = vec![
-            vec![1],
-            vec![2],
-            vec![3],
-            vec![4],
-            vec![],
-        ];
+
+        let mut graph = Graph::new(5, false);
+        graph.connect_unweighted(0, 1);
+        graph.connect_unweighted(1, 2);
+        graph.connect_unweighted(2, 3);
+        graph.connect_unweighted(3, 4);
 
         let mut lca = LCA::new(graph);
         lca.init();
