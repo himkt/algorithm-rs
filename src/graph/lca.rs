@@ -3,18 +3,18 @@ use crate::graph::graph::Graph;
 const ROOT: usize = 0;
 const MAX_LOG_V: usize = 30;
 
-pub struct LCA {
+pub struct LowestCommonAncestor {
     parents: Vec<Vec<usize>>,
     depth: Vec<usize>,
     graph: Graph,
 }
 
-impl LCA {
+impl LowestCommonAncestor {
     pub fn new(graph: Graph) -> Self {
         let n = graph.n;
         let parents = vec![vec![ROOT; n]; MAX_LOG_V];
         let depth = vec![ROOT; n];
-        LCA {
+        LowestCommonAncestor {
             parents,
             depth,
             graph,
@@ -73,7 +73,7 @@ impl LCA {
 #[cfg(test)]
 mod test_lca {
     use crate::graph::graph::Graph;
-    use crate::graph::lca::LCA;
+    use crate::graph::lca::LowestCommonAncestor;
 
     #[test]
     fn it_works() {
@@ -86,7 +86,7 @@ mod test_lca {
         graph.connect_unweighted(2, 6);
         graph.connect_unweighted(3, 7);
 
-        let mut lca = LCA::new(graph);
+        let mut lca = LowestCommonAncestor::new(graph);
         lca.init();
 
         assert_eq!(lca.lca(0, 1), 0);
@@ -106,7 +106,7 @@ mod test_lca {
         graph.connect_unweighted(2, 3);
         graph.connect_unweighted(3, 4);
 
-        let mut lca = LCA::new(graph);
+        let mut lca = LowestCommonAncestor::new(graph);
         lca.init();
 
         assert_eq!(lca.lca(0, 0), 0);

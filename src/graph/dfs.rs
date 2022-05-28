@@ -3,13 +3,13 @@ use crate::graph::graph::Graph;
 const INF: usize = 100_000_000_000_000_000;
 
 #[derive(Debug, Clone)]
-pub struct DFS {
+pub struct DepthFirstSearch {
     graph: Graph,
     seen: Vec<bool>,
     dist: Vec<usize>,
 }
 
-impl DFS {
+impl DepthFirstSearch {
     pub fn new(graph: Graph) -> Self {
         let n = graph.n;
         Self {
@@ -40,7 +40,7 @@ impl DFS {
 
 #[cfg(test)]
 mod test_dfs {
-    use crate::graph::dfs::DFS;
+    use crate::graph::dfs::DepthFirstSearch;
     use crate::graph::dfs::INF;
     use crate::graph::graph::Graph;
 
@@ -51,7 +51,7 @@ mod test_dfs {
         graph.connect_unweighted(1, 2);
         graph.connect_unweighted(2, 4);
 
-        let mut dfs = DFS::new(graph);
+        let mut dfs = DepthFirstSearch::new(graph);
         dfs.search(0);
         assert_eq!(dfs.seen, vec![true, true, true, false, true]);
         assert_eq!(dfs.dist, vec![0, 1, 2, INF, 3]);
