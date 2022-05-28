@@ -75,18 +75,11 @@
 <span id="70">70</span>
 <span id="71">71</span>
 <span id="72">72</span>
-<span id="73">73</span>
-<span id="74">74</span>
-<span id="75">75</span>
-<span id="76">76</span>
-<span id="77">77</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::graph::graph::Graph</span>;
-
 
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">TopologicalSort</span> {
     <span class="ident">graph</span>: <span class="ident">Graph</span>,
 }
-
 
 <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::needless_range_loop</span>)]</span>
 <span class="kw">impl</span> <span class="ident">TopologicalSort</span> {
@@ -129,7 +122,6 @@
     }
 }
 
-
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">mod</span> <span class="ident">test_topological_sort</span> {
     <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::graph::graph::Graph</span>;
@@ -137,7 +129,6 @@
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">it_works</span>() {
-
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">graph</span> <span class="op">=</span> <span class="ident">Graph::new</span>(<span class="number">4</span>, <span class="bool-val">true</span>);
         <span class="ident">graph</span>.<span class="ident">connect_unweighted</span>(<span class="number">1</span>, <span class="number">0</span>);
         <span class="ident">graph</span>.<span class="ident">connect_unweighted</span>(<span class="number">1</span>, <span class="number">3</span>);
@@ -149,7 +140,6 @@
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">it_works_circle</span>() {
-
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">graph</span> <span class="op">=</span> <span class="ident">Graph::new</span>(<span class="number">2</span>, <span class="bool-val">false</span>);
         <span class="ident">graph</span>.<span class="ident">connect_unweighted</span>(<span class="number">0</span>, <span class="number">1</span>);
 

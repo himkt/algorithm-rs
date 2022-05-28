@@ -98,10 +98,6 @@
 <span id="93">93</span>
 <span id="94">94</span>
 <span id="95">95</span>
-<span id="96">96</span>
-<span id="97">97</span>
-<span id="98">98</span>
-<span id="99">99</span>
 </pre><pre class="rust"><code><span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">RSQ</span> {
     <span class="ident">v</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span>,
@@ -170,35 +166,31 @@
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">mod</span> <span class="ident">test_segment_tree</span> {
+    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::tree::segment_tree::rsq::RSQ</span>;
+
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">it_works</span>() {
-        <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::tree::segment_tree::rsq::RSQ</span>;
-        {
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rsq</span> <span class="op">=</span> <span class="ident">RSQ::new</span>();
-            <span class="ident">rsq</span>.<span class="ident">add</span>(<span class="number">2</span>, <span class="number">3</span>);
-            <span class="ident">rsq</span>.<span class="ident">add</span>(<span class="number">3</span>, <span class="number">1</span>);
-            <span class="ident">rsq</span>.<span class="ident">add</span>(<span class="number">4</span>, <span class="number">4</span>);
-            <span class="macro">assert_eq!</span>(<span class="ident">rsq</span>.<span class="ident">sum</span>(<span class="number">1</span>, <span class="number">2</span>), <span class="number">3</span>);
-            <span class="macro">assert_eq!</span>(<span class="ident">rsq</span>.<span class="ident">sum</span>(<span class="number">2</span>, <span class="number">3</span>), <span class="number">4</span>);
-            <span class="macro">assert_eq!</span>(<span class="ident">rsq</span>.<span class="ident">sum</span>(<span class="number">3</span>, <span class="number">3</span>), <span class="number">1</span>);
-            <span class="macro">assert_eq!</span>(<span class="ident">rsq</span>.<span class="ident">sum</span>(<span class="number">1</span>, <span class="number">5</span>), <span class="number">8</span>);
-        }
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rsq</span> <span class="op">=</span> <span class="ident">RSQ::new</span>();
+        <span class="ident">rsq</span>.<span class="ident">add</span>(<span class="number">2</span>, <span class="number">3</span>);
+        <span class="ident">rsq</span>.<span class="ident">add</span>(<span class="number">3</span>, <span class="number">1</span>);
+        <span class="ident">rsq</span>.<span class="ident">add</span>(<span class="number">4</span>, <span class="number">4</span>);
+        <span class="macro">assert_eq!</span>(<span class="ident">rsq</span>.<span class="ident">sum</span>(<span class="number">1</span>, <span class="number">2</span>), <span class="number">3</span>);
+        <span class="macro">assert_eq!</span>(<span class="ident">rsq</span>.<span class="ident">sum</span>(<span class="number">2</span>, <span class="number">3</span>), <span class="number">4</span>);
+        <span class="macro">assert_eq!</span>(<span class="ident">rsq</span>.<span class="ident">sum</span>(<span class="number">3</span>, <span class="number">3</span>), <span class="number">1</span>);
+        <span class="macro">assert_eq!</span>(<span class="ident">rsq</span>.<span class="ident">sum</span>(<span class="number">1</span>, <span class="number">5</span>), <span class="number">8</span>);
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">it_works_from</span>() {
-        <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::tree::segment_tree::rsq::RSQ</span>;
-        {
-            <span class="kw">let</span> <span class="ident">vs</span> <span class="op">=</span> <span class="macro">vec!</span>[<span class="number">1i64</span>; <span class="number">1</span> <span class="op">&lt;</span><span class="op">&lt;</span> <span class="number">3</span>];
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rsq</span> <span class="op">=</span> <span class="ident">RSQ::from</span>(<span class="ident">vs</span>);
-            <span class="ident">rsq</span>.<span class="ident">add</span>(<span class="number">2</span>, <span class="number">3</span>);
-            <span class="ident">rsq</span>.<span class="ident">add</span>(<span class="number">3</span>, <span class="number">1</span>);
-            <span class="ident">rsq</span>.<span class="ident">add</span>(<span class="number">4</span>, <span class="number">4</span>);
-            <span class="macro">assert_eq!</span>(<span class="ident">rsq</span>.<span class="ident">sum</span>(<span class="number">1</span>, <span class="number">2</span>), <span class="number">5</span>);
-            <span class="macro">assert_eq!</span>(<span class="ident">rsq</span>.<span class="ident">sum</span>(<span class="number">2</span>, <span class="number">3</span>), <span class="number">6</span>);
-            <span class="macro">assert_eq!</span>(<span class="ident">rsq</span>.<span class="ident">sum</span>(<span class="number">3</span>, <span class="number">3</span>), <span class="number">2</span>);
-            <span class="macro">assert_eq!</span>(<span class="ident">rsq</span>.<span class="ident">sum</span>(<span class="number">1</span>, <span class="number">5</span>), <span class="number">13</span>);
-        }
+        <span class="kw">let</span> <span class="ident">vs</span> <span class="op">=</span> <span class="macro">vec!</span>[<span class="number">1i64</span>; <span class="number">1</span> <span class="op">&lt;</span><span class="op">&lt;</span> <span class="number">3</span>];
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rsq</span> <span class="op">=</span> <span class="ident">RSQ::from</span>(<span class="ident">vs</span>);
+        <span class="ident">rsq</span>.<span class="ident">add</span>(<span class="number">2</span>, <span class="number">3</span>);
+        <span class="ident">rsq</span>.<span class="ident">add</span>(<span class="number">3</span>, <span class="number">1</span>);
+        <span class="ident">rsq</span>.<span class="ident">add</span>(<span class="number">4</span>, <span class="number">4</span>);
+        <span class="macro">assert_eq!</span>(<span class="ident">rsq</span>.<span class="ident">sum</span>(<span class="number">1</span>, <span class="number">2</span>), <span class="number">5</span>);
+        <span class="macro">assert_eq!</span>(<span class="ident">rsq</span>.<span class="ident">sum</span>(<span class="number">2</span>, <span class="number">3</span>), <span class="number">6</span>);
+        <span class="macro">assert_eq!</span>(<span class="ident">rsq</span>.<span class="ident">sum</span>(<span class="number">3</span>, <span class="number">3</span>), <span class="number">2</span>);
+        <span class="macro">assert_eq!</span>(<span class="ident">rsq</span>.<span class="ident">sum</span>(<span class="number">1</span>, <span class="number">5</span>), <span class="number">13</span>);
     }
 }
 </code></pre></div>

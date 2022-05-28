@@ -125,7 +125,6 @@
 
 <span class="kw">const</span> <span class="ident">INF</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">100_000_000_000_000_000</span>;
 
-
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Dijkstra</span> {
     <span class="ident">source</span>: <span class="ident">usize</span>,
@@ -134,12 +133,16 @@
     <span class="ident">backptrs</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>,
 }
 
-
 <span class="kw">impl</span> <span class="ident">Dijkstra</span> {
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">graph</span>: <span class="ident">Graph</span>) -&gt; <span class="self">Self</span> {
         <span class="kw">let</span> <span class="ident">dist</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span> <span class="op">=</span> <span class="macro">vec!</span>[<span class="ident">INF</span>; <span class="ident">graph</span>.<span class="ident">n</span>];
         <span class="kw">let</span> <span class="ident">backptrs</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span> <span class="op">=</span> (<span class="number">0</span>..<span class="ident">graph</span>.<span class="ident">n</span>).<span class="ident">collect</span>();
-        <span class="self">Self</span> { <span class="ident">source</span>: <span class="ident">INF</span>, <span class="ident">graph</span>, <span class="ident">dist</span>, <span class="ident">backptrs</span> }
+        <span class="self">Self</span> {
+            <span class="ident">source</span>: <span class="ident">INF</span>,
+            <span class="ident">graph</span>,
+            <span class="ident">dist</span>,
+            <span class="ident">backptrs</span>,
+        }
     }
 
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">search</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">src</span>: <span class="ident">usize</span>) {
@@ -187,16 +190,14 @@
     }
 }
 
-
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">mod</span> <span class="ident">test_dijkstra</span> {
-    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::graph::graph::Graph</span>;
     <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::graph::dijkstra::Dijkstra</span>;
     <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::graph::dijkstra::INF</span>;
+    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::graph::graph::Graph</span>;
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">it_works</span>() {
-
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">graph</span> <span class="op">=</span> <span class="ident">Graph::new</span>(<span class="number">7</span>, <span class="bool-val">true</span>);
         <span class="ident">graph</span>.<span class="ident">connect</span>(<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>);
         <span class="ident">graph</span>.<span class="ident">connect</span>(<span class="number">0</span>, <span class="number">2</span>, <span class="number">5</span>);
@@ -219,7 +220,6 @@
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">it_works_unreachable_path</span>() {
-
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">graph</span> <span class="op">=</span> <span class="ident">Graph::new</span>(<span class="number">9</span>, <span class="bool-val">true</span>);
         <span class="ident">graph</span>.<span class="ident">connect</span>(<span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>);
         <span class="ident">graph</span>.<span class="ident">connect</span>(<span class="number">0</span>, <span class="number">6</span>, <span class="number">10</span>);

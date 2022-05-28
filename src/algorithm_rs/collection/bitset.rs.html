@@ -56,7 +56,6 @@
 <span id="51">51</span>
 <span id="52">52</span>
 <span id="53">53</span>
-<span id="54">54</span>
 </pre><pre class="rust"><code><span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Bitset</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Copy</span><span class="op">&gt;</span> {
     <span class="ident">curr</span>: <span class="ident">usize</span>,
     <span class="ident">array</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>,
@@ -94,21 +93,20 @@
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">mod</span> <span class="ident">test_permutation</span> {
+    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::collection::bitset</span>;
+
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">it_works</span>() {
-        <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::collection::bitset</span>;
-        {
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">bitset</span> <span class="op">=</span> <span class="ident">bitset::bitset</span>(<span class="macro">vec!</span>[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]);
-            <span class="macro">assert_eq!</span>(<span class="ident">bitset</span>.<span class="ident">next</span>(), <span class="prelude-val">Some</span>(<span class="macro">vec!</span>[]));
-            <span class="macro">assert_eq!</span>(<span class="ident">bitset</span>.<span class="ident">next</span>(), <span class="prelude-val">Some</span>(<span class="macro">vec!</span>[<span class="number">1</span>]));
-            <span class="macro">assert_eq!</span>(<span class="ident">bitset</span>.<span class="ident">next</span>(), <span class="prelude-val">Some</span>(<span class="macro">vec!</span>[<span class="number">2</span>]));
-            <span class="macro">assert_eq!</span>(<span class="ident">bitset</span>.<span class="ident">next</span>(), <span class="prelude-val">Some</span>(<span class="macro">vec!</span>[<span class="number">1</span>, <span class="number">2</span>]));
-            <span class="macro">assert_eq!</span>(<span class="ident">bitset</span>.<span class="ident">next</span>(), <span class="prelude-val">Some</span>(<span class="macro">vec!</span>[<span class="number">3</span>]));
-            <span class="macro">assert_eq!</span>(<span class="ident">bitset</span>.<span class="ident">next</span>(), <span class="prelude-val">Some</span>(<span class="macro">vec!</span>[<span class="number">1</span>, <span class="number">3</span>]));
-            <span class="macro">assert_eq!</span>(<span class="ident">bitset</span>.<span class="ident">next</span>(), <span class="prelude-val">Some</span>(<span class="macro">vec!</span>[<span class="number">2</span>, <span class="number">3</span>]));
-            <span class="macro">assert_eq!</span>(<span class="ident">bitset</span>.<span class="ident">next</span>(), <span class="prelude-val">Some</span>(<span class="macro">vec!</span>[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]));
-            <span class="macro">assert!</span>(<span class="ident">bitset</span>.<span class="ident">next</span>().<span class="ident">is_none</span>());
-        }
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">bitset</span> <span class="op">=</span> <span class="ident">bitset::bitset</span>(<span class="macro">vec!</span>[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]);
+        <span class="macro">assert_eq!</span>(<span class="ident">bitset</span>.<span class="ident">next</span>(), <span class="prelude-val">Some</span>(<span class="macro">vec!</span>[]));
+        <span class="macro">assert_eq!</span>(<span class="ident">bitset</span>.<span class="ident">next</span>(), <span class="prelude-val">Some</span>(<span class="macro">vec!</span>[<span class="number">1</span>]));
+        <span class="macro">assert_eq!</span>(<span class="ident">bitset</span>.<span class="ident">next</span>(), <span class="prelude-val">Some</span>(<span class="macro">vec!</span>[<span class="number">2</span>]));
+        <span class="macro">assert_eq!</span>(<span class="ident">bitset</span>.<span class="ident">next</span>(), <span class="prelude-val">Some</span>(<span class="macro">vec!</span>[<span class="number">1</span>, <span class="number">2</span>]));
+        <span class="macro">assert_eq!</span>(<span class="ident">bitset</span>.<span class="ident">next</span>(), <span class="prelude-val">Some</span>(<span class="macro">vec!</span>[<span class="number">3</span>]));
+        <span class="macro">assert_eq!</span>(<span class="ident">bitset</span>.<span class="ident">next</span>(), <span class="prelude-val">Some</span>(<span class="macro">vec!</span>[<span class="number">1</span>, <span class="number">3</span>]));
+        <span class="macro">assert_eq!</span>(<span class="ident">bitset</span>.<span class="ident">next</span>(), <span class="prelude-val">Some</span>(<span class="macro">vec!</span>[<span class="number">2</span>, <span class="number">3</span>]));
+        <span class="macro">assert_eq!</span>(<span class="ident">bitset</span>.<span class="ident">next</span>(), <span class="prelude-val">Some</span>(<span class="macro">vec!</span>[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]));
+        <span class="macro">assert!</span>(<span class="ident">bitset</span>.<span class="ident">next</span>().<span class="ident">is_none</span>());
     }
 }
 </code></pre></div>

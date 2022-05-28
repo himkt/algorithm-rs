@@ -147,15 +147,7 @@
 <span id="142">142</span>
 <span id="143">143</span>
 <span id="144">144</span>
-<span id="145">145</span>
-<span id="146">146</span>
-<span id="147">147</span>
-<span id="148">148</span>
-<span id="149">149</span>
-<span id="150">150</span>
-<span id="151">151</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::graph::graph::Graph</span>;
-
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Lowlink</span> {
@@ -165,7 +157,6 @@
     <span class="ident">low</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>,
     <span class="ident">bridges</span>: <span class="ident">Vec</span><span class="op">&lt;</span>(<span class="ident">usize</span>, <span class="ident">usize</span>)<span class="op">&gt;</span>,
 }
-
 
 <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::needless_range_loop</span>)]</span>
 <span class="kw">impl</span> <span class="ident">Lowlink</span> {
@@ -225,7 +216,6 @@
     }
 }
 
-
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">mod</span> <span class="ident">test_lowlink</span> {
     <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::graph::graph::Graph</span>;
@@ -233,7 +223,6 @@
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">it_works</span>() {
-
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">graph</span> <span class="op">=</span> <span class="ident">Graph::new</span>(<span class="number">7</span>, <span class="bool-val">false</span>);
         <span class="ident">graph</span>.<span class="ident">connect_unweighted</span>(<span class="number">0</span>, <span class="number">2</span>);
         <span class="ident">graph</span>.<span class="ident">connect_unweighted</span>(<span class="number">1</span>, <span class="number">6</span>);
@@ -253,7 +242,6 @@
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">it_works_without_bridge</span>() {
-
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">graph</span> <span class="op">=</span> <span class="ident">Graph::new</span>(<span class="number">3</span>, <span class="bool-val">false</span>);
         <span class="ident">graph</span>.<span class="ident">connect_unweighted</span>(<span class="number">0</span>, <span class="number">1</span>);
         <span class="ident">graph</span>.<span class="ident">connect_unweighted</span>(<span class="number">0</span>, <span class="number">2</span>);
@@ -269,7 +257,6 @@
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">it_works_with_all_edges_are_bridges</span>() {
-
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">graph</span> <span class="op">=</span> <span class="ident">Graph::new</span>(<span class="number">6</span>, <span class="bool-val">false</span>);
         <span class="ident">graph</span>.<span class="ident">connect_unweighted</span>(<span class="number">0</span>, <span class="number">1</span>);
         <span class="ident">graph</span>.<span class="ident">connect_unweighted</span>(<span class="number">1</span>, <span class="number">2</span>);
@@ -287,7 +274,6 @@
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">it_works_hand</span>() {
-
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">graph</span> <span class="op">=</span> <span class="ident">Graph::new</span>(<span class="number">7</span>, <span class="bool-val">false</span>);
         <span class="ident">graph</span>.<span class="ident">connect_unweighted</span>(<span class="number">0</span>, <span class="number">1</span>);
         <span class="ident">graph</span>.<span class="ident">connect_unweighted</span>(<span class="number">1</span>, <span class="number">2</span>);
