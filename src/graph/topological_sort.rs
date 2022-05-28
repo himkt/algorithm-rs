@@ -1,10 +1,8 @@
 use crate::graph::graph::Graph;
 
-
 pub struct TopologicalSort {
     graph: Graph,
 }
-
 
 #[allow(clippy::needless_range_loop)]
 impl TopologicalSort {
@@ -47,7 +45,6 @@ impl TopologicalSort {
     }
 }
 
-
 #[cfg(test)]
 mod test_topological_sort {
     use crate::graph::graph::Graph;
@@ -55,7 +52,6 @@ mod test_topological_sort {
 
     #[test]
     fn it_works() {
-
         let mut graph = Graph::new(4, true);
         graph.connect_unweighted(1, 0);
         graph.connect_unweighted(1, 3);
@@ -67,7 +63,6 @@ mod test_topological_sort {
 
     #[test]
     fn it_works_circle() {
-
         let mut graph = Graph::new(2, false);
         graph.connect_unweighted(0, 1);
 

@@ -66,34 +66,30 @@ impl RSQ {
 
 #[cfg(test)]
 mod test_segment_tree {
+    use crate::tree::segment_tree::rsq::RSQ;
+
     #[test]
     fn it_works() {
-        use crate::tree::segment_tree::rsq::RSQ;
-        {
-            let mut rsq = RSQ::new();
-            rsq.add(2, 3);
-            rsq.add(3, 1);
-            rsq.add(4, 4);
-            assert_eq!(rsq.sum(1, 2), 3);
-            assert_eq!(rsq.sum(2, 3), 4);
-            assert_eq!(rsq.sum(3, 3), 1);
-            assert_eq!(rsq.sum(1, 5), 8);
-        }
+        let mut rsq = RSQ::new();
+        rsq.add(2, 3);
+        rsq.add(3, 1);
+        rsq.add(4, 4);
+        assert_eq!(rsq.sum(1, 2), 3);
+        assert_eq!(rsq.sum(2, 3), 4);
+        assert_eq!(rsq.sum(3, 3), 1);
+        assert_eq!(rsq.sum(1, 5), 8);
     }
 
     #[test]
     fn it_works_from() {
-        use crate::tree::segment_tree::rsq::RSQ;
-        {
-            let vs = vec![1i64; 1 << 3];
-            let mut rsq = RSQ::from(vs);
-            rsq.add(2, 3);
-            rsq.add(3, 1);
-            rsq.add(4, 4);
-            assert_eq!(rsq.sum(1, 2), 5);
-            assert_eq!(rsq.sum(2, 3), 6);
-            assert_eq!(rsq.sum(3, 3), 2);
-            assert_eq!(rsq.sum(1, 5), 13);
-        }
+        let vs = vec![1i64; 1 << 3];
+        let mut rsq = RSQ::from(vs);
+        rsq.add(2, 3);
+        rsq.add(3, 1);
+        rsq.add(4, 4);
+        assert_eq!(rsq.sum(1, 2), 5);
+        assert_eq!(rsq.sum(2, 3), 6);
+        assert_eq!(rsq.sum(3, 3), 2);
+        assert_eq!(rsq.sum(1, 5), 13);
     }
 }

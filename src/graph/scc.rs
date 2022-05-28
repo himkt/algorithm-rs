@@ -1,6 +1,5 @@
 use crate::graph::graph::Graph;
 
-
 pub struct SCC {
     fgraph: Graph,
     rgraph: Graph,
@@ -10,7 +9,6 @@ pub struct SCC {
     vs: Vec<usize>,
     n: usize,
 }
-
 
 impl SCC {
     pub fn new(graph: Graph) -> Self {
@@ -36,7 +34,7 @@ impl SCC {
             rused,
             cmp,
             vs,
-            n
+            n,
         }
     }
 
@@ -97,7 +95,6 @@ impl SCC {
     }
 }
 
-
 #[cfg(test)]
 mod test_scc {
     use crate::graph::graph::Graph;
@@ -105,7 +102,6 @@ mod test_scc {
 
     #[test]
     fn it_works() {
-
         let mut graph = Graph::new(6, true);
         graph.connect_unweighted(1, 4);
         graph.connect_unweighted(5, 2);

@@ -2,7 +2,6 @@ use crate::graph::graph::Graph;
 
 const INF: usize = 100_000_000_000_000_000;
 
-
 #[derive(Debug, Clone)]
 pub struct Dijkstra {
     source: usize,
@@ -11,12 +10,16 @@ pub struct Dijkstra {
     backptrs: Vec<usize>,
 }
 
-
 impl Dijkstra {
     pub fn new(graph: Graph) -> Self {
         let dist: Vec<usize> = vec![INF; graph.n];
         let backptrs: Vec<usize> = (0..graph.n).collect();
-        Self { source: INF, graph, dist, backptrs }
+        Self {
+            source: INF,
+            graph,
+            dist,
+            backptrs,
+        }
     }
 
     pub fn search(&mut self, src: usize) {
@@ -64,16 +67,14 @@ impl Dijkstra {
     }
 }
 
-
 #[cfg(test)]
 mod test_dijkstra {
-    use crate::graph::graph::Graph;
     use crate::graph::dijkstra::Dijkstra;
     use crate::graph::dijkstra::INF;
+    use crate::graph::graph::Graph;
 
     #[test]
     fn it_works() {
-
         let mut graph = Graph::new(7, true);
         graph.connect(0, 1, 2);
         graph.connect(0, 2, 5);
@@ -96,7 +97,6 @@ mod test_dijkstra {
 
     #[test]
     fn it_works_unreachable_path() {
-
         let mut graph = Graph::new(9, true);
         graph.connect(0, 1, 1);
         graph.connect(0, 6, 10);
