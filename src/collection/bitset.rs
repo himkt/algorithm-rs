@@ -4,6 +4,7 @@ pub struct Bitset<T: Copy> {
     len: usize,
 }
 
+
 impl<T: Copy> Iterator for Bitset<T> {
     type Item = Vec<T>;
 
@@ -24,6 +25,7 @@ impl<T: Copy> Iterator for Bitset<T> {
     }
 }
 
+
 pub fn bitset<T: Copy>(a: Vec<T>) -> Bitset<T> {
     let len = a.len();
     Bitset {
@@ -33,22 +35,23 @@ pub fn bitset<T: Copy>(a: Vec<T>) -> Bitset<T> {
     }
 }
 
+
 #[cfg(test)]
 mod test_permutation {
+    use crate::collection::bitset;
+
     #[test]
     fn it_works() {
-        use crate::collection::bitset;
-        {
-            let mut bitset = bitset::bitset(vec![1, 2, 3]);
-            assert_eq!(bitset.next(), Some(vec![]));
-            assert_eq!(bitset.next(), Some(vec![1]));
-            assert_eq!(bitset.next(), Some(vec![2]));
-            assert_eq!(bitset.next(), Some(vec![1, 2]));
-            assert_eq!(bitset.next(), Some(vec![3]));
-            assert_eq!(bitset.next(), Some(vec![1, 3]));
-            assert_eq!(bitset.next(), Some(vec![2, 3]));
-            assert_eq!(bitset.next(), Some(vec![1, 2, 3]));
-            assert!(bitset.next().is_none());
-        }
+
+        let mut bitset = bitset::bitset(vec![1, 2, 3]);
+        assert_eq!(bitset.next(), Some(vec![]));
+        assert_eq!(bitset.next(), Some(vec![1]));
+        assert_eq!(bitset.next(), Some(vec![2]));
+        assert_eq!(bitset.next(), Some(vec![1, 2]));
+        assert_eq!(bitset.next(), Some(vec![3]));
+        assert_eq!(bitset.next(), Some(vec![1, 3]));
+        assert_eq!(bitset.next(), Some(vec![2, 3]));
+        assert_eq!(bitset.next(), Some(vec![1, 2, 3]));
+        assert!(bitset.next().is_none());
     }
 }

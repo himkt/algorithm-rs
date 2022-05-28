@@ -33,14 +33,14 @@ pub fn z(s: &str) -> Vec<usize> {
     ans
 }
 
+
 #[cfg(test)]
 mod test_z_algorithm {
+    use crate::string::z::z;
+
     #[test]
     fn it_works() {
-        use crate::string::z::z;
 
-        {
-            assert_eq!(z("ISSISSIPPIM"), vec![11, 0, 0, 4, 0, 0, 1, 0, 0, 1, 0]);
-        }
+        assert_eq!(z("ISSISSIPPIM"), vec![11, 0, 0, 4, 0, 0, 1, 0, 0, 1, 0]);
     }
 }
