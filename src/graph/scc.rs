@@ -1,6 +1,6 @@
 use crate::graph::graph::Graph;
 
-pub struct SCC {
+pub struct StoronglyConnectedComponent {
     fgraph: Graph,
     rgraph: Graph,
     fused: Vec<bool>,
@@ -9,7 +9,7 @@ pub struct SCC {
     topological_ranks: Vec<usize>,
 }
 
-impl SCC {
+impl StoronglyConnectedComponent {
     pub fn new(graph: Graph) -> Self {
         let n = graph.n;
         let fgraph = graph;
@@ -92,7 +92,7 @@ impl SCC {
 #[cfg(test)]
 mod test_scc {
     use crate::graph::graph::Graph;
-    use crate::graph::scc::SCC;
+    use crate::graph::scc::StoronglyConnectedComponent;
 
     #[test]
     fn it_works() {
@@ -105,7 +105,7 @@ mod test_scc {
         graph.connect_unweighted(0, 3);
         graph.connect_unweighted(4, 2);
 
-        let mut scc = SCC::new(graph);
+        let mut scc = StoronglyConnectedComponent::new(graph);
         assert_eq!(scc.scc(), 4);
         assert_eq!(scc.topological_ranks, vec![3, 1, 2, 3, 1, 0]);
     }
