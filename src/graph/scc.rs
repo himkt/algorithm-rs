@@ -5,19 +5,13 @@ pub struct SCC {
     rgraph: Graph,
     fused: Vec<bool>,
     rused: Vec<bool>,
-    cmp: Vec<usize>,
-    vs: Vec<usize>,
-    n: usize,
+    fhistory: Vec<usize>,
+    topological_ranks: Vec<usize>,
 }
 
 impl SCC {
     pub fn new(graph: Graph) -> Self {
         let n = graph.n;
-        let fused = vec![false; n];
-        let rused = vec![false; n];
-        let cmp = vec![0; n];
-        let vs = vec![];
-
         let fgraph = graph;
         let mut rgraph = Graph::new(n, true);
 
@@ -30,16 +24,15 @@ impl SCC {
         Self {
             fgraph,
             rgraph,
-            fused,
-            rused,
-            cmp,
-            vs,
-            n,
+            fused: vec![false; n],
+            rused: vec![false; n],
+            fhistory: vec![],
+            topological_ranks: vec![0; n],
         }
     }
 
     pub fn scc(&mut self) -> usize {
-        for u in 0..self.n {
+        for u in 0..self.fgraph.n {
             if self.fused[u] {
                 continue;
             }
@@ -48,9 +41,10 @@ impl SCC {
         }
 
         let mut k = 0;
+        let m = self.fhistory.len();
 
-        for i in (0..self.vs.len()).rev() {
-            let u = self.vs[i];
+        for i in (0..m).rev() {
+            let u = self.fhistory[i];
 
             if self.rused[u] {
                 continue;
@@ -76,12 +70,12 @@ impl SCC {
             self.fdfs(v);
         }
 
-        self.vs.push(u);
+        self.fhistory.push(u);
     }
 
     fn rdfs(&mut self, u: usize, k: usize) {
         self.rused[u] = true;
-        self.cmp[u] = k;
+        self.topological_ranks[u] = k;
 
         for i in 0..self.rgraph.graph[u].len() {
             let (v, _) = self.rgraph.graph[u][i];
@@ -113,6 +107,6 @@ mod test_scc {
 
         let mut scc = SCC::new(graph);
         assert_eq!(scc.scc(), 4);
-        assert_eq!(scc.cmp, vec![3, 1, 2, 3, 1, 0]);
+        assert_eq!(scc.topological_ranks, vec![3, 1, 2, 3, 1, 0]);
     }
 }
