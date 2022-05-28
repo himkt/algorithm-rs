@@ -3,18 +3,15 @@ pub struct RAQ {
     v: Vec<i64>,
 }
 
-
 impl RAQ {
     const SEQ_LEN: usize = 1 << 18;
 }
-
 
 impl Default for RAQ {
     fn default() -> Self {
         RAQ::new()
     }
 }
-
 
 impl RAQ {
     pub fn new() -> Self {
@@ -67,14 +64,12 @@ impl RAQ {
     }
 }
 
-
 #[cfg(test)]
 mod test_segment_tree {
     use crate::tree::segment_tree::raq::RAQ;
 
     #[test]
     fn it_works() {
-
         let mut rsq = RAQ::new();
         rsq.add(1, 2, 1);
         rsq.add(2, 3, 2);
@@ -85,7 +80,6 @@ mod test_segment_tree {
 
     #[test]
     fn it_works_from() {
-
         let vs = vec![1i64; 1 << 2];
         let mut rsq = RAQ::from(vs);
         rsq.add(1, 2, 1);

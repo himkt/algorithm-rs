@@ -1,6 +1,5 @@
 use crate::graph::graph::Graph;
 
-
 #[derive(Debug, Clone)]
 pub struct Lowlink {
     graph: Graph,
@@ -9,7 +8,6 @@ pub struct Lowlink {
     low: Vec<usize>,
     bridges: Vec<(usize, usize)>,
 }
-
 
 #[allow(clippy::needless_range_loop)]
 impl Lowlink {
@@ -69,7 +67,6 @@ impl Lowlink {
     }
 }
 
-
 #[cfg(test)]
 mod test_lowlink {
     use crate::graph::graph::Graph;
@@ -77,7 +74,6 @@ mod test_lowlink {
 
     #[test]
     fn it_works() {
-
         let mut graph = Graph::new(7, false);
         graph.connect_unweighted(0, 2);
         graph.connect_unweighted(1, 6);
@@ -97,7 +93,6 @@ mod test_lowlink {
 
     #[test]
     fn it_works_without_bridge() {
-
         let mut graph = Graph::new(3, false);
         graph.connect_unweighted(0, 1);
         graph.connect_unweighted(0, 2);
@@ -113,7 +108,6 @@ mod test_lowlink {
 
     #[test]
     fn it_works_with_all_edges_are_bridges() {
-
         let mut graph = Graph::new(6, false);
         graph.connect_unweighted(0, 1);
         graph.connect_unweighted(1, 2);
@@ -131,7 +125,6 @@ mod test_lowlink {
 
     #[test]
     fn it_works_hand() {
-
         let mut graph = Graph::new(7, false);
         graph.connect_unweighted(0, 1);
         graph.connect_unweighted(1, 2);

@@ -1,8 +1,4 @@
-pub fn lower_bound(
-    range: std::ops::Range<usize>,
-    prop: &dyn Fn(usize) -> bool,
-) -> usize {
-
+pub fn lower_bound(range: std::ops::Range<usize>, prop: &dyn Fn(usize) -> bool) -> usize {
     if prop(range.start) {
         return range.start;
     }
@@ -27,10 +23,9 @@ mod test_lower_bound {
 
     #[test]
     fn it_works() {
-
-            let vs: Vec<usize> = vec![0, 1, 2, 3, 5, 7, 10];
-            assert_eq!(lower_bound(0..vs.len(), &|x| 1 <= vs[x]), 1);
-            assert_eq!(lower_bound(0..vs.len(), &|x| 3 <= vs[x]), 3);
-            assert_eq!(lower_bound(0..vs.len(), &|x| 7 <= vs[x]), 5);
+        let vs: Vec<usize> = vec![0, 1, 2, 3, 5, 7, 10];
+        assert_eq!(lower_bound(0..vs.len(), &|x| 1 <= vs[x]), 1);
+        assert_eq!(lower_bound(0..vs.len(), &|x| 3 <= vs[x]), 3);
+        assert_eq!(lower_bound(0..vs.len(), &|x| 7 <= vs[x]), 5);
     }
 }

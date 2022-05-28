@@ -1,14 +1,11 @@
 use crate::geometry::point::Point;
 
-
 pub struct Line<T>(pub Point<T>, pub Point<T>);
-
 
 pub trait LineAPI<T> {
     fn distance(&self, p: Point<T>) -> f64;
     fn contains_point(&self, p: Point<T>) -> bool;
 }
-
 
 // i64
 impl LineAPI<i64> for Line<i64> {
@@ -27,7 +24,6 @@ impl LineAPI<i64> for Line<i64> {
     }
 }
 
-
 // f64
 impl LineAPI<f64> for Line<f64> {
     fn distance(&self, p: Point<f64>) -> f64 {
@@ -45,16 +41,14 @@ impl LineAPI<f64> for Line<f64> {
     }
 }
 
-
 #[cfg(test)]
 mod test_plane {
     use crate::geometry::line::Line;
-    use crate::geometry::line::Point;
     use crate::geometry::line::LineAPI;
+    use crate::geometry::line::Point;
 
     #[test]
     fn it_works_line_f64() {
-
         let x = Point(0.0, 0.0);
         let y = Point(2.0, 3.0);
         let line = Line(x, y);
@@ -70,7 +64,6 @@ mod test_plane {
 
     #[test]
     fn it_works_line_i64() {
-
         let x = Point(0, 0);
         let y = Point(2, 3);
         let line = Line(x, y);
@@ -84,7 +77,7 @@ mod test_plane {
         assert_eq!(result, expected);
 
         // contain
-        assert!(line.contains_point(Point(4,  6)));
+        assert!(line.contains_point(Point(4, 6)));
         assert!(line.contains_point(Point(-2, -3)));
         assert!(!line.contains_point(Point(1, 1)));
     }

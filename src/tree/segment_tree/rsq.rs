@@ -3,18 +3,15 @@ pub struct RSQ {
     v: Vec<i64>,
 }
 
-
 impl RSQ {
     const SEQ_LEN: usize = 1 << 18;
 }
-
 
 impl Default for RSQ {
     fn default() -> Self {
         RSQ::new()
     }
 }
-
 
 impl RSQ {
     pub fn new() -> Self {
@@ -67,14 +64,12 @@ impl RSQ {
     }
 }
 
-
 #[cfg(test)]
 mod test_segment_tree {
     use crate::tree::segment_tree::rsq::RSQ;
 
     #[test]
     fn it_works() {
-
         let mut rsq = RSQ::new();
         rsq.add(2, 3);
         rsq.add(3, 1);
@@ -87,7 +82,6 @@ mod test_segment_tree {
 
     #[test]
     fn it_works_from() {
-
         let vs = vec![1i64; 1 << 3];
         let mut rsq = RSQ::from(vs);
         rsq.add(2, 3);

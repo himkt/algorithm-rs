@@ -7,13 +7,18 @@ pub struct Graph {
     directed: bool,
 }
 
-
 impl Graph {
     pub fn new(n: usize, directed: bool) -> Self {
         let graph: Vec<Vec<(usize, usize)>> = vec![vec![]; n];
         let in_degrees = vec![0; n];
         let out_degrees = vec![0; n];
-        Self { n, graph, in_degrees, out_degrees, directed }
+        Self {
+            n,
+            graph,
+            in_degrees,
+            out_degrees,
+            directed,
+        }
     }
 
     pub fn connect(&mut self, from: usize, to: usize, weight: usize) {
@@ -49,10 +54,9 @@ impl Graph {
     }
 
     pub fn connected(&self, u: usize, v: usize) -> bool {
-        self.graph[u].iter().filter(|&&(k,_)| v == k).count() > 0
+        self.graph[u].iter().filter(|&&(k, _)| v == k).count() > 0
     }
 }
-
 
 #[cfg(test)]
 mod test_graph {
@@ -60,7 +64,6 @@ mod test_graph {
 
     #[test]
     fn it_works_directed() {
-
         let mut graph = Graph::new(6, true);
         graph.connect_unweighted(0, 1);
         graph.connect_unweighted(2, 5);
@@ -88,7 +91,6 @@ mod test_graph {
 
     #[test]
     fn it_works_undirected() {
-
         let mut graph = Graph::new(6, false);
         graph.connect_unweighted(0, 1);
         graph.connect(2, 4, 10);
@@ -118,10 +120,7 @@ mod test_graph {
         let mut graph = Graph::new(2, false);
         graph.connect_unweighted(0, 1);
 
-        let expected = vec![
-            vec![(1, 1)],
-            vec![(0, 1)]
-        ];
+        let expected = vec![vec![(1, 1)], vec![(0, 1)]];
 
         assert_eq!(graph.graph, expected);
     }
@@ -132,10 +131,7 @@ mod test_graph {
         graph.connect(0, 1, 10);
         graph.connect_unweighted(0, 1);
 
-        let expected = vec![
-            vec![(1, 10), (1, 1)],
-            vec![],
-        ];
+        let expected = vec![vec![(1, 10), (1, 1)], vec![]];
         assert_eq!(graph.graph, expected);
     }
 }

@@ -13,7 +13,6 @@ pub fn modpow(mut a: usize, mut n: usize, m: usize) -> usize {
     ans
 }
 
-
 #[cfg(test)]
 mod test_modpow {
     #[test]

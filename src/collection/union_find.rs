@@ -4,7 +4,6 @@ pub struct UnionFind {
     sizes: Vec<usize>,
 }
 
-
 #[allow(clippy::needless_range_loop)]
 impl UnionFind {
     pub fn new(n: usize) -> Self {
@@ -45,7 +44,6 @@ impl UnionFind {
     }
 }
 
-
 #[cfg(test)]
 mod test_union_find {
     use crate::collection::union_find::UnionFind;
@@ -57,7 +55,6 @@ mod test_union_find {
 
     #[test]
     fn it_works() {
-
         let n: usize = 5;
         let mut uf = UnionFind::new(n);
         assert_eq!(sizes(&mut uf, n), [1, 1, 1, 1, 1]);

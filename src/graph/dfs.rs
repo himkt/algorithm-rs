@@ -2,14 +2,12 @@ use crate::graph::graph::Graph;
 
 const INF: usize = 100_000_000_000_000_000;
 
-
 #[derive(Debug, Clone)]
 pub struct DFS {
     graph: Graph,
     seen: Vec<bool>,
     dist: Vec<usize>,
 }
-
 
 impl DFS {
     pub fn new(graph: Graph) -> Self {
@@ -40,16 +38,14 @@ impl DFS {
     }
 }
 
-
 #[cfg(test)]
 mod test_dfs {
-    use crate::graph::graph::Graph;
     use crate::graph::dfs::DFS;
     use crate::graph::dfs::INF;
+    use crate::graph::graph::Graph;
 
     #[test]
     fn it_works() {
-
         let mut graph = Graph::new(5, true);
         graph.connect_unweighted(0, 1);
         graph.connect_unweighted(1, 2);
