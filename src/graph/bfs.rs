@@ -42,23 +42,21 @@ impl BFS {
 
 #[cfg(test)]
 mod test_bfs {
+    use crate::graph::graph::Graph;
+    use crate::graph::bfs::BFS;
+    use crate::graph::bfs::INF;
 
     #[test]
     fn it_works() {
-        use crate::graph::graph::Graph;
-        use crate::graph::bfs::BFS;
-        use crate::graph::bfs::INF;
 
-        {
-            let mut graph = Graph::new(5, true);
-            graph.connect_unweighted(0, 1);
-            graph.connect_unweighted(1, 2);
-            graph.connect_unweighted(2, 4);
+        let mut graph = Graph::new(5, true);
+        graph.connect_unweighted(0, 1);
+        graph.connect_unweighted(1, 2);
+        graph.connect_unweighted(2, 4);
 
-            let mut bfs = BFS::new(graph);
-            bfs.search(0);
-            assert_eq!(bfs.seen, vec![true, true, true, false, true]);
-            assert_eq!(bfs.dist, vec![0, 1, 2, INF, 3]);
-        }
+        let mut bfs = BFS::new(graph);
+        bfs.search(0);
+        assert_eq!(bfs.seen, vec![true, true, true, false, true]);
+        assert_eq!(bfs.dist, vec![0, 1, 2, INF, 3]);
     }
 }

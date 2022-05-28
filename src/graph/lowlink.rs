@@ -69,6 +69,7 @@ impl Lowlink {
     }
 }
 
+
 #[cfg(test)]
 mod test_lowlink {
     use crate::graph::graph::Graph;

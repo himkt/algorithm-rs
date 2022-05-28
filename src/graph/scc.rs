@@ -13,7 +13,6 @@ pub struct SCC {
 
 
 impl SCC {
-    #[allow(clippy::needless_range_loop)]
     pub fn new(graph: Graph) -> Self {
         let n = graph.n;
         let fused = vec![false; n];

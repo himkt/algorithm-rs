@@ -73,6 +73,7 @@ mod test_dijkstra {
 
     #[test]
     fn it_works() {
+
         let mut graph = Graph::new(7, true);
         graph.connect(0, 1, 2);
         graph.connect(0, 2, 5);
@@ -89,14 +90,13 @@ mod test_dijkstra {
         dijkstra.search(0);
         assert_eq!(dijkstra.dist, vec![0, 2, 5, 7, 12, 8, 17]);
 
-        assert_eq!(
-            dijkstra.shortest_path(0, 6),
-            vec![(0, 1), (1, 4), (4, 6)],
-        );
+        let expected = vec![(0, 1), (1, 4), (4, 6)];
+        assert_eq!(dijkstra.shortest_path(0, 6), expected);
     }
 
     #[test]
     fn it_works_unreachable_path() {
+
         let mut graph = Graph::new(9, true);
         graph.connect(0, 1, 1);
         graph.connect(0, 6, 10);

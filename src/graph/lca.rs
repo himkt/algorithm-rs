@@ -76,6 +76,7 @@ mod test_lca {
 
     #[test]
     fn it_works() {
+
         let mut graph = Graph::new(8, false);
         graph.connect_unweighted(0, 1);
         graph.connect_unweighted(0, 2);
@@ -99,6 +100,7 @@ mod test_lca {
 
     #[test]
     fn it_works_line() {
+
         let mut graph = Graph::new(5, false);
         graph.connect_unweighted(0, 1);
         graph.connect_unweighted(1, 2);

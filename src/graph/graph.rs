@@ -60,6 +60,7 @@ mod test_graph {
 
     #[test]
     fn it_works_directed() {
+
         let mut graph = Graph::new(6, true);
         graph.connect_unweighted(0, 1);
         graph.connect_unweighted(2, 5);
@@ -87,6 +88,7 @@ mod test_graph {
 
     #[test]
     fn it_works_undirected() {
+
         let mut graph = Graph::new(6, false);
         graph.connect_unweighted(0, 1);
         graph.connect(2, 4, 10);

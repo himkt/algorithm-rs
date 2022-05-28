@@ -43,22 +43,21 @@ impl DFS {
 
 #[cfg(test)]
 mod test_dfs {
+    use crate::graph::graph::Graph;
+    use crate::graph::dfs::DFS;
+    use crate::graph::dfs::INF;
 
     #[test]
     fn it_works() {
-        use crate::graph::graph::Graph;
-        use crate::graph::dfs::DFS;
-        use crate::graph::dfs::INF;
-        {
-            let mut graph = Graph::new(5, true);
-            graph.connect_unweighted(0, 1);
-            graph.connect_unweighted(1, 2);
-            graph.connect_unweighted(2, 4);
 
-            let mut dfs = DFS::new(graph);
-            dfs.search(0);
-            assert_eq!(dfs.seen, vec![true, true, true, false, true]);
-            assert_eq!(dfs.dist, vec![0, 1, 2, INF, 3]);
-        }
+        let mut graph = Graph::new(5, true);
+        graph.connect_unweighted(0, 1);
+        graph.connect_unweighted(1, 2);
+        graph.connect_unweighted(2, 4);
+
+        let mut dfs = DFS::new(graph);
+        dfs.search(0);
+        assert_eq!(dfs.seen, vec![true, true, true, false, true]);
+        assert_eq!(dfs.dist, vec![0, 1, 2, INF, 3]);
     }
 }
