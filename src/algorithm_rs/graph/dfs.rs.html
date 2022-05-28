@@ -67,13 +67,13 @@
 <span class="kw">const</span> <span class="ident">INF</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">100_000_000_000_000_000</span>;
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">DFS</span> {
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">DepthFirstSearch</span> {
     <span class="ident">graph</span>: <span class="ident">Graph</span>,
     <span class="ident">seen</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span>,
     <span class="ident">dist</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>,
 }
 
-<span class="kw">impl</span> <span class="ident">DFS</span> {
+<span class="kw">impl</span> <span class="ident">DepthFirstSearch</span> {
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">graph</span>: <span class="ident">Graph</span>) -&gt; <span class="self">Self</span> {
         <span class="kw">let</span> <span class="ident">n</span> <span class="op">=</span> <span class="ident">graph</span>.<span class="ident">n</span>;
         <span class="self">Self</span> {
@@ -104,7 +104,7 @@
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">mod</span> <span class="ident">test_dfs</span> {
-    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::graph::dfs::DFS</span>;
+    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::graph::dfs::DepthFirstSearch</span>;
     <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::graph::dfs::INF</span>;
     <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::graph::graph::Graph</span>;
 
@@ -115,7 +115,7 @@
         <span class="ident">graph</span>.<span class="ident">connect_unweighted</span>(<span class="number">1</span>, <span class="number">2</span>);
         <span class="ident">graph</span>.<span class="ident">connect_unweighted</span>(<span class="number">2</span>, <span class="number">4</span>);
 
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">dfs</span> <span class="op">=</span> <span class="ident">DFS::new</span>(<span class="ident">graph</span>);
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">dfs</span> <span class="op">=</span> <span class="ident">DepthFirstSearch::new</span>(<span class="ident">graph</span>);
         <span class="ident">dfs</span>.<span class="ident">search</span>(<span class="number">0</span>);
         <span class="macro">assert_eq!</span>(<span class="ident">dfs</span>.<span class="ident">seen</span>, <span class="macro">vec!</span>[<span class="bool-val">true</span>, <span class="bool-val">true</span>, <span class="bool-val">true</span>, <span class="bool-val">false</span>, <span class="bool-val">true</span>]);
         <span class="macro">assert_eq!</span>(<span class="ident">dfs</span>.<span class="ident">dist</span>, <span class="macro">vec!</span>[<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="ident">INF</span>, <span class="number">3</span>]);

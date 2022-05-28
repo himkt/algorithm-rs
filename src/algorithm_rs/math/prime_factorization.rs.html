@@ -62,6 +62,7 @@
 <span id="57">57</span>
 <span id="58">58</span>
 <span id="59">59</span>
+<span id="60">60</span>
 </pre><pre class="rust"><code><span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">eratosthenes_sieve_smallest_prime_factors</span>(<span class="ident">n</span>: <span class="ident">usize</span>) -&gt; <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">smallest_prime_factors</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span> <span class="op">=</span> (<span class="number">0</span>..<span class="op">=</span><span class="ident">n</span> <span class="op">+</span> <span class="number">1</span>).<span class="ident">into_iter</span>().<span class="ident">collect</span>();
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">i</span> <span class="op">=</span> <span class="number">2</span>;
@@ -108,9 +109,10 @@
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">mod</span> <span class="ident">test_eratosthenes_sieve</span> {
+    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::math::prime_factorization::SequentialPrimeFactorization</span>;
+
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">it_works</span>() {
-        <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::math::prime_factorization::SequentialPrimeFactorization</span>;
         <span class="kw">let</span> <span class="ident">prime_factorizer</span> <span class="op">=</span> <span class="ident">SequentialPrimeFactorization::new</span>(<span class="number">100</span>);
 
         <span class="macro">assert_eq!</span>(<span class="ident">prime_factorizer</span>.<span class="ident">factorize</span>(<span class="number">1</span>), <span class="macro">vec!</span>[]);

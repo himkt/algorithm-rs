@@ -127,18 +127,18 @@
 <span class="kw">const</span> <span class="ident">ROOT</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">0</span>;
 <span class="kw">const</span> <span class="ident">MAX_LOG_V</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">30</span>;
 
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">LCA</span> {
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">LowestCommonAncestor</span> {
     <span class="ident">parents</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span><span class="op">&gt;</span>,
     <span class="ident">depth</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>,
     <span class="ident">graph</span>: <span class="ident">Graph</span>,
 }
 
-<span class="kw">impl</span> <span class="ident">LCA</span> {
+<span class="kw">impl</span> <span class="ident">LowestCommonAncestor</span> {
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">graph</span>: <span class="ident">Graph</span>) -&gt; <span class="self">Self</span> {
         <span class="kw">let</span> <span class="ident">n</span> <span class="op">=</span> <span class="ident">graph</span>.<span class="ident">n</span>;
         <span class="kw">let</span> <span class="ident">parents</span> <span class="op">=</span> <span class="macro">vec!</span>[<span class="macro">vec!</span>[<span class="ident">ROOT</span>; <span class="ident">n</span>]; <span class="ident">MAX_LOG_V</span>];
         <span class="kw">let</span> <span class="ident">depth</span> <span class="op">=</span> <span class="macro">vec!</span>[<span class="ident">ROOT</span>; <span class="ident">n</span>];
-        <span class="ident">LCA</span> {
+        <span class="ident">LowestCommonAncestor</span> {
             <span class="ident">parents</span>,
             <span class="ident">depth</span>,
             <span class="ident">graph</span>,
@@ -197,7 +197,7 @@
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">mod</span> <span class="ident">test_lca</span> {
     <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::graph::graph::Graph</span>;
-    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::graph::lca::LCA</span>;
+    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::graph::lca::LowestCommonAncestor</span>;
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">it_works</span>() {
@@ -210,7 +210,7 @@
         <span class="ident">graph</span>.<span class="ident">connect_unweighted</span>(<span class="number">2</span>, <span class="number">6</span>);
         <span class="ident">graph</span>.<span class="ident">connect_unweighted</span>(<span class="number">3</span>, <span class="number">7</span>);
 
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">lca</span> <span class="op">=</span> <span class="ident">LCA::new</span>(<span class="ident">graph</span>);
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">lca</span> <span class="op">=</span> <span class="ident">LowestCommonAncestor::new</span>(<span class="ident">graph</span>);
         <span class="ident">lca</span>.<span class="ident">init</span>();
 
         <span class="macro">assert_eq!</span>(<span class="ident">lca</span>.<span class="ident">lca</span>(<span class="number">0</span>, <span class="number">1</span>), <span class="number">0</span>);
@@ -230,7 +230,7 @@
         <span class="ident">graph</span>.<span class="ident">connect_unweighted</span>(<span class="number">2</span>, <span class="number">3</span>);
         <span class="ident">graph</span>.<span class="ident">connect_unweighted</span>(<span class="number">3</span>, <span class="number">4</span>);
 
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">lca</span> <span class="op">=</span> <span class="ident">LCA::new</span>(<span class="ident">graph</span>);
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">lca</span> <span class="op">=</span> <span class="ident">LowestCommonAncestor::new</span>(<span class="ident">graph</span>);
         <span class="ident">lca</span>.<span class="ident">init</span>();
 
         <span class="macro">assert_eq!</span>(<span class="ident">lca</span>.<span class="ident">lca</span>(<span class="number">0</span>, <span class="number">0</span>), <span class="number">0</span>);

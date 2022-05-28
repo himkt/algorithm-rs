@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["DFS",""]]});
+initSidebarItems({"struct":[["DepthFirstSearch",""]]});

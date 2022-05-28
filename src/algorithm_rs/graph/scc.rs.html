@@ -115,32 +115,20 @@
 <span id="110">110</span>
 <span id="111">111</span>
 <span id="112">112</span>
-<span id="113">113</span>
-<span id="114">114</span>
-<span id="115">115</span>
-<span id="116">116</span>
-<span id="117">117</span>
-<span id="118">118</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::graph::graph::Graph</span>;
 
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">SCC</span> {
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">StoronglyConnectedComponent</span> {
     <span class="ident">fgraph</span>: <span class="ident">Graph</span>,
     <span class="ident">rgraph</span>: <span class="ident">Graph</span>,
     <span class="ident">fused</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span>,
     <span class="ident">rused</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span>,
-    <span class="ident">cmp</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>,
-    <span class="ident">vs</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>,
-    <span class="ident">n</span>: <span class="ident">usize</span>,
+    <span class="ident">fhistory</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>,
+    <span class="ident">topological_ranks</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>,
 }
 
-<span class="kw">impl</span> <span class="ident">SCC</span> {
+<span class="kw">impl</span> <span class="ident">StoronglyConnectedComponent</span> {
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">graph</span>: <span class="ident">Graph</span>) -&gt; <span class="self">Self</span> {
         <span class="kw">let</span> <span class="ident">n</span> <span class="op">=</span> <span class="ident">graph</span>.<span class="ident">n</span>;
-        <span class="kw">let</span> <span class="ident">fused</span> <span class="op">=</span> <span class="macro">vec!</span>[<span class="bool-val">false</span>; <span class="ident">n</span>];
-        <span class="kw">let</span> <span class="ident">rused</span> <span class="op">=</span> <span class="macro">vec!</span>[<span class="bool-val">false</span>; <span class="ident">n</span>];
-        <span class="kw">let</span> <span class="ident">cmp</span> <span class="op">=</span> <span class="macro">vec!</span>[<span class="number">0</span>; <span class="ident">n</span>];
-        <span class="kw">let</span> <span class="ident">vs</span> <span class="op">=</span> <span class="macro">vec!</span>[];
-
         <span class="kw">let</span> <span class="ident">fgraph</span> <span class="op">=</span> <span class="ident">graph</span>;
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rgraph</span> <span class="op">=</span> <span class="ident">Graph::new</span>(<span class="ident">n</span>, <span class="bool-val">true</span>);
 
@@ -153,16 +141,15 @@
         <span class="self">Self</span> {
             <span class="ident">fgraph</span>,
             <span class="ident">rgraph</span>,
-            <span class="ident">fused</span>,
-            <span class="ident">rused</span>,
-            <span class="ident">cmp</span>,
-            <span class="ident">vs</span>,
-            <span class="ident">n</span>,
+            <span class="ident">fused</span>: <span class="macro">vec!</span>[<span class="bool-val">false</span>; <span class="ident">n</span>],
+            <span class="ident">rused</span>: <span class="macro">vec!</span>[<span class="bool-val">false</span>; <span class="ident">n</span>],
+            <span class="ident">fhistory</span>: <span class="macro">vec!</span>[],
+            <span class="ident">topological_ranks</span>: <span class="macro">vec!</span>[<span class="number">0</span>; <span class="ident">n</span>],
         }
     }
 
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">scc</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="ident">usize</span> {
-        <span class="kw">for</span> <span class="ident">u</span> <span class="kw">in</span> <span class="number">0</span>..<span class="self">self</span>.<span class="ident">n</span> {
+        <span class="kw">for</span> <span class="ident">u</span> <span class="kw">in</span> <span class="number">0</span>..<span class="self">self</span>.<span class="ident">fgraph</span>.<span class="ident">n</span> {
             <span class="kw">if</span> <span class="self">self</span>.<span class="ident">fused</span>[<span class="ident">u</span>] {
                 <span class="kw">continue</span>;
             }
@@ -171,9 +158,10 @@
         }
 
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">k</span> <span class="op">=</span> <span class="number">0</span>;
+        <span class="kw">let</span> <span class="ident">m</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">fhistory</span>.<span class="ident">len</span>();
 
-        <span class="kw">for</span> <span class="ident">i</span> <span class="kw">in</span> (<span class="number">0</span>..<span class="self">self</span>.<span class="ident">vs</span>.<span class="ident">len</span>()).<span class="ident">rev</span>() {
-            <span class="kw">let</span> <span class="ident">u</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">vs</span>[<span class="ident">i</span>];
+        <span class="kw">for</span> <span class="ident">i</span> <span class="kw">in</span> (<span class="number">0</span>..<span class="ident">m</span>).<span class="ident">rev</span>() {
+            <span class="kw">let</span> <span class="ident">u</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">fhistory</span>[<span class="ident">i</span>];
 
             <span class="kw">if</span> <span class="self">self</span>.<span class="ident">rused</span>[<span class="ident">u</span>] {
                 <span class="kw">continue</span>;
@@ -199,12 +187,12 @@
             <span class="self">self</span>.<span class="ident">fdfs</span>(<span class="ident">v</span>);
         }
 
-        <span class="self">self</span>.<span class="ident">vs</span>.<span class="ident">push</span>(<span class="ident">u</span>);
+        <span class="self">self</span>.<span class="ident">fhistory</span>.<span class="ident">push</span>(<span class="ident">u</span>);
     }
 
     <span class="kw">fn</span> <span class="ident">rdfs</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">u</span>: <span class="ident">usize</span>, <span class="ident">k</span>: <span class="ident">usize</span>) {
         <span class="self">self</span>.<span class="ident">rused</span>[<span class="ident">u</span>] <span class="op">=</span> <span class="bool-val">true</span>;
-        <span class="self">self</span>.<span class="ident">cmp</span>[<span class="ident">u</span>] <span class="op">=</span> <span class="ident">k</span>;
+        <span class="self">self</span>.<span class="ident">topological_ranks</span>[<span class="ident">u</span>] <span class="op">=</span> <span class="ident">k</span>;
 
         <span class="kw">for</span> <span class="ident">i</span> <span class="kw">in</span> <span class="number">0</span>..<span class="self">self</span>.<span class="ident">rgraph</span>.<span class="ident">graph</span>[<span class="ident">u</span>].<span class="ident">len</span>() {
             <span class="kw">let</span> (<span class="ident">v</span>, <span class="kw">_</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">rgraph</span>.<span class="ident">graph</span>[<span class="ident">u</span>][<span class="ident">i</span>];
@@ -221,7 +209,7 @@
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">mod</span> <span class="ident">test_scc</span> {
     <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::graph::graph::Graph</span>;
-    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::graph::scc::SCC</span>;
+    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::graph::scc::StoronglyConnectedComponent</span>;
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">it_works</span>() {
@@ -234,9 +222,9 @@
         <span class="ident">graph</span>.<span class="ident">connect_unweighted</span>(<span class="number">0</span>, <span class="number">3</span>);
         <span class="ident">graph</span>.<span class="ident">connect_unweighted</span>(<span class="number">4</span>, <span class="number">2</span>);
 
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">scc</span> <span class="op">=</span> <span class="ident">SCC::new</span>(<span class="ident">graph</span>);
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">scc</span> <span class="op">=</span> <span class="ident">StoronglyConnectedComponent::new</span>(<span class="ident">graph</span>);
         <span class="macro">assert_eq!</span>(<span class="ident">scc</span>.<span class="ident">scc</span>(), <span class="number">4</span>);
-        <span class="macro">assert_eq!</span>(<span class="ident">scc</span>.<span class="ident">cmp</span>, <span class="macro">vec!</span>[<span class="number">3</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">0</span>]);
+        <span class="macro">assert_eq!</span>(<span class="ident">scc</span>.<span class="ident">topological_ranks</span>, <span class="macro">vec!</span>[<span class="number">3</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">0</span>]);
     }
 }
 </code></pre></div>

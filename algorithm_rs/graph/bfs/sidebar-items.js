@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["BFS",""]]});
+initSidebarItems({"struct":[["BreadthFirstSearch",""]]});

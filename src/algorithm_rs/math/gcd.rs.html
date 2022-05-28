@@ -23,8 +23,6 @@
 <span id="18">18</span>
 <span id="19">19</span>
 <span id="20">20</span>
-<span id="21">21</span>
-<span id="22">22</span>
 </pre><pre class="rust"><code><span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gcd</span>(<span class="ident">a</span>: <span class="ident">i64</span>, <span class="ident">b</span>: <span class="ident">i64</span>) -&gt; <span class="ident">i64</span> {
     <span class="kw">if</span> <span class="ident">b</span> <span class="op">==</span> <span class="number">0</span> {
         <span class="ident">a</span>
@@ -35,16 +33,14 @@
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">mod</span> <span class="ident">test_gcd</span> {
+    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::math::gcd::gcd</span>;
+
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">it_works</span>() {
-        <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::math::gcd::gcd</span>;
-
-        {
-            <span class="macro">assert_eq!</span>(<span class="ident">gcd</span>(<span class="number">15</span>, <span class="number">5</span>), <span class="number">5</span>);
-            <span class="macro">assert_eq!</span>(<span class="ident">gcd</span>(<span class="number">5</span>, <span class="number">15</span>), <span class="number">5</span>);
-            <span class="macro">assert_eq!</span>(<span class="ident">gcd</span>(<span class="number">198</span>, <span class="number">26</span>), <span class="number">2</span>);
-            <span class="macro">assert_eq!</span>(<span class="ident">gcd</span>(<span class="number">26</span>, <span class="number">198</span>), <span class="number">2</span>);
-        }
+        <span class="macro">assert_eq!</span>(<span class="ident">gcd</span>(<span class="number">15</span>, <span class="number">5</span>), <span class="number">5</span>);
+        <span class="macro">assert_eq!</span>(<span class="ident">gcd</span>(<span class="number">5</span>, <span class="number">15</span>), <span class="number">5</span>);
+        <span class="macro">assert_eq!</span>(<span class="ident">gcd</span>(<span class="number">198</span>, <span class="number">26</span>), <span class="number">2</span>);
+        <span class="macro">assert_eq!</span>(<span class="ident">gcd</span>(<span class="number">26</span>, <span class="number">198</span>), <span class="number">2</span>);
     }
 }
 </code></pre></div>

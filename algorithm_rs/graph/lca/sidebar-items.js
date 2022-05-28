@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["LCA",""]]});
+initSidebarItems({"struct":[["LowestCommonAncestor",""]]});

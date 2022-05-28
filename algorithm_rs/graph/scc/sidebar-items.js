@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["SCC",""]]});
+initSidebarItems({"struct":[["StoronglyConnectedComponent",""]]});

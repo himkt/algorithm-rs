@@ -40,7 +40,6 @@
 <span id="35">35</span>
 <span id="36">36</span>
 <span id="37">37</span>
-<span id="38">38</span>
 </pre><pre class="rust"><code><span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">com</span>(<span class="ident">n</span>: <span class="ident">i64</span>, <span class="kw-2">mut</span> <span class="ident">r</span>: <span class="ident">i64</span>) -&gt; <span class="ident">i64</span> {
     <span class="kw">if</span> <span class="ident">r</span> <span class="op">&gt;</span> <span class="ident">n</span> {
         <span class="kw">return</span> <span class="number">0</span>;
@@ -65,18 +64,17 @@
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">mod</span> <span class="ident">test_combination</span> {
+    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::math::com::com</span>;
+
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">it_works</span>() {
-        <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::math::com::com</span>;
-        {
-            <span class="macro">assert_eq!</span>(<span class="ident">com</span>(<span class="number">6</span>, <span class="number">0</span>), <span class="number">1</span>);
-            <span class="macro">assert_eq!</span>(<span class="ident">com</span>(<span class="number">6</span>, <span class="number">1</span>), <span class="number">6</span>);
-            <span class="macro">assert_eq!</span>(<span class="ident">com</span>(<span class="number">6</span>, <span class="number">2</span>), <span class="number">15</span>);
-            <span class="macro">assert_eq!</span>(<span class="ident">com</span>(<span class="number">6</span>, <span class="number">3</span>), <span class="number">20</span>);
-            <span class="macro">assert_eq!</span>(<span class="ident">com</span>(<span class="number">6</span>, <span class="number">4</span>), <span class="number">15</span>);
-            <span class="macro">assert_eq!</span>(<span class="ident">com</span>(<span class="number">6</span>, <span class="number">5</span>), <span class="number">6</span>);
-            <span class="macro">assert_eq!</span>(<span class="ident">com</span>(<span class="number">6</span>, <span class="number">6</span>), <span class="number">1</span>);
-        }
+        <span class="macro">assert_eq!</span>(<span class="ident">com</span>(<span class="number">6</span>, <span class="number">0</span>), <span class="number">1</span>);
+        <span class="macro">assert_eq!</span>(<span class="ident">com</span>(<span class="number">6</span>, <span class="number">1</span>), <span class="number">6</span>);
+        <span class="macro">assert_eq!</span>(<span class="ident">com</span>(<span class="number">6</span>, <span class="number">2</span>), <span class="number">15</span>);
+        <span class="macro">assert_eq!</span>(<span class="ident">com</span>(<span class="number">6</span>, <span class="number">3</span>), <span class="number">20</span>);
+        <span class="macro">assert_eq!</span>(<span class="ident">com</span>(<span class="number">6</span>, <span class="number">4</span>), <span class="number">15</span>);
+        <span class="macro">assert_eq!</span>(<span class="ident">com</span>(<span class="number">6</span>, <span class="number">5</span>), <span class="number">6</span>);
+        <span class="macro">assert_eq!</span>(<span class="ident">com</span>(<span class="number">6</span>, <span class="number">6</span>), <span class="number">1</span>);
     }
 }
 </code></pre></div>

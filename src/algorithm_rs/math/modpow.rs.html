@@ -31,8 +31,6 @@
 <span id="26">26</span>
 <span id="27">27</span>
 <span id="28">28</span>
-<span id="29">29</span>
-<span id="30">30</span>
 </pre><pre class="rust"><code><span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">modpow</span>(<span class="kw-2">mut</span> <span class="ident">a</span>: <span class="ident">usize</span>, <span class="kw-2">mut</span> <span class="ident">n</span>: <span class="ident">usize</span>, <span class="ident">m</span>: <span class="ident">usize</span>) -&gt; <span class="ident">usize</span> {
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">ans</span> <span class="op">=</span> <span class="number">1</span>;
 
@@ -50,17 +48,15 @@
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">mod</span> <span class="ident">test_modpow</span> {
+    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::math::modpow::modpow</span>;
+
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">it_works</span>() {
-        <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::math::modpow::modpow</span>;
-
-        {
-            <span class="macro">assert_eq!</span>(<span class="ident">modpow</span>(<span class="number">2</span>, <span class="number">10</span>, <span class="number">1_000_000_007</span>), <span class="number">1024</span>);
-            <span class="macro">assert_eq!</span>(<span class="ident">modpow</span>(<span class="number">2</span>, <span class="number">3</span>, <span class="number">1_000_000_007</span>), <span class="number">8</span>);
-            <span class="macro">assert_eq!</span>(<span class="ident">modpow</span>(<span class="number">5</span>, <span class="number">8</span>, <span class="number">1_000_000_007</span>), <span class="number">390625</span>);
-            <span class="macro">assert_eq!</span>(<span class="ident">modpow</span>(<span class="number">2</span>, <span class="number">2</span>, <span class="number">3</span>), <span class="number">1</span>);
-            <span class="macro">assert_eq!</span>(<span class="ident">modpow</span>(<span class="number">2</span>, <span class="number">3</span>, <span class="number">3</span>), <span class="number">2</span>);
-        }
+        <span class="macro">assert_eq!</span>(<span class="ident">modpow</span>(<span class="number">2</span>, <span class="number">10</span>, <span class="number">1_000_000_007</span>), <span class="number">1024</span>);
+        <span class="macro">assert_eq!</span>(<span class="ident">modpow</span>(<span class="number">2</span>, <span class="number">3</span>, <span class="number">1_000_000_007</span>), <span class="number">8</span>);
+        <span class="macro">assert_eq!</span>(<span class="ident">modpow</span>(<span class="number">5</span>, <span class="number">8</span>, <span class="number">1_000_000_007</span>), <span class="number">390625</span>);
+        <span class="macro">assert_eq!</span>(<span class="ident">modpow</span>(<span class="number">2</span>, <span class="number">2</span>, <span class="number">3</span>), <span class="number">1</span>);
+        <span class="macro">assert_eq!</span>(<span class="ident">modpow</span>(<span class="number">2</span>, <span class="number">3</span>, <span class="number">3</span>), <span class="number">2</span>);
     }
 }
 </code></pre></div>
