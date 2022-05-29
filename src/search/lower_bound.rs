@@ -23,9 +23,12 @@ mod test_lower_bound {
 
     #[test]
     fn it_works() {
-        let vs: Vec<usize> = vec![0, 1, 2, 3, 5, 7, 10];
-        assert_eq!(lower_bound(0..vs.len(), &|x| 1 <= vs[x]), 1);
-        assert_eq!(lower_bound(0..vs.len(), &|x| 3 <= vs[x]), 3);
-        assert_eq!(lower_bound(0..vs.len(), &|x| 7 <= vs[x]), 5);
+        let vs: Vec<usize> = vec![1, 2, 3, 5, 7, 10];
+        assert_eq!(lower_bound(0..vs.len(), &|x| 1 <= vs[x]), 0);
+        assert_eq!(lower_bound(0..vs.len(), &|x| 2 <= vs[x]), 1);
+        assert_eq!(lower_bound(0..vs.len(), &|x| 3 <= vs[x]), 2);
+        assert_eq!(lower_bound(0..vs.len(), &|x| 7 <= vs[x]), 4);
+        assert_eq!(lower_bound(0..vs.len(), &|x| 10 <= vs[x]), 5);
+        assert_eq!(lower_bound(0..vs.len(), &|x| 100 <= vs[x]), vs.len());
     }
 }
