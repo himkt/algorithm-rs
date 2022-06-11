@@ -1,7 +1,5 @@
 use crate::graph::graph::Graph;
 
-const INF: usize = 100_000_000_000_000_000;
-
 #[derive(Debug, Clone)]
 pub struct BreadthFirstSearch {
     graph: Graph,
@@ -10,12 +8,14 @@ pub struct BreadthFirstSearch {
 }
 
 impl BreadthFirstSearch {
+    const INF: usize = 100_000_000_000_000_000;
+
     pub fn new(graph: Graph) -> Self {
         let n = graph.n;
         Self {
             graph,
             seen: vec![false; n],
-            dist: vec![INF; n],
+            dist: vec![BreadthFirstSearch::INF; n],
         }
     }
 
@@ -40,7 +40,6 @@ impl BreadthFirstSearch {
 #[cfg(test)]
 mod test_bfs {
     use crate::graph::bfs::BreadthFirstSearch;
-    use crate::graph::bfs::INF;
     use crate::graph::graph::Graph;
 
     #[test]
@@ -53,6 +52,6 @@ mod test_bfs {
         let mut bfs = BreadthFirstSearch::new(graph);
         bfs.search(0);
         assert_eq!(bfs.seen, vec![true, true, true, false, true]);
-        assert_eq!(bfs.dist, vec![0, 1, 2, INF, 3]);
+        assert_eq!(bfs.dist, vec![0, 1, 2, BreadthFirstSearch::INF, 3]);
     }
 }

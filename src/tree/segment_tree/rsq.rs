@@ -3,10 +3,6 @@ pub struct RSQ {
     v: Vec<i64>,
 }
 
-impl RSQ {
-    const SEQ_LEN: usize = 1 << 18;
-}
-
 impl Default for RSQ {
     fn default() -> Self {
         RSQ::new()
@@ -14,6 +10,8 @@ impl Default for RSQ {
 }
 
 impl RSQ {
+    const SEQ_LEN: usize = 1<<18;
+
     pub fn new() -> Self {
         Self {
             v: vec![0; 2 * RSQ::SEQ_LEN],

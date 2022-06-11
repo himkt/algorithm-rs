@@ -1,7 +1,5 @@
 use crate::graph::graph::Graph;
 
-const INF: usize = 100_000_000_000_000_000;
-
 #[derive(Debug, Clone)]
 pub struct Dijkstra {
     source: usize,
@@ -11,11 +9,13 @@ pub struct Dijkstra {
 }
 
 impl Dijkstra {
+    const INF: usize = 100_000_000_000_000_000;
+
     pub fn new(graph: Graph) -> Self {
-        let dist: Vec<usize> = vec![INF; graph.n];
+        let dist: Vec<usize> = vec![Dijkstra::INF; graph.n];
         let backptrs: Vec<usize> = (0..graph.n).collect();
         Self {
-            source: INF,
+            source: Dijkstra::INF,
             graph,
             dist,
             backptrs,
@@ -25,7 +25,7 @@ impl Dijkstra {
     pub fn search(&mut self, src: usize) {
         self.source = src;
 
-        let mut dist = vec![INF; self.graph.n];
+        let mut dist = vec![Dijkstra::INF; self.graph.n];
         dist[src] = 0;
 
         let mut queue = std::collections::BinaryHeap::new();
@@ -51,7 +51,7 @@ impl Dijkstra {
     pub fn shortest_path(&self, u: usize, v: usize) -> Vec<(usize, usize)> {
         assert_eq!(u, self.source);
 
-        if self.dist[v] == INF {
+        if self.dist[v] == Dijkstra::INF {
             return vec![];
         }
 
@@ -70,7 +70,6 @@ impl Dijkstra {
 #[cfg(test)]
 mod test_dijkstra {
     use crate::graph::dijkstra::Dijkstra;
-    use crate::graph::dijkstra::INF;
     use crate::graph::graph::Graph;
 
     #[test]
@@ -110,7 +109,7 @@ mod test_dijkstra {
 
         let mut dijkstra = Dijkstra::new(graph);
         dijkstra.search(0);
-        assert_eq!(dijkstra.dist, vec![0, 1, 6, 3, 5, 8, 10, INF, INF]);
+        assert_eq!(dijkstra.dist, vec![0, 1, 6, 3, 5, 8, 10, Dijkstra::INF, Dijkstra::INF]);
 
         assert_eq!(dijkstra.shortest_path(0, 3), vec![(0, 1), (1, 3)]);
         assert_eq!(dijkstra.shortest_path(0, 8), vec![]);

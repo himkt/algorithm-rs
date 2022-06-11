@@ -1,7 +1,5 @@
 use crate::graph::graph::Graph;
 
-const INF: usize = 100_000_000_000_000_000;
-
 #[derive(Debug, Clone)]
 pub struct DepthFirstSearch {
     graph: Graph,
@@ -10,12 +8,14 @@ pub struct DepthFirstSearch {
 }
 
 impl DepthFirstSearch {
+    const INF: usize = 100_000_000_000_000_000;
+
     pub fn new(graph: Graph) -> Self {
         let n = graph.n;
         Self {
             graph,
             seen: vec![false; n],
-            dist: vec![INF; n],
+            dist: vec![DepthFirstSearch::INF; n],
         }
     }
 
@@ -41,7 +41,6 @@ impl DepthFirstSearch {
 #[cfg(test)]
 mod test_dfs {
     use crate::graph::dfs::DepthFirstSearch;
-    use crate::graph::dfs::INF;
     use crate::graph::graph::Graph;
 
     #[test]
@@ -54,6 +53,6 @@ mod test_dfs {
         let mut dfs = DepthFirstSearch::new(graph);
         dfs.search(0);
         assert_eq!(dfs.seen, vec![true, true, true, false, true]);
-        assert_eq!(dfs.dist, vec![0, 1, 2, INF, 3]);
+        assert_eq!(dfs.dist, vec![0, 1, 2, DepthFirstSearch::INF, 3]);
     }
 }

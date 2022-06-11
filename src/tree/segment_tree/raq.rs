@@ -3,10 +3,6 @@ pub struct RAQ {
     v: Vec<i64>,
 }
 
-impl RAQ {
-    const SEQ_LEN: usize = 1 << 18;
-}
-
 impl Default for RAQ {
     fn default() -> Self {
         RAQ::new()
@@ -14,6 +10,8 @@ impl Default for RAQ {
 }
 
 impl RAQ {
+    const SEQ_LEN: usize = 1 << 18;
+
     pub fn new() -> Self {
         Self {
             v: vec![0; 2 * RAQ::SEQ_LEN],
