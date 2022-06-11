@@ -1,1 +1,1 @@
-initSidebarItems({"mod":[["bfs",""],["dfs",""],["dijkstra",""],["graph",""],["lca",""],["lowlink",""],["scc",""],["topological_sort",""]]});
+initSidebarItems({"mod":[["bfs",""],["dfs",""],["dijkstra",""],["euler_tour",""],["graph",""],["lca",""],["lowlink",""],["scc",""],["topological_sort",""]]});
