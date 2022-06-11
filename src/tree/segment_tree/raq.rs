@@ -20,8 +20,10 @@ impl RAQ {
         }
     }
 
+    /// Get an i-th element of the array.
+    /// 0-origin.
     pub fn get(&mut self, mut index: usize) -> i64 {
-        index += RAQ::SEQ_LEN - 1;
+        index += RAQ::SEQ_LEN;
 
         let mut sum = 0;
         sum += self.v[index];
@@ -34,8 +36,11 @@ impl RAQ {
         sum
     }
 
+    /// Add `value` to the range `[l, r)`.
+    /// Note that it is half-open interval.
+    /// 0-origin.
     pub fn add(&mut self, mut l: usize, mut r: usize, value: i64) {
-        l += RAQ::SEQ_LEN - 1;
+        l += RAQ::SEQ_LEN;
         r += RAQ::SEQ_LEN;
 
         while l < r {
@@ -72,9 +77,9 @@ mod test_segment_tree {
     fn it_works() {
         let mut rsq = RAQ::new();
         rsq.add(1, 2, 1);
-        rsq.add(2, 3, 2);
-        rsq.add(3, 3, 3);
-        assert_eq!(rsq.get(2), 3);
+        rsq.add(2, 4, 2);
+        rsq.add(3, 4, 3);
+        assert_eq!(rsq.get(2), 2);
         assert_eq!(rsq.get(3), 5);
     }
 
@@ -82,9 +87,10 @@ mod test_segment_tree {
     fn it_works_from() {
         let vs = vec![1i64; 1 << 2];
         let mut rsq = RAQ::from(vs);
-        rsq.add(1, 2, 1);
-        rsq.add(2, 3, 2);
-        rsq.add(3, 3, 3);
+        rsq.add(1, 3, 1);
+        rsq.add(2, 4, 2);
+        rsq.add(3, 4, 3);
+        assert_eq!(rsq.get(0), 1);
         assert_eq!(rsq.get(2), 4);
         assert_eq!(rsq.get(3), 6);
     }
