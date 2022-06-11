@@ -120,10 +120,7 @@
 <span id="115">115</span>
 <span id="116">116</span>
 <span id="117">117</span>
-<span id="118">118</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::graph::graph::Graph</span>;
-
-<span class="kw">const</span> <span class="ident">INF</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">100_000_000_000_000_000</span>;
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Dijkstra</span> {
@@ -134,11 +131,13 @@
 }
 
 <span class="kw">impl</span> <span class="ident">Dijkstra</span> {
+    <span class="kw">const</span> <span class="ident">INF</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">100_000_000_000_000_000</span>;
+
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">graph</span>: <span class="ident">Graph</span>) -&gt; <span class="self">Self</span> {
-        <span class="kw">let</span> <span class="ident">dist</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span> <span class="op">=</span> <span class="macro">vec!</span>[<span class="ident">INF</span>; <span class="ident">graph</span>.<span class="ident">n</span>];
+        <span class="kw">let</span> <span class="ident">dist</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span> <span class="op">=</span> <span class="macro">vec!</span>[<span class="ident">Dijkstra::INF</span>; <span class="ident">graph</span>.<span class="ident">n</span>];
         <span class="kw">let</span> <span class="ident">backptrs</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span> <span class="op">=</span> (<span class="number">0</span>..<span class="ident">graph</span>.<span class="ident">n</span>).<span class="ident">collect</span>();
         <span class="self">Self</span> {
-            <span class="ident">source</span>: <span class="ident">INF</span>,
+            <span class="ident">source</span>: <span class="ident">Dijkstra::INF</span>,
             <span class="ident">graph</span>,
             <span class="ident">dist</span>,
             <span class="ident">backptrs</span>,
@@ -148,7 +147,7 @@
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">search</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">src</span>: <span class="ident">usize</span>) {
         <span class="self">self</span>.<span class="ident">source</span> <span class="op">=</span> <span class="ident">src</span>;
 
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">dist</span> <span class="op">=</span> <span class="macro">vec!</span>[<span class="ident">INF</span>; <span class="self">self</span>.<span class="ident">graph</span>.<span class="ident">n</span>];
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">dist</span> <span class="op">=</span> <span class="macro">vec!</span>[<span class="ident">Dijkstra::INF</span>; <span class="self">self</span>.<span class="ident">graph</span>.<span class="ident">n</span>];
         <span class="ident">dist</span>[<span class="ident">src</span>] <span class="op">=</span> <span class="number">0</span>;
 
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">queue</span> <span class="op">=</span> <span class="ident">std::collections::BinaryHeap::new</span>();
@@ -174,7 +173,7 @@
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">shortest_path</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">u</span>: <span class="ident">usize</span>, <span class="ident">v</span>: <span class="ident">usize</span>) -&gt; <span class="ident">Vec</span><span class="op">&lt;</span>(<span class="ident">usize</span>, <span class="ident">usize</span>)<span class="op">&gt;</span> {
         <span class="macro">assert_eq!</span>(<span class="ident">u</span>, <span class="self">self</span>.<span class="ident">source</span>);
 
-        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">dist</span>[<span class="ident">v</span>] <span class="op">==</span> <span class="ident">INF</span> {
+        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">dist</span>[<span class="ident">v</span>] <span class="op">==</span> <span class="ident">Dijkstra::INF</span> {
             <span class="kw">return</span> <span class="macro">vec!</span>[];
         }
 
@@ -193,7 +192,6 @@
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">mod</span> <span class="ident">test_dijkstra</span> {
     <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::graph::dijkstra::Dijkstra</span>;
-    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::graph::dijkstra::INF</span>;
     <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::graph::graph::Graph</span>;
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
@@ -233,7 +231,7 @@
 
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">dijkstra</span> <span class="op">=</span> <span class="ident">Dijkstra::new</span>(<span class="ident">graph</span>);
         <span class="ident">dijkstra</span>.<span class="ident">search</span>(<span class="number">0</span>);
-        <span class="macro">assert_eq!</span>(<span class="ident">dijkstra</span>.<span class="ident">dist</span>, <span class="macro">vec!</span>[<span class="number">0</span>, <span class="number">1</span>, <span class="number">6</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">8</span>, <span class="number">10</span>, <span class="ident">INF</span>, <span class="ident">INF</span>]);
+        <span class="macro">assert_eq!</span>(<span class="ident">dijkstra</span>.<span class="ident">dist</span>, <span class="macro">vec!</span>[<span class="number">0</span>, <span class="number">1</span>, <span class="number">6</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">8</span>, <span class="number">10</span>, <span class="ident">Dijkstra::INF</span>, <span class="ident">Dijkstra::INF</span>]);
 
         <span class="macro">assert_eq!</span>(<span class="ident">dijkstra</span>.<span class="ident">shortest_path</span>(<span class="number">0</span>, <span class="number">3</span>), <span class="macro">vec!</span>[(<span class="number">0</span>, <span class="number">1</span>), (<span class="number">1</span>, <span class="number">3</span>)]);
         <span class="macro">assert_eq!</span>(<span class="ident">dijkstra</span>.<span class="ident">shortest_path</span>(<span class="number">0</span>, <span class="number">8</span>), <span class="macro">vec!</span>[]);

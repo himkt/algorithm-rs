@@ -77,8 +77,6 @@
 <span id="72">72</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::graph::graph::Graph</span>;
 
-<span class="kw">const</span> <span class="ident">INF</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">1_000_000_000_000</span>;
-
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">EulerTour</span> {
     <span class="ident">graph</span>: <span class="ident">Graph</span>,
     <span class="ident">l</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>,
@@ -87,9 +85,11 @@
 }
 
 <span class="kw">impl</span> <span class="ident">EulerTour</span> {
+    <span class="kw">const</span> <span class="ident">INF</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">100_000_000_000_000_000</span>;
+
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">n</span>: <span class="ident">usize</span>, <span class="ident">graph</span>: <span class="ident">Graph</span>) -&gt; <span class="self">Self</span> {
-        <span class="kw">let</span> <span class="ident">l</span> <span class="op">=</span> <span class="macro">vec!</span>[<span class="ident">INF</span>; <span class="ident">n</span>];
-        <span class="kw">let</span> <span class="ident">r</span> <span class="op">=</span> <span class="macro">vec!</span>[<span class="ident">INF</span>; <span class="ident">n</span>];
+        <span class="kw">let</span> <span class="ident">l</span> <span class="op">=</span> <span class="macro">vec!</span>[<span class="ident">EulerTour::INF</span>; <span class="ident">n</span>];
+        <span class="kw">let</span> <span class="ident">r</span> <span class="op">=</span> <span class="macro">vec!</span>[<span class="ident">EulerTour::INF</span>; <span class="ident">n</span>];
         <span class="ident">EulerTour</span> { <span class="ident">graph</span>, <span class="ident">l</span>, <span class="ident">r</span>, <span class="ident">t</span>: <span class="number">1</span> }
     }
 
@@ -102,7 +102,7 @@
         <span class="self">self</span>.<span class="ident">_dfs</span>(<span class="ident">root</span>, <span class="prelude-val">None</span>);
 
         <span class="kw">for</span> <span class="ident">i</span> <span class="kw">in</span> <span class="number">0</span>..<span class="self">self</span>.<span class="ident">l</span>.<span class="ident">len</span>() {
-            <span class="kw">if</span> <span class="self">self</span>.<span class="ident">r</span>[<span class="ident">i</span>] <span class="op">==</span> <span class="ident">INF</span> {
+            <span class="kw">if</span> <span class="self">self</span>.<span class="ident">r</span>[<span class="ident">i</span>] <span class="op">==</span> <span class="ident">EulerTour::INF</span> {
                 <span class="self">self</span>.<span class="ident">r</span>[<span class="ident">i</span>] <span class="op">=</span> <span class="self">self</span>.<span class="ident">l</span>[<span class="ident">i</span>];
             }
         }

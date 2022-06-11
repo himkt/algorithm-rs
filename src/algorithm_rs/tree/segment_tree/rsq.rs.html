@@ -97,15 +97,9 @@
 <span id="92">92</span>
 <span id="93">93</span>
 <span id="94">94</span>
-<span id="95">95</span>
-<span id="96">96</span>
 </pre><pre class="rust"><code><span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">RSQ</span> {
     <span class="ident">v</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span>,
-}
-
-<span class="kw">impl</span> <span class="ident">RSQ</span> {
-    <span class="kw">const</span> <span class="ident">SEQ_LEN</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">1</span> <span class="op">&lt;</span><span class="op">&lt;</span> <span class="number">18</span>;
 }
 
 <span class="kw">impl</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">RSQ</span> {
@@ -115,6 +109,8 @@
 }
 
 <span class="kw">impl</span> <span class="ident">RSQ</span> {
+    <span class="kw">const</span> <span class="ident">SEQ_LEN</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">1</span><span class="op">&lt;</span><span class="op">&lt;</span><span class="number">18</span>;
+
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() -&gt; <span class="self">Self</span> {
         <span class="self">Self</span> {
             <span class="ident">v</span>: <span class="macro">vec!</span>[<span class="number">0</span>; <span class="number">2</span> <span class="op">*</span> <span class="ident">RSQ::SEQ_LEN</span>],

@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["eratosthenes_sieve_smallest_prime_factors",""]],"struct":[["SequentialPrimeFactorization",""]]});
+initSidebarItems({"struct":[["SequentialPrimeFactorization",""]]});
