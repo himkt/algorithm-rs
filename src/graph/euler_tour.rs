@@ -1,7 +1,5 @@
 use crate::graph::graph::Graph;
 
-const INF: usize = 1_000_000_000_000;
-
 pub struct EulerTour {
     graph: Graph,
     l: Vec<usize>,
@@ -10,9 +8,11 @@ pub struct EulerTour {
 }
 
 impl EulerTour {
+    const INF: usize = 100_000_000_000_000_000;
+
     pub fn new(n: usize, graph: Graph) -> Self {
-        let l = vec![INF; n];
-        let r = vec![INF; n];
+        let l = vec![EulerTour::INF; n];
+        let r = vec![EulerTour::INF; n];
         EulerTour { graph, l, r, t: 1 }
     }
 
@@ -25,7 +25,7 @@ impl EulerTour {
         self._dfs(root, None);
 
         for i in 0..self.l.len() {
-            if self.r[i] == INF {
+            if self.r[i] == EulerTour::INF {
                 self.r[i] = self.l[i];
             }
         }

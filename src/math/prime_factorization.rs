@@ -1,22 +1,3 @@
-pub fn eratosthenes_sieve_smallest_prime_factors(n: usize) -> Vec<usize> {
-    let mut smallest_prime_factors: Vec<usize> = (0..=n + 1).into_iter().collect();
-    let mut i = 2;
-
-    while i * i <= n {
-        if smallest_prime_factors[i] == i {
-            let mut j = i;
-            while j * i <= n {
-                smallest_prime_factors[j * i] = i;
-                j += 1;
-            }
-        }
-
-        i += 1;
-    }
-
-    smallest_prime_factors
-}
-
 #[derive(Debug, Clone)]
 pub struct SequentialPrimeFactorization {
     smallest_prime_factors: Vec<usize>,
@@ -24,7 +5,21 @@ pub struct SequentialPrimeFactorization {
 
 impl SequentialPrimeFactorization {
     pub fn new(n: usize) -> Self {
-        let smallest_prime_factors = eratosthenes_sieve_smallest_prime_factors(n);
+        let mut smallest_prime_factors: Vec<usize> = (0..=(n + 1)).collect();
+        let mut i = 2;
+
+        while i * i <= n {
+            if smallest_prime_factors[i] == i {
+                let mut j = i;
+                while j * i <= n {
+                    smallest_prime_factors[j * i] = i;
+                    j += 1;
+                }
+            }
+
+            i += 1;
+        }
+
         Self {
             smallest_prime_factors,
         }
