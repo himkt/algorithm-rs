@@ -16,8 +16,13 @@ impl EulerTour {
         EulerTour { graph, l, r, t: 1 }
     }
 
+    /// Euler tour entrypoint that returns two vectors `(&l, &r)`.
+    /// Note that timestamp starts from `1`.
+    ///
+    /// - `l`: vector indicates the timestamp that visits a node `u` at the first time.
+    /// - `r`: vector indicates the timestamp that visits a node `u` at the last time.
     pub fn traverse(&mut self, root: usize) -> (&[usize], &[usize]) {
-        self.dfs(root, None);
+        self._dfs(root, None);
 
         for i in 0..self.l.len() {
             if self.r[i] == INF {
@@ -28,14 +33,14 @@ impl EulerTour {
         (&self.l, &self.r)
     }
 
-    pub fn dfs(&mut self, u: usize, p: Option<usize>) {
+    fn _dfs(&mut self, u: usize, p: Option<usize>) {
         self.l[u] = self.t;
         self.t += 1;
 
         for i in 0..self.graph.graph[u].len() {
             let (v, _) = self.graph.graph[u][i];
             if p != Some(v) {
-                self.dfs(v, Some(u));
+                self._dfs(v, Some(u));
                 self.r[u] = self.t;
                 self.t += 1;
             }
