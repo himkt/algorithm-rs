@@ -20,8 +20,10 @@ impl RSQ {
         }
     }
 
+    /// Add `value` to i-th element.
+    /// 0-origin.
     pub fn add(&mut self, mut index: usize, value: i64) {
-        index += RSQ::SEQ_LEN - 1;
+        index += RSQ::SEQ_LEN;
         self.v[index] += value;
 
         while index > 0 {
@@ -30,27 +32,24 @@ impl RSQ {
         }
     }
 
-    pub fn sum(&self, mut l: usize, mut r: usize) -> i64 {
-        l += RSQ::SEQ_LEN - 1;
-        r += RSQ::SEQ_LEN;
+    /// Sum values on `[l, r)`. Note that it is a half-open interval.
+    /// 0-origin.
+    pub fn sum(&self, l: usize, r: usize) -> i64 {
+        self._sum(l, r, 0, RSQ::SEQ_LEN, 1)
+    }
 
-        let mut ans = 0;
-
-        while l < r {
-            if l % 2 == 1 {
-                ans += self.v[l];
-                l += 1;
-            }
-            l /= 2;
-
-            if r % 2 == 1 {
-                ans += self.v[r - 1];
-                r -= 1;
-            }
-            r /= 2;
+    fn _sum(&self, ql: usize, qr: usize, sl: usize, sr: usize, pos: usize) -> i64 {
+        if qr <= sl || sr <= ql {
+            return 0;
+        }
+        if ql <= sl && sr <= qr {
+            return self.v[pos];
         }
 
-        ans
+        let sm = (sl + sr) / 2;
+        let lv = self._sum(ql, qr, sl, sm, pos * 2);
+        let rv = self._sum(ql, qr, sm, sr, pos * 2 + 1);
+        lv + rv
     }
 
     pub fn from(v: Vec<i64>) -> Self {
@@ -71,13 +70,15 @@ mod test_segment_tree {
     #[test]
     fn it_works() {
         let mut rsq = RSQ::new();
+        rsq.add(0, 3);
         rsq.add(2, 3);
         rsq.add(3, 1);
         rsq.add(4, 4);
-        assert_eq!(rsq.sum(1, 2), 3);
-        assert_eq!(rsq.sum(2, 3), 4);
-        assert_eq!(rsq.sum(3, 3), 1);
-        assert_eq!(rsq.sum(1, 5), 8);
+        assert_eq!(rsq.sum(0, 3), 6);
+        assert_eq!(rsq.sum(1, 3), 3);
+        assert_eq!(rsq.sum(2, 4), 4);
+        assert_eq!(rsq.sum(3, 4), 1);
+        assert_eq!(rsq.sum(1, 6), 8);
     }
 
     #[test]
@@ -87,9 +88,9 @@ mod test_segment_tree {
         rsq.add(2, 3);
         rsq.add(3, 1);
         rsq.add(4, 4);
-        assert_eq!(rsq.sum(1, 2), 5);
-        assert_eq!(rsq.sum(2, 3), 6);
-        assert_eq!(rsq.sum(3, 3), 2);
-        assert_eq!(rsq.sum(1, 5), 13);
+        assert_eq!(rsq.sum(1, 3), 5);
+        assert_eq!(rsq.sum(2, 4), 6);
+        assert_eq!(rsq.sum(3, 4), 2);
+        assert_eq!(rsq.sum(1, 6), 13);
     }
 }
