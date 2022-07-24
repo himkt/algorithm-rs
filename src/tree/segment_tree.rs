@@ -26,16 +26,8 @@ impl SegmentTree {
 
     pub fn new(mode: Mode) -> Self {
         let default = match &mode {
-            Mode::RangeGet(op) => match op {
-                Op::Add => 0,
-                Op::Max => SegmentTree::MIN,
-                Op::Min => SegmentTree::MAX,
-            },
-            Mode::RangeUpdate(op) => match op {
-                Op::Add => 0,
-                Op::Max => SegmentTree::MIN,
-                Op::Min => SegmentTree::MAX,
-            },
+            Mode::RangeGet(op) => SegmentTree::default(op),
+            Mode::RangeUpdate(op) => SegmentTree::default(op),
         };
 
         Self {
@@ -44,19 +36,68 @@ impl SegmentTree {
         }
     }
 
+    /// Return an appropriate default value for the given operation.
+    pub fn default(op: &Op) -> i64 {
+        match op {
+            Op::Add => 0,
+            Op::Max => SegmentTree::MIN,
+            Op::Min => SegmentTree::MAX,
+        }
+    }
+
+    pub fn _assign(ret: &mut i64, value: i64) {
+        *ret = value;
+    }
+
+    pub fn _add(lv: i64, rv: i64) -> i64 {
+        lv + rv
+    }
+
+    pub fn _add_assign_one(ret: &mut i64, value: i64) {
+        *ret += value;
+    }
+
+    pub fn _add_assign(ret: &mut i64, lv: i64, rv: i64) {
+        *ret = lv + rv;
+    }
+
+    pub fn _max(lv: i64, rv: i64) -> i64 {
+        lv.max(rv)
+    }
+
+    pub fn _max_assign(ret: &mut i64, lv: i64, rv: i64) {
+        *ret = lv.max(rv);
+    }
+
+    pub fn _min(lv: i64, rv: i64) -> i64 {
+        lv.min(rv)
+    }
+
+    pub fn _min_assign(ret: &mut i64, lv: i64, rv: i64) {
+        *ret = lv.min(rv);
+    }
+
     /// Get an i-th element of from the tree.
     pub fn get_one(&mut self, mut index: usize) -> i64 {
         index += SegmentTree::SEQ_LEN;
+        let mut ret = 0;
 
-        let mut sum = 0;
-        sum += self.v[index];
+        if let Mode::RangeUpdate(op) = &self.mode {
+            let operator = match op {
+                Op::Add => SegmentTree::_add_assign_one,
+                _ => panic!(),
+            };
 
-        while index > 0 {
-            index /= 2;
-            sum += self.v[index];
+            operator(&mut ret, self.v[index]);
+            while index > 0 {
+                index /= 2;
+                operator(&mut ret, self.v[index]);
+            }
+        } else {
+            panic!("Unsupported");
         }
 
-        sum
+        ret
     }
 
     /// Run a range query.
@@ -71,12 +112,9 @@ impl SegmentTree {
             pos: usize,
         ) -> i64 {
             if qr <= sl || sr <= ql {
-                return match &op {
-                    Op::Add => 0,
-                    Op::Max => SegmentTree::MIN,
-                    Op::Min => SegmentTree::MAX,
-                };
+                return SegmentTree::default(op);
             }
+
             if ql <= sl && sr <= qr {
                 return v[pos];
             }
@@ -84,16 +122,17 @@ impl SegmentTree {
             let sm = (sl + sr) / 2;
             let lv = _get_range(op, v, ql, qr, sl, sm, pos * 2);
             let rv = _get_range(op, v, ql, qr, sm, sr, pos * 2 + 1);
-
-            match &op {
-                Op::Add => lv + rv,
-                Op::Max => lv.max(rv),
-                Op::Min => lv.min(rv),
-            }
+            let operate = match op {
+                Op::Add => SegmentTree::_add,
+                Op::Max => SegmentTree::_max,
+                Op::Min => SegmentTree::_min,
+            };
+            operate(lv, rv)
         }
 
         if let Mode::RangeGet(op) = &self.mode {
-            _get_range(op, &self.v, l, r, 0, SegmentTree::SEQ_LEN, 1)
+            let data = &self.v;
+            _get_range(op, data, l, r, 0, SegmentTree::SEQ_LEN, 1)
         } else {
             panic!("Unsupported");
         }
@@ -103,36 +142,25 @@ impl SegmentTree {
     pub fn update_one(&mut self, mut index: usize, value: i64) {
         index += SegmentTree::SEQ_LEN;
 
-        match &self.mode {
-            Mode::RangeGet(Op::Add) => {
-                self.v[index] += value;
-            }
-            Mode::RangeGet(Op::Max) => {
-                self.v[index] = value;
-            }
-            Mode::RangeGet(Op::Min) => {
-                self.v[index] = value;
-            }
-            _ => panic!("Unsupported"),
-        };
-
         if let Mode::RangeGet(op) = &self.mode {
+            let operate_and_assign_one = match op {
+                Op::Add => SegmentTree::_add_assign_one,
+                Op::Max => SegmentTree::_assign,
+                Op::Min => SegmentTree::_assign,
+            };
+            operate_and_assign_one(&mut self.v[index], value);
+
+            let operate_and_assign = match op {
+                Op::Add => SegmentTree::_add_assign,
+                Op::Max => SegmentTree::_max_assign,
+                Op::Min => SegmentTree::_min_assign,
+            };
+
             while index > 0 {
                 index /= 2;
                 let lv = self.v[index * 2];
                 let rv = self.v[index * 2 + 1];
-
-                match op {
-                    Op::Add => {
-                        self.v[index] = lv + rv;
-                    }
-                    Op::Max => {
-                        self.v[index] = lv.max(rv);
-                    }
-                    Op::Min => {
-                        self.v[index] = lv.min(rv);
-                    }
-                };
+                operate_and_assign(&mut self.v[index], lv, rv);
             }
         }
     }
@@ -143,26 +171,21 @@ impl SegmentTree {
             l += SegmentTree::SEQ_LEN;
             r += SegmentTree::SEQ_LEN;
 
+            let operate_and_assign_one = match op {
+                Op::Add => SegmentTree::_add_assign_one,
+                _ => panic!(),
+            };
+
             while l < r {
                 if l % 2 == 1 {
-                    match op {
-                        Op::Add => {
-                            self.v[l] += value;
-                            l += 1;
-                        }
-                        _ => panic!("Unsupported"),
-                    }
+                    operate_and_assign_one(&mut self.v[l], value);
+                    l += 1;
                 }
                 l /= 2;
 
                 if r % 2 == 1 {
-                    match op {
-                        Op::Add => {
-                            self.v[r - 1] += value;
-                            r -= 1;
-                        }
-                        _ => panic!("Unsupported"),
-                    }
+                    operate_and_assign_one(&mut self.v[r - 1], value);
+                    r -= 1;
                 }
                 r /= 2;
             }
