@@ -120,6 +120,9 @@
 <span id="115">115</span>
 <span id="116">116</span>
 <span id="117">117</span>
+<span id="118">118</span>
+<span id="119">119</span>
+<span id="120">120</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::graph::graph::Graph</span>;
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>)]</span>
@@ -231,7 +234,10 @@
 
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">dijkstra</span> <span class="op">=</span> <span class="ident">Dijkstra::new</span>(<span class="ident">graph</span>);
         <span class="ident">dijkstra</span>.<span class="ident">search</span>(<span class="number">0</span>);
-        <span class="macro">assert_eq!</span>(<span class="ident">dijkstra</span>.<span class="ident">dist</span>, <span class="macro">vec!</span>[<span class="number">0</span>, <span class="number">1</span>, <span class="number">6</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">8</span>, <span class="number">10</span>, <span class="ident">Dijkstra::INF</span>, <span class="ident">Dijkstra::INF</span>]);
+        <span class="macro">assert_eq!</span>(
+            <span class="ident">dijkstra</span>.<span class="ident">dist</span>,
+            <span class="macro">vec!</span>[<span class="number">0</span>, <span class="number">1</span>, <span class="number">6</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">8</span>, <span class="number">10</span>, <span class="ident">Dijkstra::INF</span>, <span class="ident">Dijkstra::INF</span>]
+        );
 
         <span class="macro">assert_eq!</span>(<span class="ident">dijkstra</span>.<span class="ident">shortest_path</span>(<span class="number">0</span>, <span class="number">3</span>), <span class="macro">vec!</span>[(<span class="number">0</span>, <span class="number">1</span>), (<span class="number">1</span>, <span class="number">3</span>)]);
         <span class="macro">assert_eq!</span>(<span class="ident">dijkstra</span>.<span class="ident">shortest_path</span>(<span class="number">0</span>, <span class="number">8</span>), <span class="macro">vec!</span>[]);
