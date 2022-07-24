@@ -1,1 +1,1 @@
-initSidebarItems({"mod":[["raq",""],["rsq",""]]});
+initSidebarItems({"enum":[["Mode",""],["Op",""]],"struct":[["SegmentTree",""]]});
