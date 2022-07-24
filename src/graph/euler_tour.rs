@@ -50,8 +50,8 @@ impl EulerTour {
 
 #[cfg(test)]
 mod test_euler_tour {
-    use crate::graph::graph::Graph;
     use crate::graph::euler_tour::EulerTour;
+    use crate::graph::graph::Graph;
 
     #[test]
     fn it_works() {

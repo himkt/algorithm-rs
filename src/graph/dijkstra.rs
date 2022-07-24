@@ -109,7 +109,10 @@ mod test_dijkstra {
 
         let mut dijkstra = Dijkstra::new(graph);
         dijkstra.search(0);
-        assert_eq!(dijkstra.dist, vec![0, 1, 6, 3, 5, 8, 10, Dijkstra::INF, Dijkstra::INF]);
+        assert_eq!(
+            dijkstra.dist,
+            vec![0, 1, 6, 3, 5, 8, 10, Dijkstra::INF, Dijkstra::INF]
+        );
 
         assert_eq!(dijkstra.shortest_path(0, 3), vec![(0, 1), (1, 3)]);
         assert_eq!(dijkstra.shortest_path(0, 8), vec![]);
