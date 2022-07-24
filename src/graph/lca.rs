@@ -12,14 +12,8 @@ impl LowestCommonAncestor {
 
     pub fn new(graph: Graph) -> Self {
         let n = graph.n;
-        let parents = vec![
-            vec![LowestCommonAncestor::ROOT; n];
-            LowestCommonAncestor::LOGV
-        ];
-        let depth = vec![
-            LowestCommonAncestor::ROOT;
-            n
-        ];
+        let parents = vec![vec![LowestCommonAncestor::ROOT; n]; LowestCommonAncestor::LOGV];
+        let depth = vec![LowestCommonAncestor::ROOT; n];
         LowestCommonAncestor {
             parents,
             depth,
@@ -28,11 +22,7 @@ impl LowestCommonAncestor {
     }
 
     pub fn init(&mut self) {
-        self.dfs(
-            LowestCommonAncestor::ROOT,
-            LowestCommonAncestor::ROOT,
-            0,
-        );
+        self.dfs(LowestCommonAncestor::ROOT, LowestCommonAncestor::ROOT, 0);
 
         for k in 0..LowestCommonAncestor::LOGV - 1 {
             for v in 0..self.graph.n {
