@@ -2,9 +2,10 @@
 pub struct Graph {
     pub n: usize,
     pub graph: Vec<Vec<(usize, usize)>>,
+    pub rev: Vec<Vec<usize>>,
     pub in_degrees: Vec<usize>,
     pub out_degrees: Vec<usize>,
-    directed: bool,
+    pub directed: bool,
 }
 
 impl Graph {
@@ -12,9 +13,11 @@ impl Graph {
         let graph: Vec<Vec<(usize, usize)>> = vec![vec![]; n];
         let in_degrees = vec![0; n];
         let out_degrees = vec![0; n];
+        let rev = vec![vec![]; n];
         Self {
             n,
             graph,
+            rev,
             in_degrees,
             out_degrees,
             directed,
