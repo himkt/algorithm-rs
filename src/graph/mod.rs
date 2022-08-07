@@ -8,3 +8,4 @@ pub mod lca;
 pub mod lowlink;
 pub mod scc;
 pub mod topological_sort;
+pub mod ford_fullkerson;
