@@ -48,6 +48,21 @@ impl Graph {
         }
     }
 
+    pub fn connect_with_residual(&mut self, from: usize, to: usize, weight: usize) {
+        assert!(self.directed, "connect_with_residual only works in directed graph.");
+
+        self.graph[from].push((to, weight));
+        self.out_degrees[from] += 1;
+        self.in_degrees[to] += 1;
+
+        self.graph[to].push((from, 0));
+        self.out_degrees[to] += 1;
+        self.in_degrees[from] += 1;
+
+        self.rev[from].push(self.graph[to].len() - 1);
+        self.rev[to].push(self.graph[from].len() - 1);
+    }
+
     pub fn in_degree(&self, u: usize) -> usize {
         self.graph[u].len()
     }
