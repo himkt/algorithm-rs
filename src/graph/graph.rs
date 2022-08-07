@@ -57,7 +57,7 @@ impl Graph {
     }
 
     pub fn connected(&self, u: usize, v: usize) -> bool {
-        self.graph[u].iter().filter(|&&(k, _)| v == k).count() > 0
+        self.graph[u].iter().filter(|&(k, _)| &v == k).count() > 0
     }
 }
 
