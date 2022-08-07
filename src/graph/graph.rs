@@ -155,4 +155,11 @@ mod test_graph {
         let expected = vec![vec![(1, 10), (1, 1)], vec![]];
         assert_eq!(graph.graph, expected);
     }
+
+    #[test]
+    #[should_panic(expected = "connect_with_residual only works in directed graph.")]
+    fn it_does_not_work_residual() {
+        let mut graph = Graph::new(2, false);
+        graph.connect_with_residual(0, 1, 0)
+    }
 }
