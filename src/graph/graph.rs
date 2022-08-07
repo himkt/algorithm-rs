@@ -49,7 +49,10 @@ impl Graph {
     }
 
     pub fn connect_with_residual(&mut self, from: usize, to: usize, weight: usize) {
-        assert!(self.directed, "connect_with_residual only works in directed graph.");
+        assert!(
+            self.directed,
+            "connect_with_residual only works in directed graph."
+        );
 
         self.graph[from].push((to, weight));
         self.out_degrees[from] += 1;

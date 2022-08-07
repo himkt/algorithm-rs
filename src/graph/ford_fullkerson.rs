@@ -53,8 +53,8 @@ impl FordFullkerson {
 
 #[cfg(test)]
 mod test_lowlink {
-    use crate::graph::graph::Graph;
     use crate::graph::ford_fullkerson::FordFullkerson;
+    use crate::graph::graph::Graph;
 
     #[test]
     fn it_works() {
