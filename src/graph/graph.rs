@@ -2,9 +2,10 @@
 pub struct Graph {
     pub n: usize,
     pub graph: Vec<Vec<(usize, usize)>>,
+    pub rev: Vec<Vec<usize>>,
     pub in_degrees: Vec<usize>,
     pub out_degrees: Vec<usize>,
-    directed: bool,
+    pub directed: bool,
 }
 
 impl Graph {
@@ -12,9 +13,11 @@ impl Graph {
         let graph: Vec<Vec<(usize, usize)>> = vec![vec![]; n];
         let in_degrees = vec![0; n];
         let out_degrees = vec![0; n];
+        let rev = vec![vec![]; n];
         Self {
             n,
             graph,
+            rev,
             in_degrees,
             out_degrees,
             directed,
@@ -45,6 +48,24 @@ impl Graph {
         }
     }
 
+    pub fn connect_with_residual(&mut self, from: usize, to: usize, weight: usize) {
+        assert!(
+            self.directed,
+            "connect_with_residual only works in directed graph."
+        );
+
+        self.graph[from].push((to, weight));
+        self.out_degrees[from] += 1;
+        self.in_degrees[to] += 1;
+
+        self.graph[to].push((from, 0));
+        self.out_degrees[to] += 1;
+        self.in_degrees[from] += 1;
+
+        self.rev[from].push(self.graph[to].len() - 1);
+        self.rev[to].push(self.graph[from].len() - 1);
+    }
+
     pub fn in_degree(&self, u: usize) -> usize {
         self.graph[u].len()
     }
@@ -54,7 +75,7 @@ impl Graph {
     }
 
     pub fn connected(&self, u: usize, v: usize) -> bool {
-        self.graph[u].iter().filter(|&&(k, _)| v == k).count() > 0
+        self.graph[u].iter().filter(|&(k, _)| &v == k).count() > 0
     }
 }
 
@@ -133,5 +154,12 @@ mod test_graph {
 
         let expected = vec![vec![(1, 10), (1, 1)], vec![]];
         assert_eq!(graph.graph, expected);
+    }
+
+    #[test]
+    #[should_panic(expected = "connect_with_residual only works in directed graph.")]
+    fn it_does_not_work_residual() {
+        let mut graph = Graph::new(2, false);
+        graph.connect_with_residual(0, 1, 0)
     }
 }
