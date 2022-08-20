@@ -1,1 +1,1 @@
-initSidebarItems({"mod":[["bitset",""],["union_find",""]]});
+window.SIDEBAR_ITEMS = {"mod":[["bitset",""],["union_find",""]]};

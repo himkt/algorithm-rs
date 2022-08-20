@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["StoronglyConnectedComponent",""]]});
+window.SIDEBAR_ITEMS = {"struct":[["StoronglyConnectedComponent",""]]};

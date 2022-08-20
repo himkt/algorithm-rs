@@ -1,1 +1,1 @@
-initSidebarItems({"mod":[["lower_bound",""]]});
+window.SIDEBAR_ITEMS = {"mod":[["lower_bound",""]]};

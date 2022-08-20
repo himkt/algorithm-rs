@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["DepthFirstSearch",""]]});
+window.SIDEBAR_ITEMS = {"struct":[["DepthFirstSearch",""]]};

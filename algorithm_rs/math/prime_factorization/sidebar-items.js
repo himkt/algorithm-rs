@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["SequentialPrimeFactorization",""]]});
+window.SIDEBAR_ITEMS = {"struct":[["SequentialPrimeFactorization",""]]};

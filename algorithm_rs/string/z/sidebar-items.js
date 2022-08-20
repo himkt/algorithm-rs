@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["z",""]]});
+window.SIDEBAR_ITEMS = {"fn":[["z",""]]};

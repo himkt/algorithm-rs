@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["eratosthenes_sieve",""]]});
+window.SIDEBAR_ITEMS = {"fn":[["eratosthenes_sieve",""]]};

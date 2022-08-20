@@ -1,1 +1,1 @@
-initSidebarItems({"enum":[["Mode",""],["Op",""]],"struct":[["SegmentTree",""]]});
+window.SIDEBAR_ITEMS = {"enum":[["Mode",""],["Op",""]],"struct":[["SegmentTree",""]]};

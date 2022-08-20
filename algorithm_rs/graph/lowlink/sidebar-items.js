@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["Lowlink",""]]});
+window.SIDEBAR_ITEMS = {"struct":[["Lowlink",""]]};

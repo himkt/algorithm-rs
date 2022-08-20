@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["Line",""]],"trait":[["LineAPI",""]]});
+window.SIDEBAR_ITEMS = {"struct":[["Line",""]],"trait":[["LineAPI",""]]};

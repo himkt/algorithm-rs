@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["modpow",""]]});
+window.SIDEBAR_ITEMS = {"fn":[["modpow",""]]};

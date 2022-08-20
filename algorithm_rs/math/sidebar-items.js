@@ -1,1 +1,1 @@
-initSidebarItems({"mod":[["com",""],["eratosthenes",""],["gcd",""],["modcom",""],["modpow",""],["prime_factorization",""]]});
+window.SIDEBAR_ITEMS = {"mod":[["com",""],["eratosthenes",""],["gcd",""],["modcom",""],["modpow",""],["prime_factorization",""]]};

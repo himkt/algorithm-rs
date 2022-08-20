@@ -1,1 +1,1 @@
-initSidebarItems({"mod":[["convex_hull",""],["line",""],["point",""]]});
+window.SIDEBAR_ITEMS = {"mod":[["convex_hull",""],["line",""],["point",""]]};

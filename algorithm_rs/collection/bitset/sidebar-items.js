@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["bitset",""]],"struct":[["Bitset",""]]});
+window.SIDEBAR_ITEMS = {"fn":[["bitset",""]],"struct":[["Bitset",""]]};

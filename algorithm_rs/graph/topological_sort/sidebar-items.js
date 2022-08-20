@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["TopologicalSort",""]]});
+window.SIDEBAR_ITEMS = {"struct":[["TopologicalSort",""]]};
