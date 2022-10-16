@@ -1,3 +1,4 @@
-var sourcesIndex = {};
-sourcesIndex["algorithm_rs"] = {"name":"","dirs":[{"name":"collection","files":["bitset.rs","mod.rs","union_find.rs"]},{"name":"geometry","files":["convex_hull.rs","line.rs","mod.rs","point.rs"]},{"name":"graph","files":["bfs.rs","dfs.rs","dijkstra.rs","euler_tour.rs","ford_fullkerson.rs","graph.rs","lca.rs","lowlink.rs","mod.rs","scc.rs","topological_sort.rs"]},{"name":"math","files":["com.rs","eratosthenes.rs","gcd.rs","mod.rs","modcom.rs","modpow.rs","prime_factorization.rs"]},{"name":"search","files":["lower_bound.rs","mod.rs"]},{"name":"string","files":["mod.rs","z.rs"]},{"name":"tree","files":["mod.rs","segment_tree.rs"]}],"files":["lib.rs"]};
+var sourcesIndex = JSON.parse('{\
+"algorithm_rs":["",[["collection",[],["bitset.rs","mod.rs","union_find.rs"]],["geometry",[],["convex_hull.rs","line.rs","mod.rs","point.rs"]],["graph",[],["bfs.rs","dfs.rs","dijkstra.rs","euler_tour.rs","ford_fullkerson.rs","graph.rs","lca.rs","lowlink.rs","mod.rs","scc.rs","topological_sort.rs"]],["math",[],["com.rs","eratosthenes.rs","gcd.rs","mod.rs","modcom.rs","modpow.rs","prime_factorization.rs"]],["search",[],["lower_bound.rs","mod.rs","upper_bound.rs"]],["string",[],["mod.rs","z.rs"]],["tree",[],["mod.rs","segment_tree.rs"]]],["lib.rs"]]\
+}');
 createSourceSidebar();
