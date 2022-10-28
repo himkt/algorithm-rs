@@ -11,11 +11,11 @@ pub enum CollectionType {
     Combination,
 }
 
-pub struct CollectionIter {
+pub struct CollectionIter<'a> {
     pub a: Range<usize>,
     pub n: usize,
     pub k: usize,
-    pub data: Vec<usize>,
+    pub data: &'a Vec<usize>,
     pub depth: usize,
     pub stack: VecDeque<Item>,
     pub permutation: Vec<usize>,
@@ -24,8 +24,8 @@ pub struct CollectionIter {
     pub allow_duplication: bool,
 }
 
-impl CollectionIter {
-    pub fn permutation(data: Vec<usize>, allow_duplication: bool) -> Self {
+impl<'a> CollectionIter<'a> {
+    pub fn permutation(data: &'a Vec<usize>, allow_duplication: bool) -> Self {
         let n: usize = data.len();
         let a = 0..n;
 
@@ -49,7 +49,7 @@ impl CollectionIter {
         }
     }
 
-    pub fn combination(data: Vec<usize>, k: usize, allow_duplication: bool) -> Self {
+    pub fn combination(data: &'a Vec<usize>, k: usize, allow_duplication: bool) -> Self {
         let n: usize = data.len();
         let a = 0..n;
 
@@ -88,7 +88,7 @@ impl CollectionIter {
     }
 }
 
-impl Iterator for CollectionIter {
+impl Iterator for CollectionIter<'_> {
     type Item = Vec<usize>;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -141,7 +141,7 @@ mod test_iterator {
         fn it_works_permutation() {
             let data = vec![1, 2, 4];
             let num_expected = 27;  // n^3
-            let iterator = CollectionIter::permutation(data, true);
+            let iterator = CollectionIter::permutation(&data, true);
             let expected = vec![
                 vec![1, 1, 1],
                 vec![1, 1, 2],
@@ -179,7 +179,7 @@ mod test_iterator {
             let k: usize = 3;
             let data = vec![1, 2, 4];
             let num_expected = 10;  // c(n + k - 1, k)
-            let iterator = CollectionIter::combination(data, k, true);
+            let iterator = CollectionIter::combination(&data, k, true);
 
             let expected = vec![
                 vec![1, 1, 1],
@@ -204,7 +204,7 @@ mod test_iterator {
         fn it_works_permutation() {
             let data = vec![1, 2, 4, 8];
             let num_expected = 24;  // 4!
-            let iterator = CollectionIter::permutation(data, false);
+            let iterator = CollectionIter::permutation(&data, false);
             let expected = vec![
                 vec![1, 2, 4, 8],
                 vec![1, 2, 8, 4],
@@ -239,7 +239,7 @@ mod test_iterator {
             let k: usize = 3;
             let num_expected = 4;  // c(n, k)
             let data = vec![1, 2, 4, 8];
-            let iterator = CollectionIter::combination(data, k, false);
+            let iterator = CollectionIter::combination(&data, k, false);
             let expected = vec![
                 vec![1, 2, 4],
                 vec![1, 2, 8],
