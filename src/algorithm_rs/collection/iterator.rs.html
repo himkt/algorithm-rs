@@ -263,11 +263,11 @@
     <span class="ident">Combination</span>,
 }
 
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">CollectionIter</span> {
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">CollectionIter</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
     <span class="kw">pub</span> <span class="ident">a</span>: <span class="ident">Range</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>,
     <span class="kw">pub</span> <span class="ident">n</span>: <span class="ident">usize</span>,
     <span class="kw">pub</span> <span class="ident">k</span>: <span class="ident">usize</span>,
-    <span class="kw">pub</span> <span class="ident">data</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span> <span class="ident">data</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>,
     <span class="kw">pub</span> <span class="ident">depth</span>: <span class="ident">usize</span>,
     <span class="kw">pub</span> <span class="ident">stack</span>: <span class="ident">VecDeque</span><span class="op">&lt;</span><span class="ident">Item</span><span class="op">&gt;</span>,
     <span class="kw">pub</span> <span class="ident">permutation</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>,
@@ -276,8 +276,8 @@
     <span class="kw">pub</span> <span class="ident">allow_duplication</span>: <span class="ident">bool</span>,
 }
 
-<span class="kw">impl</span> <span class="ident">CollectionIter</span> {
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">permutation</span>(<span class="ident">data</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>, <span class="ident">allow_duplication</span>: <span class="ident">bool</span>) -&gt; <span class="self">Self</span> {
+<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">CollectionIter</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">permutation</span>(<span class="ident">data</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>, <span class="ident">allow_duplication</span>: <span class="ident">bool</span>) -&gt; <span class="self">Self</span> {
         <span class="kw">let</span> <span class="ident">n</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="ident">data</span>.<span class="ident">len</span>();
         <span class="kw">let</span> <span class="ident">a</span> <span class="op">=</span> <span class="number">0</span>..<span class="ident">n</span>;
 
@@ -301,7 +301,7 @@
         }
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">combination</span>(<span class="ident">data</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>, <span class="ident">k</span>: <span class="ident">usize</span>, <span class="ident">allow_duplication</span>: <span class="ident">bool</span>) -&gt; <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">combination</span>(<span class="ident">data</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>, <span class="ident">k</span>: <span class="ident">usize</span>, <span class="ident">allow_duplication</span>: <span class="ident">bool</span>) -&gt; <span class="self">Self</span> {
         <span class="kw">let</span> <span class="ident">n</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="ident">data</span>.<span class="ident">len</span>();
         <span class="kw">let</span> <span class="ident">a</span> <span class="op">=</span> <span class="number">0</span>..<span class="ident">n</span>;
 
@@ -340,7 +340,7 @@
     }
 }
 
-<span class="kw">impl</span> <span class="ident">Iterator</span> <span class="kw">for</span> <span class="ident">CollectionIter</span> {
+<span class="kw">impl</span> <span class="ident">Iterator</span> <span class="kw">for</span> <span class="ident">CollectionIter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span> {
     <span class="kw">type</span> <span class="ident">Item</span> <span class="op">=</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>;
 
     <span class="kw">fn</span> <span class="ident">next</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Item</span><span class="op">&gt;</span> {
@@ -393,7 +393,7 @@
         <span class="kw">fn</span> <span class="ident">it_works_permutation</span>() {
             <span class="kw">let</span> <span class="ident">data</span> <span class="op">=</span> <span class="macro">vec!</span>[<span class="number">1</span>, <span class="number">2</span>, <span class="number">4</span>];
             <span class="kw">let</span> <span class="ident">num_expected</span> <span class="op">=</span> <span class="number">27</span>;  <span class="comment">// n^3</span>
-            <span class="kw">let</span> <span class="ident">iterator</span> <span class="op">=</span> <span class="ident">CollectionIter::permutation</span>(<span class="ident">data</span>, <span class="bool-val">true</span>);
+            <span class="kw">let</span> <span class="ident">iterator</span> <span class="op">=</span> <span class="ident">CollectionIter::permutation</span>(<span class="kw-2">&amp;</span><span class="ident">data</span>, <span class="bool-val">true</span>);
             <span class="kw">let</span> <span class="ident">expected</span> <span class="op">=</span> <span class="macro">vec!</span>[
                 <span class="macro">vec!</span>[<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>],
                 <span class="macro">vec!</span>[<span class="number">1</span>, <span class="number">1</span>, <span class="number">2</span>],
@@ -431,7 +431,7 @@
             <span class="kw">let</span> <span class="ident">k</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">3</span>;
             <span class="kw">let</span> <span class="ident">data</span> <span class="op">=</span> <span class="macro">vec!</span>[<span class="number">1</span>, <span class="number">2</span>, <span class="number">4</span>];
             <span class="kw">let</span> <span class="ident">num_expected</span> <span class="op">=</span> <span class="number">10</span>;  <span class="comment">// c(n + k - 1, k)</span>
-            <span class="kw">let</span> <span class="ident">iterator</span> <span class="op">=</span> <span class="ident">CollectionIter::combination</span>(<span class="ident">data</span>, <span class="ident">k</span>, <span class="bool-val">true</span>);
+            <span class="kw">let</span> <span class="ident">iterator</span> <span class="op">=</span> <span class="ident">CollectionIter::combination</span>(<span class="kw-2">&amp;</span><span class="ident">data</span>, <span class="ident">k</span>, <span class="bool-val">true</span>);
 
             <span class="kw">let</span> <span class="ident">expected</span> <span class="op">=</span> <span class="macro">vec!</span>[
                 <span class="macro">vec!</span>[<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>],
@@ -456,7 +456,7 @@
         <span class="kw">fn</span> <span class="ident">it_works_permutation</span>() {
             <span class="kw">let</span> <span class="ident">data</span> <span class="op">=</span> <span class="macro">vec!</span>[<span class="number">1</span>, <span class="number">2</span>, <span class="number">4</span>, <span class="number">8</span>];
             <span class="kw">let</span> <span class="ident">num_expected</span> <span class="op">=</span> <span class="number">24</span>;  <span class="comment">// 4!</span>
-            <span class="kw">let</span> <span class="ident">iterator</span> <span class="op">=</span> <span class="ident">CollectionIter::permutation</span>(<span class="ident">data</span>, <span class="bool-val">false</span>);
+            <span class="kw">let</span> <span class="ident">iterator</span> <span class="op">=</span> <span class="ident">CollectionIter::permutation</span>(<span class="kw-2">&amp;</span><span class="ident">data</span>, <span class="bool-val">false</span>);
             <span class="kw">let</span> <span class="ident">expected</span> <span class="op">=</span> <span class="macro">vec!</span>[
                 <span class="macro">vec!</span>[<span class="number">1</span>, <span class="number">2</span>, <span class="number">4</span>, <span class="number">8</span>],
                 <span class="macro">vec!</span>[<span class="number">1</span>, <span class="number">2</span>, <span class="number">8</span>, <span class="number">4</span>],
@@ -491,7 +491,7 @@
             <span class="kw">let</span> <span class="ident">k</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">3</span>;
             <span class="kw">let</span> <span class="ident">num_expected</span> <span class="op">=</span> <span class="number">4</span>;  <span class="comment">// c(n, k)</span>
             <span class="kw">let</span> <span class="ident">data</span> <span class="op">=</span> <span class="macro">vec!</span>[<span class="number">1</span>, <span class="number">2</span>, <span class="number">4</span>, <span class="number">8</span>];
-            <span class="kw">let</span> <span class="ident">iterator</span> <span class="op">=</span> <span class="ident">CollectionIter::combination</span>(<span class="ident">data</span>, <span class="ident">k</span>, <span class="bool-val">false</span>);
+            <span class="kw">let</span> <span class="ident">iterator</span> <span class="op">=</span> <span class="ident">CollectionIter::combination</span>(<span class="kw-2">&amp;</span><span class="ident">data</span>, <span class="ident">k</span>, <span class="bool-val">false</span>);
             <span class="kw">let</span> <span class="ident">expected</span> <span class="op">=</span> <span class="macro">vec!</span>[
                 <span class="macro">vec!</span>[<span class="number">1</span>, <span class="number">2</span>, <span class="number">4</span>],
                 <span class="macro">vec!</span>[<span class="number">1</span>, <span class="number">2</span>, <span class="number">8</span>],
