@@ -34,7 +34,7 @@ pub fn bitset<T: Copy>(a: Vec<T>) -> Bitset<T> {
 }
 
 #[cfg(test)]
-mod test_permutation {
+mod test_bitset {
     use crate::collection::bitset;
 
     #[test]
