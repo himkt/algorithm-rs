@@ -45,38 +45,6 @@ impl SegmentTree {
         }
     }
 
-    pub fn _assign(ret: &mut i64, value: i64) {
-        *ret = value;
-    }
-
-    pub fn _add(lv: i64, rv: i64) -> i64 {
-        lv + rv
-    }
-
-    pub fn _add_assign_one(ret: &mut i64, value: i64) {
-        *ret += value;
-    }
-
-    pub fn _add_assign(ret: &mut i64, lv: i64, rv: i64) {
-        *ret = lv + rv;
-    }
-
-    pub fn _max(lv: i64, rv: i64) -> i64 {
-        lv.max(rv)
-    }
-
-    pub fn _max_assign(ret: &mut i64, lv: i64, rv: i64) {
-        *ret = lv.max(rv);
-    }
-
-    pub fn _min(lv: i64, rv: i64) -> i64 {
-        lv.min(rv)
-    }
-
-    pub fn _min_assign(ret: &mut i64, lv: i64, rv: i64) {
-        *ret = lv.min(rv);
-    }
-
     /// Get an i-th element of from the tree.
     pub fn get_one(&mut self, mut index: usize) -> i64 {
         index += SegmentTree::SEQ_LEN;
@@ -84,7 +52,7 @@ impl SegmentTree {
 
         if let Mode::RangeUpdate(op) = &self.mode {
             let operator = match op {
-                Op::Add => SegmentTree::_add_assign_one,
+                Op::Add => |ret: &mut i64, v: i64| *ret += v,
                 _ => panic!(),
             };
 
@@ -123,9 +91,9 @@ impl SegmentTree {
             let lv = _get_range(op, v, ql, qr, sl, sm, pos * 2);
             let rv = _get_range(op, v, ql, qr, sm, sr, pos * 2 + 1);
             let operate = match op {
-                Op::Add => SegmentTree::_add,
-                Op::Max => SegmentTree::_max,
-                Op::Min => SegmentTree::_min,
+                Op::Add => |l: i64, r: i64| l + r,
+                Op::Max => |l: i64, r: i64| l.max(r),
+                Op::Min => |l: i64, r: i64| l.min(r),
             };
             operate(lv, rv)
         }
@@ -144,16 +112,16 @@ impl SegmentTree {
 
         if let Mode::RangeGet(op) = &self.mode {
             let operate_and_assign_one = match op {
-                Op::Add => SegmentTree::_add_assign_one,
-                Op::Max => SegmentTree::_assign,
-                Op::Min => SegmentTree::_assign,
+                Op::Add => |ret: &mut i64, v: i64| *ret += v,
+                Op::Max => |ret: &mut i64, v: i64| *ret = v,
+                Op::Min => |ret: &mut i64, v: i64| *ret = v,
             };
             operate_and_assign_one(&mut self.v[index], value);
 
             let operate_and_assign = match op {
-                Op::Add => SegmentTree::_add_assign,
-                Op::Max => SegmentTree::_max_assign,
-                Op::Min => SegmentTree::_min_assign,
+                Op::Add => |ret: &mut i64, l: i64, r: i64| *ret = l + r,
+                Op::Max => |ret: &mut i64, l: i64, r: i64| *ret = l.max(r),
+                Op::Min => |ret: &mut i64, l: i64, r: i64| *ret = l.min(r),
             };
 
             while index > 0 {
@@ -172,7 +140,7 @@ impl SegmentTree {
             r += SegmentTree::SEQ_LEN;
 
             let operate_and_assign_one = match op {
-                Op::Add => SegmentTree::_add_assign_one,
+                Op::Add => |ret: &mut i64, v: i64| *ret += v,
                 _ => panic!(),
             };
 
