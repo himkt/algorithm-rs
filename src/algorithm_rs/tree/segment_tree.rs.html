@@ -222,10 +222,9 @@
 <span id="222">222</span>
 <span id="223">223</span>
 <span id="224">224</span>
-<span id="225">225</span>
 </pre><pre class="rust"><code><span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">SegmentTree</span> {
-    <span class="ident">v</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span>,
+    <span class="ident">data</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span>,
     <span class="ident">mode</span>: <span class="ident">Mode</span>,
 }
 
@@ -256,7 +255,7 @@
         };
 
         <span class="self">Self</span> {
-            <span class="ident">v</span>: <span class="macro">vec!</span>[<span class="ident">default</span>; <span class="number">2</span> <span class="op">*</span> <span class="ident">SegmentTree::SEQ_LEN</span>],
+            <span class="ident">data</span>: <span class="macro">vec!</span>[<span class="ident">default</span>; <span class="number">2</span> <span class="op">*</span> <span class="ident">SegmentTree::SEQ_LEN</span>],
             <span class="ident">mode</span>,
         }
     }
@@ -281,10 +280,10 @@
                 <span class="kw">_</span> =&gt; <span class="macro">panic!</span>(),
             };
 
-            <span class="ident">operator</span>(<span class="kw-2">&amp;mut</span> <span class="ident">ret</span>, <span class="self">self</span>.<span class="ident">v</span>[<span class="ident">index</span>]);
+            <span class="ident">operator</span>(<span class="kw-2">&amp;mut</span> <span class="ident">ret</span>, <span class="self">self</span>.<span class="ident">data</span>[<span class="ident">index</span>]);
             <span class="kw">while</span> <span class="ident">index</span> <span class="op">&gt;</span> <span class="number">0</span> {
                 <span class="ident">index</span> <span class="op">/</span><span class="op">=</span> <span class="number">2</span>;
-                <span class="ident">operator</span>(<span class="kw-2">&amp;mut</span> <span class="ident">ret</span>, <span class="self">self</span>.<span class="ident">v</span>[<span class="ident">index</span>]);
+                <span class="ident">operator</span>(<span class="kw-2">&amp;mut</span> <span class="ident">ret</span>, <span class="self">self</span>.<span class="ident">data</span>[<span class="ident">index</span>]);
             }
         } <span class="kw">else</span> {
             <span class="macro">panic!</span>(<span class="string">&quot;Unsupported&quot;</span>);
@@ -293,39 +292,38 @@
         <span class="ident">ret</span>
     }
 
-    <span class="doccomment">/// Run a range query.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_range</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">l</span>: <span class="ident">usize</span>, <span class="ident">r</span>: <span class="ident">usize</span>) -&gt; <span class="ident">i64</span> {
-        <span class="kw">fn</span> <span class="ident">_get_range</span>(
-            <span class="ident">op</span>: <span class="kw-2">&amp;</span><span class="ident">Op</span>,
-            <span class="ident">v</span>: <span class="kw-2">&amp;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span>,
-            <span class="ident">ql</span>: <span class="ident">usize</span>,
-            <span class="ident">qr</span>: <span class="ident">usize</span>,
-            <span class="ident">sl</span>: <span class="ident">usize</span>,
-            <span class="ident">sr</span>: <span class="ident">usize</span>,
-            <span class="ident">pos</span>: <span class="ident">usize</span>,
-        ) -&gt; <span class="ident">i64</span> {
-            <span class="kw">if</span> <span class="ident">qr</span> <span class="op">&lt;</span><span class="op">=</span> <span class="ident">sl</span> <span class="op">|</span><span class="op">|</span> <span class="ident">sr</span> <span class="op">&lt;</span><span class="op">=</span> <span class="ident">ql</span> {
-                <span class="kw">return</span> <span class="ident">SegmentTree::default</span>(<span class="ident">op</span>);
-            }
-
-            <span class="kw">if</span> <span class="ident">ql</span> <span class="op">&lt;</span><span class="op">=</span> <span class="ident">sl</span> <span class="op">&amp;&amp;</span> <span class="ident">sr</span> <span class="op">&lt;</span><span class="op">=</span> <span class="ident">qr</span> {
-                <span class="kw">return</span> <span class="ident">v</span>[<span class="ident">pos</span>];
-            }
-
-            <span class="kw">let</span> <span class="ident">sm</span> <span class="op">=</span> (<span class="ident">sl</span> <span class="op">+</span> <span class="ident">sr</span>) <span class="op">/</span> <span class="number">2</span>;
-            <span class="kw">let</span> <span class="ident">lv</span> <span class="op">=</span> <span class="ident">_get_range</span>(<span class="ident">op</span>, <span class="ident">v</span>, <span class="ident">ql</span>, <span class="ident">qr</span>, <span class="ident">sl</span>, <span class="ident">sm</span>, <span class="ident">pos</span> <span class="op">*</span> <span class="number">2</span>);
-            <span class="kw">let</span> <span class="ident">rv</span> <span class="op">=</span> <span class="ident">_get_range</span>(<span class="ident">op</span>, <span class="ident">v</span>, <span class="ident">ql</span>, <span class="ident">qr</span>, <span class="ident">sm</span>, <span class="ident">sr</span>, <span class="ident">pos</span> <span class="op">*</span> <span class="number">2</span> <span class="op">+</span> <span class="number">1</span>);
-            <span class="kw">let</span> <span class="ident">operate</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">op</span> {
-                <span class="ident">Op::Add</span> =&gt; <span class="op">|</span><span class="ident">l</span>: <span class="ident">i64</span>, <span class="ident">r</span>: <span class="ident">i64</span><span class="op">|</span> <span class="ident">l</span> <span class="op">+</span> <span class="ident">r</span>,
-                <span class="ident">Op::Max</span> =&gt; <span class="op">|</span><span class="ident">l</span>: <span class="ident">i64</span>, <span class="ident">r</span>: <span class="ident">i64</span><span class="op">|</span> <span class="ident">l</span>.<span class="ident">max</span>(<span class="ident">r</span>),
-                <span class="ident">Op::Min</span> =&gt; <span class="op">|</span><span class="ident">l</span>: <span class="ident">i64</span>, <span class="ident">r</span>: <span class="ident">i64</span><span class="op">|</span> <span class="ident">l</span>.<span class="ident">min</span>(<span class="ident">r</span>),
-            };
-            <span class="ident">operate</span>(<span class="ident">lv</span>, <span class="ident">rv</span>)
+    <span class="kw">fn</span> <span class="ident">range_query_recursive</span>(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        <span class="ident">op</span>: <span class="kw-2">&amp;</span><span class="ident">Op</span>,
+        <span class="ident">ql</span>: <span class="ident">usize</span>,
+        <span class="ident">qr</span>: <span class="ident">usize</span>,
+        <span class="ident">sl</span>: <span class="ident">usize</span>,
+        <span class="ident">sr</span>: <span class="ident">usize</span>,
+        <span class="ident">pos</span>: <span class="ident">usize</span>,
+    ) -&gt; <span class="ident">i64</span> {
+        <span class="kw">if</span> <span class="ident">qr</span> <span class="op">&lt;</span><span class="op">=</span> <span class="ident">sl</span> <span class="op">|</span><span class="op">|</span> <span class="ident">sr</span> <span class="op">&lt;</span><span class="op">=</span> <span class="ident">ql</span> {
+            <span class="kw">return</span> <span class="ident">SegmentTree::default</span>(<span class="ident">op</span>);
         }
 
+        <span class="kw">if</span> <span class="ident">ql</span> <span class="op">&lt;</span><span class="op">=</span> <span class="ident">sl</span> <span class="op">&amp;&amp;</span> <span class="ident">sr</span> <span class="op">&lt;</span><span class="op">=</span> <span class="ident">qr</span> {
+            <span class="kw">return</span> <span class="self">self</span>.<span class="ident">data</span>[<span class="ident">pos</span>];
+        }
+
+        <span class="kw">let</span> <span class="ident">sm</span> <span class="op">=</span> (<span class="ident">sl</span> <span class="op">+</span> <span class="ident">sr</span>) <span class="op">/</span> <span class="number">2</span>;
+        <span class="kw">let</span> <span class="ident">lv</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">range_query_recursive</span>(<span class="ident">op</span>, <span class="ident">ql</span>, <span class="ident">qr</span>, <span class="ident">sl</span>, <span class="ident">sm</span>, <span class="ident">pos</span> <span class="op">*</span> <span class="number">2</span>);
+        <span class="kw">let</span> <span class="ident">rv</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">range_query_recursive</span>(<span class="ident">op</span>, <span class="ident">ql</span>, <span class="ident">qr</span>, <span class="ident">sm</span>, <span class="ident">sr</span>, <span class="ident">pos</span> <span class="op">*</span> <span class="number">2</span> <span class="op">+</span> <span class="number">1</span>);
+        <span class="kw">let</span> <span class="ident">operate</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">op</span> {
+            <span class="ident">Op::Add</span> =&gt; <span class="op">|</span><span class="ident">l</span>: <span class="ident">i64</span>, <span class="ident">r</span>: <span class="ident">i64</span><span class="op">|</span> <span class="ident">l</span> <span class="op">+</span> <span class="ident">r</span>,
+            <span class="ident">Op::Max</span> =&gt; <span class="op">|</span><span class="ident">l</span>: <span class="ident">i64</span>, <span class="ident">r</span>: <span class="ident">i64</span><span class="op">|</span> <span class="ident">l</span>.<span class="ident">max</span>(<span class="ident">r</span>),
+            <span class="ident">Op::Min</span> =&gt; <span class="op">|</span><span class="ident">l</span>: <span class="ident">i64</span>, <span class="ident">r</span>: <span class="ident">i64</span><span class="op">|</span> <span class="ident">l</span>.<span class="ident">min</span>(<span class="ident">r</span>),
+        };
+        <span class="ident">operate</span>(<span class="ident">lv</span>, <span class="ident">rv</span>)
+    }
+
+    <span class="doccomment">/// Run a range query.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_range</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">l</span>: <span class="ident">usize</span>, <span class="ident">r</span>: <span class="ident">usize</span>) -&gt; <span class="ident">i64</span> {
         <span class="kw">if</span> <span class="kw">let</span> <span class="ident">Mode::RangeGet</span>(<span class="ident">op</span>) <span class="op">=</span> <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">mode</span> {
-            <span class="kw">let</span> <span class="ident">data</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">v</span>;
-            <span class="ident">_get_range</span>(<span class="ident">op</span>, <span class="ident">data</span>, <span class="ident">l</span>, <span class="ident">r</span>, <span class="number">0</span>, <span class="ident">SegmentTree::SEQ_LEN</span>, <span class="number">1</span>)
+            <span class="self">self</span>.<span class="ident">range_query_recursive</span>(<span class="ident">op</span>, <span class="ident">l</span>, <span class="ident">r</span>, <span class="number">0</span>, <span class="ident">SegmentTree::SEQ_LEN</span>, <span class="number">1</span>)
         } <span class="kw">else</span> {
             <span class="macro">panic!</span>(<span class="string">&quot;Unsupported&quot;</span>);
         }
@@ -341,7 +339,7 @@
                 <span class="ident">Op::Max</span> =&gt; <span class="op">|</span><span class="ident">ret</span>: <span class="kw-2">&amp;mut</span> <span class="ident">i64</span>, <span class="ident">v</span>: <span class="ident">i64</span><span class="op">|</span> <span class="kw-2">*</span><span class="ident">ret</span> <span class="op">=</span> <span class="ident">v</span>,
                 <span class="ident">Op::Min</span> =&gt; <span class="op">|</span><span class="ident">ret</span>: <span class="kw-2">&amp;mut</span> <span class="ident">i64</span>, <span class="ident">v</span>: <span class="ident">i64</span><span class="op">|</span> <span class="kw-2">*</span><span class="ident">ret</span> <span class="op">=</span> <span class="ident">v</span>,
             };
-            <span class="ident">operate_and_assign_one</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>.<span class="ident">v</span>[<span class="ident">index</span>], <span class="ident">value</span>);
+            <span class="ident">operate_and_assign_one</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>.<span class="ident">data</span>[<span class="ident">index</span>], <span class="ident">value</span>);
 
             <span class="kw">let</span> <span class="ident">operate_and_assign</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">op</span> {
                 <span class="ident">Op::Add</span> =&gt; <span class="op">|</span><span class="ident">ret</span>: <span class="kw-2">&amp;mut</span> <span class="ident">i64</span>, <span class="ident">l</span>: <span class="ident">i64</span>, <span class="ident">r</span>: <span class="ident">i64</span><span class="op">|</span> <span class="kw-2">*</span><span class="ident">ret</span> <span class="op">=</span> <span class="ident">l</span> <span class="op">+</span> <span class="ident">r</span>,
@@ -351,9 +349,9 @@
 
             <span class="kw">while</span> <span class="ident">index</span> <span class="op">&gt;</span> <span class="number">0</span> {
                 <span class="ident">index</span> <span class="op">/</span><span class="op">=</span> <span class="number">2</span>;
-                <span class="kw">let</span> <span class="ident">lv</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">v</span>[<span class="ident">index</span> <span class="op">*</span> <span class="number">2</span>];
-                <span class="kw">let</span> <span class="ident">rv</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">v</span>[<span class="ident">index</span> <span class="op">*</span> <span class="number">2</span> <span class="op">+</span> <span class="number">1</span>];
-                <span class="ident">operate_and_assign</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>.<span class="ident">v</span>[<span class="ident">index</span>], <span class="ident">lv</span>, <span class="ident">rv</span>);
+                <span class="kw">let</span> <span class="ident">lv</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">data</span>[<span class="ident">index</span> <span class="op">*</span> <span class="number">2</span>];
+                <span class="kw">let</span> <span class="ident">rv</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">data</span>[<span class="ident">index</span> <span class="op">*</span> <span class="number">2</span> <span class="op">+</span> <span class="number">1</span>];
+                <span class="ident">operate_and_assign</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>.<span class="ident">data</span>[<span class="ident">index</span>], <span class="ident">lv</span>, <span class="ident">rv</span>);
             }
         }
     }
@@ -361,23 +359,23 @@
     <span class="doccomment">/// Add `value` to the range `[l, r)`.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">update_range</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="kw-2">mut</span> <span class="ident">l</span>: <span class="ident">usize</span>, <span class="kw-2">mut</span> <span class="ident">r</span>: <span class="ident">usize</span>, <span class="ident">value</span>: <span class="ident">i64</span>) {
         <span class="kw">if</span> <span class="kw">let</span> <span class="ident">Mode::RangeUpdate</span>(<span class="ident">op</span>) <span class="op">=</span> <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">mode</span> {
-            <span class="ident">l</span> <span class="op">+</span><span class="op">=</span> <span class="ident">SegmentTree::SEQ_LEN</span>;
-            <span class="ident">r</span> <span class="op">+</span><span class="op">=</span> <span class="ident">SegmentTree::SEQ_LEN</span>;
-
             <span class="kw">let</span> <span class="ident">operate_and_assign_one</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">op</span> {
                 <span class="ident">Op::Add</span> =&gt; <span class="op">|</span><span class="ident">ret</span>: <span class="kw-2">&amp;mut</span> <span class="ident">i64</span>, <span class="ident">v</span>: <span class="ident">i64</span><span class="op">|</span> <span class="kw-2">*</span><span class="ident">ret</span> <span class="op">+</span><span class="op">=</span> <span class="ident">v</span>,
                 <span class="kw">_</span> =&gt; <span class="macro">panic!</span>(),
             };
 
+            <span class="ident">l</span> <span class="op">+</span><span class="op">=</span> <span class="ident">SegmentTree::SEQ_LEN</span>;
+            <span class="ident">r</span> <span class="op">+</span><span class="op">=</span> <span class="ident">SegmentTree::SEQ_LEN</span>;
+
             <span class="kw">while</span> <span class="ident">l</span> <span class="op">&lt;</span> <span class="ident">r</span> {
                 <span class="kw">if</span> <span class="ident">l</span> <span class="op">%</span> <span class="number">2</span> <span class="op">==</span> <span class="number">1</span> {
-                    <span class="ident">operate_and_assign_one</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>.<span class="ident">v</span>[<span class="ident">l</span>], <span class="ident">value</span>);
+                    <span class="ident">operate_and_assign_one</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>.<span class="ident">data</span>[<span class="ident">l</span>], <span class="ident">value</span>);
                     <span class="ident">l</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
                 }
                 <span class="ident">l</span> <span class="op">/</span><span class="op">=</span> <span class="number">2</span>;
 
                 <span class="kw">if</span> <span class="ident">r</span> <span class="op">%</span> <span class="number">2</span> <span class="op">==</span> <span class="number">1</span> {
-                    <span class="ident">operate_and_assign_one</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>.<span class="ident">v</span>[<span class="ident">r</span> <span class="op">-</span> <span class="number">1</span>], <span class="ident">value</span>);
+                    <span class="ident">operate_and_assign_one</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>.<span class="ident">data</span>[<span class="ident">r</span> <span class="op">-</span> <span class="number">1</span>], <span class="ident">value</span>);
                     <span class="ident">r</span> <span class="op">-</span><span class="op">=</span> <span class="number">1</span>;
                 }
                 <span class="ident">r</span> <span class="op">/</span><span class="op">=</span> <span class="number">2</span>;
