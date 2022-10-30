@@ -1,6 +1,6 @@
 #[derive(Debug, Clone)]
 pub struct SegmentTree {
-    v: Vec<i64>,
+    data: Vec<i64>,
     mode: Mode,
 }
 
@@ -31,7 +31,7 @@ impl SegmentTree {
         };
 
         Self {
-            v: vec![default; 2 * SegmentTree::SEQ_LEN],
+            data: vec![default; 2 * SegmentTree::SEQ_LEN],
             mode,
         }
     }
@@ -56,10 +56,10 @@ impl SegmentTree {
                 _ => panic!(),
             };
 
-            operator(&mut ret, self.v[index]);
+            operator(&mut ret, self.data[index]);
             while index > 0 {
                 index /= 2;
-                operator(&mut ret, self.v[index]);
+                operator(&mut ret, self.data[index]);
             }
         } else {
             panic!("Unsupported");
@@ -68,39 +68,38 @@ impl SegmentTree {
         ret
     }
 
-    /// Run a range query.
-    pub fn get_range(&self, l: usize, r: usize) -> i64 {
-        fn _get_range(
-            op: &Op,
-            v: &Vec<i64>,
-            ql: usize,
-            qr: usize,
-            sl: usize,
-            sr: usize,
-            pos: usize,
-        ) -> i64 {
-            if qr <= sl || sr <= ql {
-                return SegmentTree::default(op);
-            }
-
-            if ql <= sl && sr <= qr {
-                return v[pos];
-            }
-
-            let sm = (sl + sr) / 2;
-            let lv = _get_range(op, v, ql, qr, sl, sm, pos * 2);
-            let rv = _get_range(op, v, ql, qr, sm, sr, pos * 2 + 1);
-            let operate = match op {
-                Op::Add => |l: i64, r: i64| l + r,
-                Op::Max => |l: i64, r: i64| l.max(r),
-                Op::Min => |l: i64, r: i64| l.min(r),
-            };
-            operate(lv, rv)
+    fn range_query_recursive(
+        &self,
+        op: &Op,
+        ql: usize,
+        qr: usize,
+        sl: usize,
+        sr: usize,
+        pos: usize,
+    ) -> i64 {
+        if qr <= sl || sr <= ql {
+            return SegmentTree::default(op);
         }
 
+        if ql <= sl && sr <= qr {
+            return self.data[pos];
+        }
+
+        let sm = (sl + sr) / 2;
+        let lv = self.range_query_recursive(op, ql, qr, sl, sm, pos * 2);
+        let rv = self.range_query_recursive(op, ql, qr, sm, sr, pos * 2 + 1);
+        let operate = match op {
+            Op::Add => |l: i64, r: i64| l + r,
+            Op::Max => |l: i64, r: i64| l.max(r),
+            Op::Min => |l: i64, r: i64| l.min(r),
+        };
+        operate(lv, rv)
+    }
+
+    /// Run a range query.
+    pub fn get_range(&self, l: usize, r: usize) -> i64 {
         if let Mode::RangeGet(op) = &self.mode {
-            let data = &self.v;
-            _get_range(op, data, l, r, 0, SegmentTree::SEQ_LEN, 1)
+            self.range_query_recursive(op, l, r, 0, SegmentTree::SEQ_LEN, 1)
         } else {
             panic!("Unsupported");
         }
@@ -116,7 +115,7 @@ impl SegmentTree {
                 Op::Max => |ret: &mut i64, v: i64| *ret = v,
                 Op::Min => |ret: &mut i64, v: i64| *ret = v,
             };
-            operate_and_assign_one(&mut self.v[index], value);
+            operate_and_assign_one(&mut self.data[index], value);
 
             let operate_and_assign = match op {
                 Op::Add => |ret: &mut i64, l: i64, r: i64| *ret = l + r,
@@ -126,9 +125,9 @@ impl SegmentTree {
 
             while index > 0 {
                 index /= 2;
-                let lv = self.v[index * 2];
-                let rv = self.v[index * 2 + 1];
-                operate_and_assign(&mut self.v[index], lv, rv);
+                let lv = self.data[index * 2];
+                let rv = self.data[index * 2 + 1];
+                operate_and_assign(&mut self.data[index], lv, rv);
             }
         }
     }
@@ -136,23 +135,23 @@ impl SegmentTree {
     /// Add `value` to the range `[l, r)`.
     pub fn update_range(&mut self, mut l: usize, mut r: usize, value: i64) {
         if let Mode::RangeUpdate(op) = &self.mode {
-            l += SegmentTree::SEQ_LEN;
-            r += SegmentTree::SEQ_LEN;
-
             let operate_and_assign_one = match op {
                 Op::Add => |ret: &mut i64, v: i64| *ret += v,
                 _ => panic!(),
             };
 
+            l += SegmentTree::SEQ_LEN;
+            r += SegmentTree::SEQ_LEN;
+
             while l < r {
                 if l % 2 == 1 {
-                    operate_and_assign_one(&mut self.v[l], value);
+                    operate_and_assign_one(&mut self.data[l], value);
                     l += 1;
                 }
                 l /= 2;
 
                 if r % 2 == 1 {
-                    operate_and_assign_one(&mut self.v[r - 1], value);
+                    operate_and_assign_one(&mut self.data[r - 1], value);
                     r -= 1;
                 }
                 r /= 2;
