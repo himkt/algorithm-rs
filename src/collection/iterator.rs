@@ -2,7 +2,8 @@ use std::{collections::VecDeque, ops::Range};
 
 #[derive(Debug)]
 pub enum Item {
-    Pre(usize), Post(usize),
+    Pre(usize),
+    Post(usize),
 }
 
 #[derive(PartialEq)]
@@ -110,7 +111,7 @@ impl Iterator for CollectionIter<'_> {
                         self.stack.push_front(Item::Post(ni));
                         self.stack.push_front(Item::Pre(ni));
                     }
-                },
+                }
                 Item::Post(i) => {
                     self.depth -= 1;
                     self.used[i] = false;
@@ -135,12 +136,12 @@ mod test_iterator {
     }
 
     mod with_duplication {
-        use crate::collection::iterator::{CollectionIter, test_iterator::check};
+        use crate::collection::iterator::{test_iterator::check, CollectionIter};
 
         #[test]
         fn it_works_permutation() {
             let data = vec![1, 2, 4];
-            let num_expected = 27;  // n^3
+            let num_expected = 27; // n^3
             let iterator = CollectionIter::permutation(&data, true);
             let expected = vec![
                 vec![1, 1, 1],
@@ -178,7 +179,7 @@ mod test_iterator {
         fn it_works_combination() {
             let k: usize = 3;
             let data = vec![1, 2, 4];
-            let num_expected = 10;  // c(n + k - 1, k)
+            let num_expected = 10; // c(n + k - 1, k)
             let iterator = CollectionIter::combination(&data, k, true);
 
             let expected = vec![
@@ -198,12 +199,12 @@ mod test_iterator {
     }
 
     mod without_duplication {
-        use crate::collection::iterator::{CollectionIter, test_iterator::check};
+        use crate::collection::iterator::{test_iterator::check, CollectionIter};
 
         #[test]
         fn it_works_permutation() {
             let data = vec![1, 2, 4, 8];
-            let num_expected = 24;  // 4!
+            let num_expected = 24; // 4!
             let iterator = CollectionIter::permutation(&data, false);
             let expected = vec![
                 vec![1, 2, 4, 8],
@@ -237,15 +238,10 @@ mod test_iterator {
         #[test]
         fn it_works_combination() {
             let k: usize = 3;
-            let num_expected = 4;  // c(n, k)
+            let num_expected = 4; // c(n, k)
             let data = vec![1, 2, 4, 8];
             let iterator = CollectionIter::combination(&data, k, false);
-            let expected = vec![
-                vec![1, 2, 4],
-                vec![1, 2, 8],
-                vec![1, 4, 8],
-                vec![2, 4, 8],
-            ];
+            let expected = vec![vec![1, 2, 4], vec![1, 2, 8], vec![1, 4, 8], vec![2, 4, 8]];
             check(iterator, num_expected, expected);
         }
     }
