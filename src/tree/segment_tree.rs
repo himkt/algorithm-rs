@@ -85,13 +85,23 @@ impl SegmentTree {
             return self.data[pos];
         }
 
+        fn add(l: i64, r: i64) -> i64 {
+            l + r
+        }
+        fn max(l: i64, r: i64) -> i64 {
+            l.max(r)
+        }
+        fn min(l: i64, r: i64) -> i64 {
+            l.min(r)
+        }
+
         let sm = (sl + sr) / 2;
         let lv = self.range_query_recursive(op, ql, qr, sl, sm, pos * 2);
         let rv = self.range_query_recursive(op, ql, qr, sm, sr, pos * 2 + 1);
         let operate = match op {
-            Op::Add => |l: i64, r: i64| l + r,
-            Op::Max => |l: i64, r: i64| l.max(r),
-            Op::Min => |l: i64, r: i64| l.min(r),
+            Op::Add => add,
+            Op::Max => max,
+            Op::Min => min,
         };
         operate(lv, rv)
     }
@@ -109,18 +119,37 @@ impl SegmentTree {
     pub fn update_one(&mut self, mut index: usize, value: i64) {
         index += SegmentTree::SEQ_LEN;
 
+        fn add_assign_one(ret: &mut i64, v: i64) {
+            *ret += v;
+        }
+        fn max_assign_one(ret: &mut i64, v: i64) {
+            *ret = v;
+        }
+        fn min_assign_one(ret: &mut i64, v: i64) {
+            *ret = v;
+        }
+        fn add_assign(ret: &mut i64, l: i64, r: i64) {
+            *ret = l + r;
+        }
+        fn max_assign(ret: &mut i64, l: i64, r: i64) {
+            *ret = l.max(r);
+        }
+        fn min_assign(ret: &mut i64, l: i64, r: i64) {
+            *ret = l.min(r);
+        }
+
         if let Mode::RangeGet(op) = &self.mode {
             let operate_and_assign_one = match op {
-                Op::Add => |ret: &mut i64, v: i64| *ret += v,
-                Op::Max => |ret: &mut i64, v: i64| *ret = v,
-                Op::Min => |ret: &mut i64, v: i64| *ret = v,
+                Op::Add => add_assign_one,
+                Op::Max => max_assign_one,
+                Op::Min => min_assign_one,
             };
             operate_and_assign_one(&mut self.data[index], value);
 
             let operate_and_assign = match op {
-                Op::Add => |ret: &mut i64, l: i64, r: i64| *ret = l + r,
-                Op::Max => |ret: &mut i64, l: i64, r: i64| *ret = l.max(r),
-                Op::Min => |ret: &mut i64, l: i64, r: i64| *ret = l.min(r),
+                Op::Add => add_assign,
+                Op::Max => max_assign,
+                Op::Min => min_assign,
             };
 
             while index > 0 {
