@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/math/modinv.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>modinv.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../algorithm_rs/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../algorithm_rs/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../algorithm_rs/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/math/modinv.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>modinv.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../../normalize.css"><link rel="stylesheet" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../../ayu.css" disabled><link rel="stylesheet" href="../../../dark.css" disabled><link rel="stylesheet" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../algorithm_rs/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../algorithm_rs/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../algorithm_rs/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -57,64 +57,64 @@
 <span id="57">57</span>
 <span id="58">58</span>
 <span id="59">59</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::math::modpow::modpow</span>;
+</pre><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::math::modpow::modpow;
 
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">phi</span>(<span class="kw-2">mut</span> <span class="ident">n</span>: <span class="ident">usize</span>) -&gt; <span class="ident">usize</span> {
-    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">n</span>;
+<span class="kw">pub fn </span>phi(<span class="kw-2">mut </span>n: usize) -&gt; usize {
+    <span class="kw">let </span><span class="kw-2">mut </span>res = n;
 
-    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">i</span> <span class="op">=</span> <span class="number">2</span>;
-    <span class="kw">while</span> <span class="ident">i</span> <span class="op">*</span> <span class="ident">i</span> <span class="op">&lt;</span><span class="op">=</span> <span class="ident">n</span> {
-        <span class="kw">if</span> <span class="ident">n</span> <span class="op">%</span> <span class="ident">i</span> <span class="op">==</span> <span class="number">0</span> {
-            <span class="ident">res</span> <span class="op">=</span> <span class="ident">res</span> <span class="op">/</span> <span class="ident">i</span> <span class="op">*</span> (<span class="ident">i</span> <span class="op">-</span> <span class="number">1</span>);
-            <span class="kw">while</span> <span class="ident">n</span> <span class="op">%</span> <span class="ident">i</span> <span class="op">==</span> <span class="number">0</span> {
-                <span class="ident">n</span> <span class="op">/</span><span class="op">=</span> <span class="ident">i</span>;
+    <span class="kw">let </span><span class="kw-2">mut </span>i = <span class="number">2</span>;
+    <span class="kw">while </span>i * i &lt;= n {
+        <span class="kw">if </span>n % i == <span class="number">0 </span>{
+            res = res / i * (i - <span class="number">1</span>);
+            <span class="kw">while </span>n % i == <span class="number">0 </span>{
+                n /= i;
             }
         }
-        <span class="ident">i</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
+        i += <span class="number">1</span>;
     }
 
-    <span class="kw">if</span> <span class="ident">n</span> <span class="op">!</span><span class="op">=</span> <span class="number">1</span> {
-        <span class="ident">res</span> <span class="op">=</span> <span class="ident">res</span> <span class="op">/</span> <span class="ident">n</span> <span class="op">*</span> (<span class="ident">n</span> <span class="op">-</span> <span class="number">1</span>);
+    <span class="kw">if </span>n != <span class="number">1 </span>{
+        res = res / n * (n - <span class="number">1</span>);
     }
 
-    <span class="ident">res</span>
+    res
 }
 
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">modinv</span>(<span class="ident">a</span>: <span class="ident">usize</span>, <span class="ident">p</span>: <span class="ident">usize</span>) -&gt; <span class="ident">usize</span> {
-    <span class="kw">let</span> <span class="ident">m</span> <span class="op">=</span> <span class="ident">phi</span>(<span class="ident">p</span>);
-    <span class="ident">modpow</span>(<span class="ident">a</span>, <span class="ident">m</span> <span class="op">-</span> <span class="number">1</span>, <span class="ident">p</span>)
+<span class="kw">pub fn </span>modinv(a: usize, p: usize) -&gt; usize {
+    <span class="kw">let </span>m = phi(p);
+    modpow(a, m - <span class="number">1</span>, p)
 }
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
-<span class="kw">mod</span> <span class="ident">test_modinv</span> {
-    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::math::modinv::modinv</span>;
-    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::math::modpow::modpow</span>;
+<span class="attribute">#[cfg(test)]
+</span><span class="kw">mod </span>test_modinv {
+    <span class="kw">use </span><span class="kw">crate</span>::math::modinv::modinv;
+    <span class="kw">use </span><span class="kw">crate</span>::math::modpow::modpow;
 
-    <span class="kw">fn</span> <span class="ident">inv_euler</span>(<span class="ident">a</span>: <span class="ident">usize</span>, <span class="ident">p</span>: <span class="ident">usize</span>) -&gt; <span class="ident">usize</span> {
-        <span class="ident">modpow</span>(<span class="ident">a</span>, <span class="ident">p</span> <span class="op">-</span> <span class="number">2</span>, <span class="ident">p</span>)
+    <span class="kw">fn </span>inv_euler(a: usize, p: usize) -&gt; usize {
+        modpow(a, p - <span class="number">2</span>, p)
     }
 
-    <span class="kw">fn</span> <span class="ident">inv_simple</span>(<span class="ident">a</span>: <span class="ident">usize</span>, <span class="ident">p</span>: <span class="ident">usize</span>) -&gt; <span class="ident">usize</span> {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">ret</span> <span class="op">=</span> <span class="number">1</span>;
-        <span class="kw">loop</span> {
-            <span class="kw">if</span> (<span class="ident">a</span> <span class="op">*</span> <span class="ident">ret</span>) <span class="op">%</span> <span class="ident">p</span> <span class="op">==</span> <span class="number">1</span> {
-                <span class="kw">return</span> <span class="ident">ret</span>;
+    <span class="kw">fn </span>inv_simple(a: usize, p: usize) -&gt; usize {
+        <span class="kw">let </span><span class="kw-2">mut </span>ret = <span class="number">1</span>;
+        <span class="kw">loop </span>{
+            <span class="kw">if </span>(a * ret) % p == <span class="number">1 </span>{
+                <span class="kw">return </span>ret;
             }
-            <span class="ident">ret</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
+            ret += <span class="number">1</span>;
         }
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">it_works_prime</span>() {
-        <span class="comment">// 10^-1 mod 7</span>
-        <span class="macro">assert_eq!</span>(<span class="ident">modinv</span>(<span class="number">10</span>, <span class="number">7</span>), <span class="ident">inv_euler</span>(<span class="number">10</span>, <span class="number">7</span>));
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>it_works_prime() {
+        <span class="comment">// 10^-1 mod 7
+        </span><span class="macro">assert_eq!</span>(modinv(<span class="number">10</span>, <span class="number">7</span>), inv_euler(<span class="number">10</span>, <span class="number">7</span>));
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">it_works_composite</span>() {
-        <span class="comment">// 10^-1 mod 2019</span>
-        <span class="macro">assert_eq!</span>(<span class="ident">modinv</span>(<span class="number">10</span>, <span class="number">2019</span>), <span class="ident">inv_simple</span>(<span class="number">10</span>, <span class="number">2019</span>));
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>it_works_composite() {
+        <span class="comment">// 10^-1 mod 2019
+        </span><span class="macro">assert_eq!</span>(modinv(<span class="number">10</span>, <span class="number">2019</span>), inv_simple(<span class="number">10</span>, <span class="number">2019</span>));
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="algorithm_rs" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0 (a55dd71d5 2022-09-19)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="algorithm_rs" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0 (897e37553 2022-11-02)" ></div></body></html>

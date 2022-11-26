@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/collection/iterator.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>iterator.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../algorithm_rs/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../algorithm_rs/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../algorithm_rs/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/collection/iterator.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>iterator.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../../normalize.css"><link rel="stylesheet" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../../ayu.css" disabled><link rel="stylesheet" href="../../../dark.css" disabled><link rel="stylesheet" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../algorithm_rs/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../algorithm_rs/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../algorithm_rs/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -246,152 +246,152 @@
 <span id="246">246</span>
 <span id="247">247</span>
 <span id="248">248</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">collections::VecDeque</span>, <span class="ident">ops::Range</span>};
+</pre><pre class="rust"><code><span class="kw">use </span>std::{collections::VecDeque, ops::Range};
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Item</span> {
-    <span class="ident">Pre</span>(<span class="ident">usize</span>),
-    <span class="ident">Post</span>(<span class="ident">usize</span>),
+<span class="attribute">#[derive(Debug)]
+</span><span class="kw">pub enum </span>Item {
+    Pre(usize),
+    Post(usize),
 }
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">PartialEq</span>)]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">CollectionType</span> {
-    <span class="ident">Permutation</span>,
-    <span class="ident">Combination</span>,
+<span class="attribute">#[derive(PartialEq)]
+</span><span class="kw">pub enum </span>CollectionType {
+    Permutation,
+    Combination,
 }
 
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">CollectionIter</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
-    <span class="kw">pub</span> <span class="ident">a</span>: <span class="ident">Range</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>,
-    <span class="kw">pub</span> <span class="ident">n</span>: <span class="ident">usize</span>,
-    <span class="kw">pub</span> <span class="ident">k</span>: <span class="ident">usize</span>,
-    <span class="kw">pub</span> <span class="ident">data</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>,
-    <span class="kw">pub</span> <span class="ident">depth</span>: <span class="ident">usize</span>,
-    <span class="kw">pub</span> <span class="ident">stack</span>: <span class="ident">VecDeque</span><span class="op">&lt;</span><span class="ident">Item</span><span class="op">&gt;</span>,
-    <span class="kw">pub</span> <span class="ident">permutation</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>,
-    <span class="kw">pub</span> <span class="ident">used</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span>,
-    <span class="kw">pub</span> <span class="ident">collection_type</span>: <span class="ident">CollectionType</span>,
-    <span class="kw">pub</span> <span class="ident">allow_duplication</span>: <span class="ident">bool</span>,
+<span class="kw">pub struct </span>CollectionIter&lt;<span class="lifetime">&#39;a</span>&gt; {
+    <span class="kw">pub </span>a: Range&lt;usize&gt;,
+    <span class="kw">pub </span>n: usize,
+    <span class="kw">pub </span>k: usize,
+    <span class="kw">pub </span>data: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>Vec&lt;usize&gt;,
+    <span class="kw">pub </span>depth: usize,
+    <span class="kw">pub </span>stack: VecDeque&lt;Item&gt;,
+    <span class="kw">pub </span>permutation: Vec&lt;usize&gt;,
+    <span class="kw">pub </span>used: Vec&lt;bool&gt;,
+    <span class="kw">pub </span>collection_type: CollectionType,
+    <span class="kw">pub </span>allow_duplication: bool,
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">CollectionIter</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">permutation</span>(<span class="ident">data</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>, <span class="ident">allow_duplication</span>: <span class="ident">bool</span>) -&gt; <span class="self">Self</span> {
-        <span class="kw">let</span> <span class="ident">n</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="ident">data</span>.<span class="ident">len</span>();
-        <span class="kw">let</span> <span class="ident">a</span> <span class="op">=</span> <span class="number">0</span>..<span class="ident">n</span>;
+<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; CollectionIter&lt;<span class="lifetime">&#39;a</span>&gt; {
+    <span class="kw">pub fn </span>permutation(data: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>Vec&lt;usize&gt;, allow_duplication: bool) -&gt; <span class="self">Self </span>{
+        <span class="kw">let </span>n: usize = data.len();
+        <span class="kw">let </span>a = <span class="number">0</span>..n;
 
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">stack</span> <span class="op">=</span> <span class="ident">VecDeque::new</span>();
-        <span class="kw">for</span> <span class="ident">i</span> <span class="kw">in</span> <span class="ident">a</span>.<span class="ident">clone</span>().<span class="ident">rev</span>() {
-            <span class="ident">stack</span>.<span class="ident">push_front</span>(<span class="ident">Item::Post</span>(<span class="ident">i</span>));
-            <span class="ident">stack</span>.<span class="ident">push_front</span>(<span class="ident">Item::Pre</span>(<span class="ident">i</span>));
+        <span class="kw">let </span><span class="kw-2">mut </span>stack = VecDeque::new();
+        <span class="kw">for </span>i <span class="kw">in </span>a.clone().rev() {
+            stack.push_front(Item::Post(i));
+            stack.push_front(Item::Pre(i));
         }
 
-        <span class="ident">CollectionIter</span> {
-            <span class="ident">a</span>,
-            <span class="ident">n</span>,
-            <span class="ident">k</span>: <span class="ident">n</span>,
-            <span class="ident">data</span>,
-            <span class="ident">depth</span>: <span class="number">0</span>,
-            <span class="ident">stack</span>,
-            <span class="ident">permutation</span>: <span class="macro">vec!</span>[<span class="number">0</span>; <span class="ident">n</span>],
-            <span class="ident">used</span>: <span class="macro">vec!</span>[<span class="bool-val">false</span>; <span class="ident">n</span>],
-            <span class="ident">collection_type</span>: <span class="ident">CollectionType::Permutation</span>,
-            <span class="ident">allow_duplication</span>,
+        CollectionIter {
+            a,
+            n,
+            k: n,
+            data,
+            depth: <span class="number">0</span>,
+            stack,
+            permutation: <span class="macro">vec!</span>[<span class="number">0</span>; n],
+            used: <span class="macro">vec!</span>[<span class="bool-val">false</span>; n],
+            collection_type: CollectionType::Permutation,
+            allow_duplication,
         }
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">combination</span>(<span class="ident">data</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>, <span class="ident">k</span>: <span class="ident">usize</span>, <span class="ident">allow_duplication</span>: <span class="ident">bool</span>) -&gt; <span class="self">Self</span> {
-        <span class="kw">let</span> <span class="ident">n</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="ident">data</span>.<span class="ident">len</span>();
-        <span class="kw">let</span> <span class="ident">a</span> <span class="op">=</span> <span class="number">0</span>..<span class="ident">n</span>;
+    <span class="kw">pub fn </span>combination(data: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>Vec&lt;usize&gt;, k: usize, allow_duplication: bool) -&gt; <span class="self">Self </span>{
+        <span class="kw">let </span>n: usize = data.len();
+        <span class="kw">let </span>a = <span class="number">0</span>..n;
 
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">stack</span> <span class="op">=</span> <span class="ident">VecDeque::new</span>();
-        <span class="kw">for</span> <span class="ident">i</span> <span class="kw">in</span> <span class="ident">a</span>.<span class="ident">clone</span>().<span class="ident">rev</span>() {
-            <span class="ident">stack</span>.<span class="ident">push_front</span>(<span class="ident">Item::Post</span>(<span class="ident">i</span>));
-            <span class="ident">stack</span>.<span class="ident">push_front</span>(<span class="ident">Item::Pre</span>(<span class="ident">i</span>));
+        <span class="kw">let </span><span class="kw-2">mut </span>stack = VecDeque::new();
+        <span class="kw">for </span>i <span class="kw">in </span>a.clone().rev() {
+            stack.push_front(Item::Post(i));
+            stack.push_front(Item::Pre(i));
         }
 
-        <span class="ident">CollectionIter</span> {
-            <span class="ident">a</span>,
-            <span class="ident">n</span>,
-            <span class="ident">k</span>,
-            <span class="ident">data</span>,
-            <span class="ident">depth</span>: <span class="number">0</span>,
-            <span class="ident">stack</span>,
-            <span class="ident">permutation</span>: <span class="macro">vec!</span>[<span class="number">0</span>; <span class="ident">k</span>],
-            <span class="ident">used</span>: <span class="macro">vec!</span>[<span class="bool-val">false</span>; <span class="ident">n</span>],
-            <span class="ident">collection_type</span>: <span class="ident">CollectionType::Combination</span>,
-            <span class="ident">allow_duplication</span>,
+        CollectionIter {
+            a,
+            n,
+            k,
+            data,
+            depth: <span class="number">0</span>,
+            stack,
+            permutation: <span class="macro">vec!</span>[<span class="number">0</span>; k],
+            used: <span class="macro">vec!</span>[<span class="bool-val">false</span>; n],
+            collection_type: CollectionType::Combination,
+            allow_duplication,
         }
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">should_skip</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">ni</span>: <span class="ident">usize</span>) -&gt; <span class="ident">bool</span> {
-        <span class="kw">let</span> <span class="ident">is_permutation</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">collection_type</span> <span class="op">==</span> <span class="ident">CollectionType::Permutation</span>;
-        <span class="ident">is_permutation</span> <span class="op">&amp;&amp;</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">allow_duplication</span> <span class="op">&amp;&amp;</span> <span class="self">self</span>.<span class="ident">used</span>[<span class="ident">ni</span>]
+    <span class="kw">pub fn </span>should_skip(<span class="kw-2">&amp;</span><span class="self">self</span>, ni: usize) -&gt; bool {
+        <span class="kw">let </span>is_permutation = <span class="self">self</span>.collection_type == CollectionType::Permutation;
+        is_permutation &amp;&amp; !<span class="self">self</span>.allow_duplication &amp;&amp; <span class="self">self</span>.used[ni]
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">lower</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">ni</span>: <span class="ident">usize</span>) -&gt; <span class="ident">usize</span> {
-        <span class="kw">match</span> (<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">collection_type</span>, <span class="self">self</span>.<span class="ident">allow_duplication</span>) {
-            (<span class="kw-2">&amp;</span><span class="ident">CollectionType::Permutation</span>, <span class="bool-val">true</span>) =&gt; <span class="number">0</span>,
-            (<span class="kw-2">&amp;</span><span class="ident">CollectionType::Permutation</span>, <span class="bool-val">false</span>) =&gt; <span class="number">0</span>,
-            (<span class="kw-2">&amp;</span><span class="ident">CollectionType::Combination</span>, <span class="bool-val">true</span>) =&gt; <span class="ident">ni</span>,
-            (<span class="kw-2">&amp;</span><span class="ident">CollectionType::Combination</span>, <span class="bool-val">false</span>) =&gt; <span class="ident">ni</span> <span class="op">+</span> <span class="number">1</span>,
+    <span class="kw">pub fn </span>lower(<span class="kw-2">&amp;</span><span class="self">self</span>, ni: usize) -&gt; usize {
+        <span class="kw">match </span>(<span class="kw-2">&amp;</span><span class="self">self</span>.collection_type, <span class="self">self</span>.allow_duplication) {
+            (<span class="kw-2">&amp;</span>CollectionType::Permutation, <span class="bool-val">true</span>) =&gt; <span class="number">0</span>,
+            (<span class="kw-2">&amp;</span>CollectionType::Permutation, <span class="bool-val">false</span>) =&gt; <span class="number">0</span>,
+            (<span class="kw-2">&amp;</span>CollectionType::Combination, <span class="bool-val">true</span>) =&gt; ni,
+            (<span class="kw-2">&amp;</span>CollectionType::Combination, <span class="bool-val">false</span>) =&gt; ni + <span class="number">1</span>,
         }
     }
 }
 
-<span class="kw">impl</span> <span class="ident">Iterator</span> <span class="kw">for</span> <span class="ident">CollectionIter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span> {
-    <span class="kw">type</span> <span class="ident">Item</span> <span class="op">=</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>;
+<span class="kw">impl </span>Iterator <span class="kw">for </span>CollectionIter&lt;<span class="lifetime">&#39;_</span>&gt; {
+    <span class="kw">type </span>Item = Vec&lt;usize&gt;;
 
-    <span class="kw">fn</span> <span class="ident">next</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Item</span><span class="op">&gt;</span> {
-        <span class="kw">while</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">item_wrapper</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">stack</span>.<span class="ident">pop_front</span>() {
-            <span class="kw">match</span> <span class="ident">item_wrapper</span> {
-                <span class="ident">Item::Pre</span>(<span class="ident">i</span>) =&gt; {
-                    <span class="self">self</span>.<span class="ident">permutation</span>[<span class="self">self</span>.<span class="ident">depth</span>] <span class="op">=</span> <span class="self">self</span>.<span class="ident">data</span>[<span class="ident">i</span>];
-                    <span class="self">self</span>.<span class="ident">used</span>[<span class="ident">i</span>] <span class="op">=</span> <span class="bool-val">true</span>;
-                    <span class="self">self</span>.<span class="ident">depth</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
+    <span class="kw">fn </span>next(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="self">Self</span>::Item&gt; {
+        <span class="kw">while let </span><span class="prelude-val">Some</span>(item_wrapper) = <span class="self">self</span>.stack.pop_front() {
+            <span class="kw">match </span>item_wrapper {
+                Item::Pre(i) =&gt; {
+                    <span class="self">self</span>.permutation[<span class="self">self</span>.depth] = <span class="self">self</span>.data[i];
+                    <span class="self">self</span>.used[i] = <span class="bool-val">true</span>;
+                    <span class="self">self</span>.depth += <span class="number">1</span>;
 
-                    <span class="kw">if</span> <span class="self">self</span>.<span class="ident">depth</span> <span class="op">==</span> <span class="self">self</span>.<span class="ident">k</span> {
-                        <span class="kw">return</span> <span class="prelude-val">Some</span>(<span class="self">self</span>.<span class="ident">permutation</span>.<span class="ident">clone</span>());
+                    <span class="kw">if </span><span class="self">self</span>.depth == <span class="self">self</span>.k {
+                        <span class="kw">return </span><span class="prelude-val">Some</span>(<span class="self">self</span>.permutation.clone());
                     }
 
-                    <span class="kw">for</span> <span class="ident">ni</span> <span class="kw">in</span> (<span class="self">self</span>.<span class="ident">lower</span>(<span class="ident">i</span>)..<span class="self">self</span>.<span class="ident">a</span>.<span class="ident">end</span>).<span class="ident">rev</span>() {
-                        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">should_skip</span>(<span class="ident">ni</span>) {
+                    <span class="kw">for </span>ni <span class="kw">in </span>(<span class="self">self</span>.lower(i)..<span class="self">self</span>.a.end).rev() {
+                        <span class="kw">if </span><span class="self">self</span>.should_skip(ni) {
                             <span class="kw">continue</span>;
                         }
-                        <span class="self">self</span>.<span class="ident">stack</span>.<span class="ident">push_front</span>(<span class="ident">Item::Post</span>(<span class="ident">ni</span>));
-                        <span class="self">self</span>.<span class="ident">stack</span>.<span class="ident">push_front</span>(<span class="ident">Item::Pre</span>(<span class="ident">ni</span>));
+                        <span class="self">self</span>.stack.push_front(Item::Post(ni));
+                        <span class="self">self</span>.stack.push_front(Item::Pre(ni));
                     }
                 }
-                <span class="ident">Item::Post</span>(<span class="ident">i</span>) =&gt; {
-                    <span class="self">self</span>.<span class="ident">depth</span> <span class="op">-</span><span class="op">=</span> <span class="number">1</span>;
-                    <span class="self">self</span>.<span class="ident">used</span>[<span class="ident">i</span>] <span class="op">=</span> <span class="bool-val">false</span>;
+                Item::Post(i) =&gt; {
+                    <span class="self">self</span>.depth -= <span class="number">1</span>;
+                    <span class="self">self</span>.used[i] = <span class="bool-val">false</span>;
                 }
             }
         }
 
-        <span class="prelude-val">None</span>
-    }
+        <span class="prelude-val">None
+    </span>}
 }
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
-<span class="kw">mod</span> <span class="ident">test_iterator</span> {
-    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::collection::iterator::CollectionIter</span>;
-    <span class="kw">fn</span> <span class="ident">check</span>(<span class="ident">iterator</span>: <span class="ident">CollectionIter</span>, <span class="ident">num_expected</span>: <span class="ident">usize</span>, <span class="ident">expected</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span><span class="op">&gt;</span>) {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">num_count</span> <span class="op">=</span> <span class="number">0</span>;
-        <span class="kw">for</span> <span class="ident">perm</span> <span class="kw">in</span> <span class="ident">iterator</span> {
-            <span class="macro">assert_eq!</span>(<span class="ident">expected</span>[<span class="ident">num_count</span>], <span class="ident">perm</span>);
-            <span class="ident">num_count</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
+<span class="attribute">#[cfg(test)]
+</span><span class="kw">mod </span>test_iterator {
+    <span class="kw">use </span><span class="kw">crate</span>::collection::iterator::CollectionIter;
+    <span class="kw">fn </span>check(iterator: CollectionIter, num_expected: usize, expected: Vec&lt;Vec&lt;usize&gt;&gt;) {
+        <span class="kw">let </span><span class="kw-2">mut </span>num_count = <span class="number">0</span>;
+        <span class="kw">for </span>perm <span class="kw">in </span>iterator {
+            <span class="macro">assert_eq!</span>(expected[num_count], perm);
+            num_count += <span class="number">1</span>;
         }
-        <span class="macro">assert_eq!</span>(<span class="ident">num_count</span>, <span class="ident">num_expected</span>);
+        <span class="macro">assert_eq!</span>(num_count, num_expected);
     }
 
-    <span class="kw">mod</span> <span class="ident">with_duplication</span> {
-        <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::collection::iterator</span>::{<span class="ident">test_iterator::check</span>, <span class="ident">CollectionIter</span>};
+    <span class="kw">mod </span>with_duplication {
+        <span class="kw">use </span><span class="kw">crate</span>::collection::iterator::{test_iterator::check, CollectionIter};
 
-        <span class="attribute">#[<span class="ident">test</span>]</span>
-        <span class="kw">fn</span> <span class="ident">it_works_permutation</span>() {
-            <span class="kw">let</span> <span class="ident">data</span> <span class="op">=</span> <span class="macro">vec!</span>[<span class="number">1</span>, <span class="number">2</span>, <span class="number">4</span>];
-            <span class="kw">let</span> <span class="ident">num_expected</span> <span class="op">=</span> <span class="number">27</span>; <span class="comment">// n^3</span>
-            <span class="kw">let</span> <span class="ident">iterator</span> <span class="op">=</span> <span class="ident">CollectionIter::permutation</span>(<span class="kw-2">&amp;</span><span class="ident">data</span>, <span class="bool-val">true</span>);
-            <span class="kw">let</span> <span class="ident">expected</span> <span class="op">=</span> <span class="macro">vec!</span>[
+        <span class="attribute">#[test]
+        </span><span class="kw">fn </span>it_works_permutation() {
+            <span class="kw">let </span>data = <span class="macro">vec!</span>[<span class="number">1</span>, <span class="number">2</span>, <span class="number">4</span>];
+            <span class="kw">let </span>num_expected = <span class="number">27</span>; <span class="comment">// n^3
+            </span><span class="kw">let </span>iterator = CollectionIter::permutation(<span class="kw-2">&amp;</span>data, <span class="bool-val">true</span>);
+            <span class="kw">let </span>expected = <span class="macro">vec!</span>[
                 <span class="macro">vec!</span>[<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>],
                 <span class="macro">vec!</span>[<span class="number">1</span>, <span class="number">1</span>, <span class="number">2</span>],
                 <span class="macro">vec!</span>[<span class="number">1</span>, <span class="number">1</span>, <span class="number">4</span>],
@@ -420,17 +420,17 @@
                 <span class="macro">vec!</span>[<span class="number">4</span>, <span class="number">4</span>, <span class="number">2</span>],
                 <span class="macro">vec!</span>[<span class="number">4</span>, <span class="number">4</span>, <span class="number">4</span>],
             ];
-            <span class="ident">check</span>(<span class="ident">iterator</span>, <span class="ident">num_expected</span>, <span class="ident">expected</span>);
+            check(iterator, num_expected, expected);
         }
 
-        <span class="attribute">#[<span class="ident">test</span>]</span>
-        <span class="kw">fn</span> <span class="ident">it_works_combination</span>() {
-            <span class="kw">let</span> <span class="ident">k</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">3</span>;
-            <span class="kw">let</span> <span class="ident">data</span> <span class="op">=</span> <span class="macro">vec!</span>[<span class="number">1</span>, <span class="number">2</span>, <span class="number">4</span>];
-            <span class="kw">let</span> <span class="ident">num_expected</span> <span class="op">=</span> <span class="number">10</span>; <span class="comment">// c(n + k - 1, k)</span>
-            <span class="kw">let</span> <span class="ident">iterator</span> <span class="op">=</span> <span class="ident">CollectionIter::combination</span>(<span class="kw-2">&amp;</span><span class="ident">data</span>, <span class="ident">k</span>, <span class="bool-val">true</span>);
+        <span class="attribute">#[test]
+        </span><span class="kw">fn </span>it_works_combination() {
+            <span class="kw">let </span>k: usize = <span class="number">3</span>;
+            <span class="kw">let </span>data = <span class="macro">vec!</span>[<span class="number">1</span>, <span class="number">2</span>, <span class="number">4</span>];
+            <span class="kw">let </span>num_expected = <span class="number">10</span>; <span class="comment">// c(n + k - 1, k)
+            </span><span class="kw">let </span>iterator = CollectionIter::combination(<span class="kw-2">&amp;</span>data, k, <span class="bool-val">true</span>);
 
-            <span class="kw">let</span> <span class="ident">expected</span> <span class="op">=</span> <span class="macro">vec!</span>[
+            <span class="kw">let </span>expected = <span class="macro">vec!</span>[
                 <span class="macro">vec!</span>[<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>],
                 <span class="macro">vec!</span>[<span class="number">1</span>, <span class="number">1</span>, <span class="number">2</span>],
                 <span class="macro">vec!</span>[<span class="number">1</span>, <span class="number">1</span>, <span class="number">4</span>],
@@ -442,19 +442,19 @@
                 <span class="macro">vec!</span>[<span class="number">2</span>, <span class="number">4</span>, <span class="number">4</span>],
                 <span class="macro">vec!</span>[<span class="number">4</span>, <span class="number">4</span>, <span class="number">4</span>],
             ];
-            <span class="ident">check</span>(<span class="ident">iterator</span>, <span class="ident">num_expected</span>, <span class="ident">expected</span>);
+            check(iterator, num_expected, expected);
         }
     }
 
-    <span class="kw">mod</span> <span class="ident">without_duplication</span> {
-        <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::collection::iterator</span>::{<span class="ident">test_iterator::check</span>, <span class="ident">CollectionIter</span>};
+    <span class="kw">mod </span>without_duplication {
+        <span class="kw">use </span><span class="kw">crate</span>::collection::iterator::{test_iterator::check, CollectionIter};
 
-        <span class="attribute">#[<span class="ident">test</span>]</span>
-        <span class="kw">fn</span> <span class="ident">it_works_permutation</span>() {
-            <span class="kw">let</span> <span class="ident">data</span> <span class="op">=</span> <span class="macro">vec!</span>[<span class="number">1</span>, <span class="number">2</span>, <span class="number">4</span>, <span class="number">8</span>];
-            <span class="kw">let</span> <span class="ident">num_expected</span> <span class="op">=</span> <span class="number">24</span>; <span class="comment">// 4!</span>
-            <span class="kw">let</span> <span class="ident">iterator</span> <span class="op">=</span> <span class="ident">CollectionIter::permutation</span>(<span class="kw-2">&amp;</span><span class="ident">data</span>, <span class="bool-val">false</span>);
-            <span class="kw">let</span> <span class="ident">expected</span> <span class="op">=</span> <span class="macro">vec!</span>[
+        <span class="attribute">#[test]
+        </span><span class="kw">fn </span>it_works_permutation() {
+            <span class="kw">let </span>data = <span class="macro">vec!</span>[<span class="number">1</span>, <span class="number">2</span>, <span class="number">4</span>, <span class="number">8</span>];
+            <span class="kw">let </span>num_expected = <span class="number">24</span>; <span class="comment">// 4!
+            </span><span class="kw">let </span>iterator = CollectionIter::permutation(<span class="kw-2">&amp;</span>data, <span class="bool-val">false</span>);
+            <span class="kw">let </span>expected = <span class="macro">vec!</span>[
                 <span class="macro">vec!</span>[<span class="number">1</span>, <span class="number">2</span>, <span class="number">4</span>, <span class="number">8</span>],
                 <span class="macro">vec!</span>[<span class="number">1</span>, <span class="number">2</span>, <span class="number">8</span>, <span class="number">4</span>],
                 <span class="macro">vec!</span>[<span class="number">1</span>, <span class="number">4</span>, <span class="number">2</span>, <span class="number">8</span>],
@@ -480,19 +480,19 @@
                 <span class="macro">vec!</span>[<span class="number">8</span>, <span class="number">4</span>, <span class="number">1</span>, <span class="number">2</span>],
                 <span class="macro">vec!</span>[<span class="number">8</span>, <span class="number">4</span>, <span class="number">2</span>, <span class="number">1</span>],
             ];
-            <span class="ident">check</span>(<span class="ident">iterator</span>, <span class="ident">num_expected</span>, <span class="ident">expected</span>);
+            check(iterator, num_expected, expected);
         }
 
-        <span class="attribute">#[<span class="ident">test</span>]</span>
-        <span class="kw">fn</span> <span class="ident">it_works_combination</span>() {
-            <span class="kw">let</span> <span class="ident">k</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">3</span>;
-            <span class="kw">let</span> <span class="ident">num_expected</span> <span class="op">=</span> <span class="number">4</span>; <span class="comment">// c(n, k)</span>
-            <span class="kw">let</span> <span class="ident">data</span> <span class="op">=</span> <span class="macro">vec!</span>[<span class="number">1</span>, <span class="number">2</span>, <span class="number">4</span>, <span class="number">8</span>];
-            <span class="kw">let</span> <span class="ident">iterator</span> <span class="op">=</span> <span class="ident">CollectionIter::combination</span>(<span class="kw-2">&amp;</span><span class="ident">data</span>, <span class="ident">k</span>, <span class="bool-val">false</span>);
-            <span class="kw">let</span> <span class="ident">expected</span> <span class="op">=</span> <span class="macro">vec!</span>[<span class="macro">vec!</span>[<span class="number">1</span>, <span class="number">2</span>, <span class="number">4</span>], <span class="macro">vec!</span>[<span class="number">1</span>, <span class="number">2</span>, <span class="number">8</span>], <span class="macro">vec!</span>[<span class="number">1</span>, <span class="number">4</span>, <span class="number">8</span>], <span class="macro">vec!</span>[<span class="number">2</span>, <span class="number">4</span>, <span class="number">8</span>]];
-            <span class="ident">check</span>(<span class="ident">iterator</span>, <span class="ident">num_expected</span>, <span class="ident">expected</span>);
+        <span class="attribute">#[test]
+        </span><span class="kw">fn </span>it_works_combination() {
+            <span class="kw">let </span>k: usize = <span class="number">3</span>;
+            <span class="kw">let </span>num_expected = <span class="number">4</span>; <span class="comment">// c(n, k)
+            </span><span class="kw">let </span>data = <span class="macro">vec!</span>[<span class="number">1</span>, <span class="number">2</span>, <span class="number">4</span>, <span class="number">8</span>];
+            <span class="kw">let </span>iterator = CollectionIter::combination(<span class="kw-2">&amp;</span>data, k, <span class="bool-val">false</span>);
+            <span class="kw">let </span>expected = <span class="macro">vec!</span>[<span class="macro">vec!</span>[<span class="number">1</span>, <span class="number">2</span>, <span class="number">4</span>], <span class="macro">vec!</span>[<span class="number">1</span>, <span class="number">2</span>, <span class="number">8</span>], <span class="macro">vec!</span>[<span class="number">1</span>, <span class="number">4</span>, <span class="number">8</span>], <span class="macro">vec!</span>[<span class="number">2</span>, <span class="number">4</span>, <span class="number">8</span>]];
+            check(iterator, num_expected, expected);
         }
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="algorithm_rs" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0 (a55dd71d5 2022-09-19)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="algorithm_rs" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0 (897e37553 2022-11-02)" ></div></body></html>

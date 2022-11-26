@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/tree/segment_tree.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>segment_tree.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../algorithm_rs/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../algorithm_rs/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../algorithm_rs/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/tree/segment_tree.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>segment_tree.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../../normalize.css"><link rel="stylesheet" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../../ayu.css" disabled><link rel="stylesheet" href="../../../dark.css" disabled><link rel="stylesheet" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../algorithm_rs/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../algorithm_rs/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../algorithm_rs/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -251,258 +251,258 @@
 <span id="251">251</span>
 <span id="252">252</span>
 <span id="253">253</span>
-</pre><pre class="rust"><code><span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">SegmentTree</span> {
-    <span class="ident">data</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span>,
-    <span class="ident">mode</span>: <span class="ident">Mode</span>,
+</pre><pre class="rust"><code><span class="attribute">#[derive(Debug, Clone)]
+</span><span class="kw">pub struct </span>SegmentTree {
+    data: Vec&lt;i64&gt;,
+    mode: Mode,
 }
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>)]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Mode</span> {
-    <span class="ident">RangeUpdate</span>(<span class="ident">Op</span>),
-    <span class="ident">RangeGet</span>(<span class="ident">Op</span>),
+<span class="attribute">#[derive(Debug, Clone, PartialEq, Eq)]
+</span><span class="kw">pub enum </span>Mode {
+    RangeUpdate(Op),
+    RangeGet(Op),
 }
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>)]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Op</span> {
-    <span class="ident">Max</span>,
-    <span class="ident">Min</span>,
-    <span class="ident">Add</span>,
+<span class="attribute">#[derive(Debug, Clone, PartialEq, Eq)]
+</span><span class="kw">pub enum </span>Op {
+    Max,
+    Min,
+    Add,
 }
 
-<span class="comment">// Segment tree implementation. All operations are 0-origin.</span>
-<span class="comment">// Note that a half-open interval [l, r) is used as a range representation.</span>
-<span class="kw">impl</span> <span class="ident">SegmentTree</span> {
-    <span class="kw">const</span> <span class="ident">SEQ_LEN</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">1</span> <span class="op">&lt;</span><span class="op">&lt;</span> <span class="number">20</span>;
-    <span class="kw">const</span> <span class="ident">MAX</span>: <span class="ident">i64</span> <span class="op">=</span> <span class="number">1_000_000_000_000</span>;
-    <span class="kw">const</span> <span class="ident">MIN</span>: <span class="ident">i64</span> <span class="op">=</span> <span class="op">-</span><span class="number">1_000_000_000_000</span>;
+<span class="comment">// Segment tree implementation. All operations are 0-origin.
+// Note that a half-open interval [l, r) is used as a range representation.
+</span><span class="kw">impl </span>SegmentTree {
+    <span class="kw">const </span>SEQ_LEN: usize = <span class="number">1 </span>&lt;&lt; <span class="number">20</span>;
+    <span class="kw">const </span>MAX: i64 = <span class="number">1_000_000_000_000</span>;
+    <span class="kw">const </span>MIN: i64 = -<span class="number">1_000_000_000_000</span>;
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">mode</span>: <span class="ident">Mode</span>) -&gt; <span class="self">Self</span> {
-        <span class="kw">let</span> <span class="ident">default</span> <span class="op">=</span> <span class="kw">match</span> <span class="kw-2">&amp;</span><span class="ident">mode</span> {
-            <span class="ident">Mode::RangeGet</span>(<span class="ident">op</span>) =&gt; <span class="ident">SegmentTree::default</span>(<span class="ident">op</span>),
-            <span class="ident">Mode::RangeUpdate</span>(<span class="ident">op</span>) =&gt; <span class="ident">SegmentTree::default</span>(<span class="ident">op</span>),
+    <span class="kw">pub fn </span>new(mode: Mode) -&gt; <span class="self">Self </span>{
+        <span class="kw">let </span>default = <span class="kw">match </span><span class="kw-2">&amp;</span>mode {
+            Mode::RangeGet(op) =&gt; SegmentTree::default(op),
+            Mode::RangeUpdate(op) =&gt; SegmentTree::default(op),
         };
 
-        <span class="self">Self</span> {
-            <span class="ident">data</span>: <span class="macro">vec!</span>[<span class="ident">default</span>; <span class="number">2</span> <span class="op">*</span> <span class="ident">SegmentTree::SEQ_LEN</span>],
-            <span class="ident">mode</span>,
+        <span class="self">Self </span>{
+            data: <span class="macro">vec!</span>[default; <span class="number">2 </span>* SegmentTree::SEQ_LEN],
+            mode,
         }
     }
 
-    <span class="doccomment">/// Return an appropriate default value for the given operation.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">default</span>(<span class="ident">op</span>: <span class="kw-2">&amp;</span><span class="ident">Op</span>) -&gt; <span class="ident">i64</span> {
-        <span class="kw">match</span> <span class="ident">op</span> {
-            <span class="ident">Op::Add</span> =&gt; <span class="number">0</span>,
-            <span class="ident">Op::Max</span> =&gt; <span class="ident">SegmentTree::MIN</span>,
-            <span class="ident">Op::Min</span> =&gt; <span class="ident">SegmentTree::MAX</span>,
+    <span class="doccomment">/// Return an appropriate default value for the given operation.
+    </span><span class="kw">pub fn </span>default(op: <span class="kw-2">&amp;</span>Op) -&gt; i64 {
+        <span class="kw">match </span>op {
+            Op::Add =&gt; <span class="number">0</span>,
+            Op::Max =&gt; SegmentTree::MIN,
+            Op::Min =&gt; SegmentTree::MAX,
         }
     }
 
-    <span class="doccomment">/// Get an i-th element of from the tree.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_one</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="kw-2">mut</span> <span class="ident">index</span>: <span class="ident">usize</span>) -&gt; <span class="ident">i64</span> {
-        <span class="ident">index</span> <span class="op">+</span><span class="op">=</span> <span class="ident">SegmentTree::SEQ_LEN</span>;
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">ret</span> <span class="op">=</span> <span class="number">0</span>;
+    <span class="doccomment">/// Get an i-th element of from the tree.
+    </span><span class="kw">pub fn </span>get_one(<span class="kw-2">&amp;mut </span><span class="self">self</span>, <span class="kw-2">mut </span>index: usize) -&gt; i64 {
+        index += SegmentTree::SEQ_LEN;
+        <span class="kw">let </span><span class="kw-2">mut </span>ret = <span class="number">0</span>;
 
-        <span class="kw">if</span> <span class="kw">let</span> <span class="ident">Mode::RangeUpdate</span>(<span class="ident">op</span>) <span class="op">=</span> <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">mode</span> {
-            <span class="kw">let</span> <span class="ident">operator</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">op</span> {
-                <span class="ident">Op::Add</span> =&gt; <span class="op">|</span><span class="ident">ret</span>: <span class="kw-2">&amp;mut</span> <span class="ident">i64</span>, <span class="ident">v</span>: <span class="ident">i64</span><span class="op">|</span> <span class="kw-2">*</span><span class="ident">ret</span> <span class="op">+</span><span class="op">=</span> <span class="ident">v</span>,
-                <span class="kw">_</span> =&gt; <span class="macro">panic!</span>(),
+        <span class="kw">if let </span>Mode::RangeUpdate(op) = <span class="kw-2">&amp;</span><span class="self">self</span>.mode {
+            <span class="kw">let </span>operator = <span class="kw">match </span>op {
+                Op::Add =&gt; |ret: <span class="kw-2">&amp;mut </span>i64, v: i64| <span class="kw-2">*</span>ret += v,
+                <span class="kw">_ </span>=&gt; <span class="macro">panic!</span>(),
             };
 
-            <span class="ident">operator</span>(<span class="kw-2">&amp;mut</span> <span class="ident">ret</span>, <span class="self">self</span>.<span class="ident">data</span>[<span class="ident">index</span>]);
-            <span class="kw">while</span> <span class="ident">index</span> <span class="op">&gt;</span> <span class="number">0</span> {
-                <span class="ident">index</span> <span class="op">/</span><span class="op">=</span> <span class="number">2</span>;
-                <span class="ident">operator</span>(<span class="kw-2">&amp;mut</span> <span class="ident">ret</span>, <span class="self">self</span>.<span class="ident">data</span>[<span class="ident">index</span>]);
+            operator(<span class="kw-2">&amp;mut </span>ret, <span class="self">self</span>.data[index]);
+            <span class="kw">while </span>index &gt; <span class="number">0 </span>{
+                index /= <span class="number">2</span>;
+                operator(<span class="kw-2">&amp;mut </span>ret, <span class="self">self</span>.data[index]);
             }
-        } <span class="kw">else</span> {
+        } <span class="kw">else </span>{
             <span class="macro">panic!</span>(<span class="string">&quot;Unsupported&quot;</span>);
         }
 
-        <span class="ident">ret</span>
+        ret
     }
 
-    <span class="kw">fn</span> <span class="ident">range_query_recursive</span>(
+    <span class="kw">fn </span>range_query_recursive(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">op</span>: <span class="kw-2">&amp;</span><span class="ident">Op</span>,
-        <span class="ident">ql</span>: <span class="ident">usize</span>,
-        <span class="ident">qr</span>: <span class="ident">usize</span>,
-        <span class="ident">sl</span>: <span class="ident">usize</span>,
-        <span class="ident">sr</span>: <span class="ident">usize</span>,
-        <span class="ident">pos</span>: <span class="ident">usize</span>,
-    ) -&gt; <span class="ident">i64</span> {
-        <span class="kw">if</span> <span class="ident">qr</span> <span class="op">&lt;</span><span class="op">=</span> <span class="ident">sl</span> <span class="op">|</span><span class="op">|</span> <span class="ident">sr</span> <span class="op">&lt;</span><span class="op">=</span> <span class="ident">ql</span> {
-            <span class="kw">return</span> <span class="ident">SegmentTree::default</span>(<span class="ident">op</span>);
+        op: <span class="kw-2">&amp;</span>Op,
+        ql: usize,
+        qr: usize,
+        sl: usize,
+        sr: usize,
+        pos: usize,
+    ) -&gt; i64 {
+        <span class="kw">if </span>qr &lt;= sl || sr &lt;= ql {
+            <span class="kw">return </span>SegmentTree::default(op);
         }
 
-        <span class="kw">if</span> <span class="ident">ql</span> <span class="op">&lt;</span><span class="op">=</span> <span class="ident">sl</span> <span class="op">&amp;&amp;</span> <span class="ident">sr</span> <span class="op">&lt;</span><span class="op">=</span> <span class="ident">qr</span> {
-            <span class="kw">return</span> <span class="self">self</span>.<span class="ident">data</span>[<span class="ident">pos</span>];
+        <span class="kw">if </span>ql &lt;= sl &amp;&amp; sr &lt;= qr {
+            <span class="kw">return </span><span class="self">self</span>.data[pos];
         }
 
-        <span class="kw">fn</span> <span class="ident">add</span>(<span class="ident">l</span>: <span class="ident">i64</span>, <span class="ident">r</span>: <span class="ident">i64</span>) -&gt; <span class="ident">i64</span> {
-            <span class="ident">l</span> <span class="op">+</span> <span class="ident">r</span>
+        <span class="kw">fn </span>add(l: i64, r: i64) -&gt; i64 {
+            l + r
         }
-        <span class="kw">fn</span> <span class="ident">max</span>(<span class="ident">l</span>: <span class="ident">i64</span>, <span class="ident">r</span>: <span class="ident">i64</span>) -&gt; <span class="ident">i64</span> {
-            <span class="ident">l</span>.<span class="ident">max</span>(<span class="ident">r</span>)
+        <span class="kw">fn </span>max(l: i64, r: i64) -&gt; i64 {
+            l.max(r)
         }
-        <span class="kw">fn</span> <span class="ident">min</span>(<span class="ident">l</span>: <span class="ident">i64</span>, <span class="ident">r</span>: <span class="ident">i64</span>) -&gt; <span class="ident">i64</span> {
-            <span class="ident">l</span>.<span class="ident">min</span>(<span class="ident">r</span>)
+        <span class="kw">fn </span>min(l: i64, r: i64) -&gt; i64 {
+            l.min(r)
         }
 
-        <span class="kw">let</span> <span class="ident">sm</span> <span class="op">=</span> (<span class="ident">sl</span> <span class="op">+</span> <span class="ident">sr</span>) <span class="op">/</span> <span class="number">2</span>;
-        <span class="kw">let</span> <span class="ident">lv</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">range_query_recursive</span>(<span class="ident">op</span>, <span class="ident">ql</span>, <span class="ident">qr</span>, <span class="ident">sl</span>, <span class="ident">sm</span>, <span class="ident">pos</span> <span class="op">*</span> <span class="number">2</span>);
-        <span class="kw">let</span> <span class="ident">rv</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">range_query_recursive</span>(<span class="ident">op</span>, <span class="ident">ql</span>, <span class="ident">qr</span>, <span class="ident">sm</span>, <span class="ident">sr</span>, <span class="ident">pos</span> <span class="op">*</span> <span class="number">2</span> <span class="op">+</span> <span class="number">1</span>);
-        <span class="kw">let</span> <span class="ident">operate</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">op</span> {
-            <span class="ident">Op::Add</span> =&gt; <span class="ident">add</span>,
-            <span class="ident">Op::Max</span> =&gt; <span class="ident">max</span>,
-            <span class="ident">Op::Min</span> =&gt; <span class="ident">min</span>,
+        <span class="kw">let </span>sm = (sl + sr) / <span class="number">2</span>;
+        <span class="kw">let </span>lv = <span class="self">self</span>.range_query_recursive(op, ql, qr, sl, sm, pos * <span class="number">2</span>);
+        <span class="kw">let </span>rv = <span class="self">self</span>.range_query_recursive(op, ql, qr, sm, sr, pos * <span class="number">2 </span>+ <span class="number">1</span>);
+        <span class="kw">let </span>operate = <span class="kw">match </span>op {
+            Op::Add =&gt; add,
+            Op::Max =&gt; max,
+            Op::Min =&gt; min,
         };
-        <span class="ident">operate</span>(<span class="ident">lv</span>, <span class="ident">rv</span>)
+        operate(lv, rv)
     }
 
-    <span class="doccomment">/// Run a range query.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_range</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">l</span>: <span class="ident">usize</span>, <span class="ident">r</span>: <span class="ident">usize</span>) -&gt; <span class="ident">i64</span> {
-        <span class="kw">if</span> <span class="kw">let</span> <span class="ident">Mode::RangeGet</span>(<span class="ident">op</span>) <span class="op">=</span> <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">mode</span> {
-            <span class="self">self</span>.<span class="ident">range_query_recursive</span>(<span class="ident">op</span>, <span class="ident">l</span>, <span class="ident">r</span>, <span class="number">0</span>, <span class="ident">SegmentTree::SEQ_LEN</span>, <span class="number">1</span>)
-        } <span class="kw">else</span> {
+    <span class="doccomment">/// Run a range query.
+    </span><span class="kw">pub fn </span>get_range(<span class="kw-2">&amp;</span><span class="self">self</span>, l: usize, r: usize) -&gt; i64 {
+        <span class="kw">if let </span>Mode::RangeGet(op) = <span class="kw-2">&amp;</span><span class="self">self</span>.mode {
+            <span class="self">self</span>.range_query_recursive(op, l, r, <span class="number">0</span>, SegmentTree::SEQ_LEN, <span class="number">1</span>)
+        } <span class="kw">else </span>{
             <span class="macro">panic!</span>(<span class="string">&quot;Unsupported&quot;</span>);
         }
     }
 
-    <span class="doccomment">/// Update an i-th element to `value`.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">update_one</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="kw-2">mut</span> <span class="ident">index</span>: <span class="ident">usize</span>, <span class="ident">value</span>: <span class="ident">i64</span>) {
-        <span class="ident">index</span> <span class="op">+</span><span class="op">=</span> <span class="ident">SegmentTree::SEQ_LEN</span>;
+    <span class="doccomment">/// Update an i-th element to `value`.
+    </span><span class="kw">pub fn </span>update_one(<span class="kw-2">&amp;mut </span><span class="self">self</span>, <span class="kw-2">mut </span>index: usize, value: i64) {
+        index += SegmentTree::SEQ_LEN;
 
-        <span class="kw">fn</span> <span class="ident">add_assign_one</span>(<span class="ident">ret</span>: <span class="kw-2">&amp;mut</span> <span class="ident">i64</span>, <span class="ident">v</span>: <span class="ident">i64</span>) {
-            <span class="kw-2">*</span><span class="ident">ret</span> <span class="op">+</span><span class="op">=</span> <span class="ident">v</span>;
+        <span class="kw">fn </span>add_assign_one(ret: <span class="kw-2">&amp;mut </span>i64, v: i64) {
+            <span class="kw-2">*</span>ret += v;
         }
-        <span class="kw">fn</span> <span class="ident">max_assign_one</span>(<span class="ident">ret</span>: <span class="kw-2">&amp;mut</span> <span class="ident">i64</span>, <span class="ident">v</span>: <span class="ident">i64</span>) {
-            <span class="kw-2">*</span><span class="ident">ret</span> <span class="op">=</span> <span class="ident">v</span>;
+        <span class="kw">fn </span>max_assign_one(ret: <span class="kw-2">&amp;mut </span>i64, v: i64) {
+            <span class="kw-2">*</span>ret = v;
         }
-        <span class="kw">fn</span> <span class="ident">min_assign_one</span>(<span class="ident">ret</span>: <span class="kw-2">&amp;mut</span> <span class="ident">i64</span>, <span class="ident">v</span>: <span class="ident">i64</span>) {
-            <span class="kw-2">*</span><span class="ident">ret</span> <span class="op">=</span> <span class="ident">v</span>;
+        <span class="kw">fn </span>min_assign_one(ret: <span class="kw-2">&amp;mut </span>i64, v: i64) {
+            <span class="kw-2">*</span>ret = v;
         }
-        <span class="kw">fn</span> <span class="ident">add_assign</span>(<span class="ident">ret</span>: <span class="kw-2">&amp;mut</span> <span class="ident">i64</span>, <span class="ident">l</span>: <span class="ident">i64</span>, <span class="ident">r</span>: <span class="ident">i64</span>) {
-            <span class="kw-2">*</span><span class="ident">ret</span> <span class="op">=</span> <span class="ident">l</span> <span class="op">+</span> <span class="ident">r</span>;
+        <span class="kw">fn </span>add_assign(ret: <span class="kw-2">&amp;mut </span>i64, l: i64, r: i64) {
+            <span class="kw-2">*</span>ret = l + r;
         }
-        <span class="kw">fn</span> <span class="ident">max_assign</span>(<span class="ident">ret</span>: <span class="kw-2">&amp;mut</span> <span class="ident">i64</span>, <span class="ident">l</span>: <span class="ident">i64</span>, <span class="ident">r</span>: <span class="ident">i64</span>) {
-            <span class="kw-2">*</span><span class="ident">ret</span> <span class="op">=</span> <span class="ident">l</span>.<span class="ident">max</span>(<span class="ident">r</span>);
+        <span class="kw">fn </span>max_assign(ret: <span class="kw-2">&amp;mut </span>i64, l: i64, r: i64) {
+            <span class="kw-2">*</span>ret = l.max(r);
         }
-        <span class="kw">fn</span> <span class="ident">min_assign</span>(<span class="ident">ret</span>: <span class="kw-2">&amp;mut</span> <span class="ident">i64</span>, <span class="ident">l</span>: <span class="ident">i64</span>, <span class="ident">r</span>: <span class="ident">i64</span>) {
-            <span class="kw-2">*</span><span class="ident">ret</span> <span class="op">=</span> <span class="ident">l</span>.<span class="ident">min</span>(<span class="ident">r</span>);
+        <span class="kw">fn </span>min_assign(ret: <span class="kw-2">&amp;mut </span>i64, l: i64, r: i64) {
+            <span class="kw-2">*</span>ret = l.min(r);
         }
 
-        <span class="kw">if</span> <span class="kw">let</span> <span class="ident">Mode::RangeGet</span>(<span class="ident">op</span>) <span class="op">=</span> <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">mode</span> {
-            <span class="kw">let</span> <span class="ident">operate_and_assign_one</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">op</span> {
-                <span class="ident">Op::Add</span> =&gt; <span class="ident">add_assign_one</span>,
-                <span class="ident">Op::Max</span> =&gt; <span class="ident">max_assign_one</span>,
-                <span class="ident">Op::Min</span> =&gt; <span class="ident">min_assign_one</span>,
+        <span class="kw">if let </span>Mode::RangeGet(op) = <span class="kw-2">&amp;</span><span class="self">self</span>.mode {
+            <span class="kw">let </span>operate_and_assign_one = <span class="kw">match </span>op {
+                Op::Add =&gt; add_assign_one,
+                Op::Max =&gt; max_assign_one,
+                Op::Min =&gt; min_assign_one,
             };
-            <span class="ident">operate_and_assign_one</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>.<span class="ident">data</span>[<span class="ident">index</span>], <span class="ident">value</span>);
+            operate_and_assign_one(<span class="kw-2">&amp;mut </span><span class="self">self</span>.data[index], value);
 
-            <span class="kw">let</span> <span class="ident">operate_and_assign</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">op</span> {
-                <span class="ident">Op::Add</span> =&gt; <span class="ident">add_assign</span>,
-                <span class="ident">Op::Max</span> =&gt; <span class="ident">max_assign</span>,
-                <span class="ident">Op::Min</span> =&gt; <span class="ident">min_assign</span>,
+            <span class="kw">let </span>operate_and_assign = <span class="kw">match </span>op {
+                Op::Add =&gt; add_assign,
+                Op::Max =&gt; max_assign,
+                Op::Min =&gt; min_assign,
             };
 
-            <span class="kw">while</span> <span class="ident">index</span> <span class="op">&gt;</span> <span class="number">0</span> {
-                <span class="ident">index</span> <span class="op">/</span><span class="op">=</span> <span class="number">2</span>;
-                <span class="kw">let</span> <span class="ident">lv</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">data</span>[<span class="ident">index</span> <span class="op">*</span> <span class="number">2</span>];
-                <span class="kw">let</span> <span class="ident">rv</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">data</span>[<span class="ident">index</span> <span class="op">*</span> <span class="number">2</span> <span class="op">+</span> <span class="number">1</span>];
-                <span class="ident">operate_and_assign</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>.<span class="ident">data</span>[<span class="ident">index</span>], <span class="ident">lv</span>, <span class="ident">rv</span>);
+            <span class="kw">while </span>index &gt; <span class="number">0 </span>{
+                index /= <span class="number">2</span>;
+                <span class="kw">let </span>lv = <span class="self">self</span>.data[index * <span class="number">2</span>];
+                <span class="kw">let </span>rv = <span class="self">self</span>.data[index * <span class="number">2 </span>+ <span class="number">1</span>];
+                operate_and_assign(<span class="kw-2">&amp;mut </span><span class="self">self</span>.data[index], lv, rv);
             }
         }
     }
 
-    <span class="doccomment">/// Add `value` to the range `[l, r)`.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">update_range</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="kw-2">mut</span> <span class="ident">l</span>: <span class="ident">usize</span>, <span class="kw-2">mut</span> <span class="ident">r</span>: <span class="ident">usize</span>, <span class="ident">value</span>: <span class="ident">i64</span>) {
-        <span class="kw">if</span> <span class="kw">let</span> <span class="ident">Mode::RangeUpdate</span>(<span class="ident">op</span>) <span class="op">=</span> <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">mode</span> {
-            <span class="kw">let</span> <span class="ident">operate_and_assign_one</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">op</span> {
-                <span class="ident">Op::Add</span> =&gt; <span class="op">|</span><span class="ident">ret</span>: <span class="kw-2">&amp;mut</span> <span class="ident">i64</span>, <span class="ident">v</span>: <span class="ident">i64</span><span class="op">|</span> <span class="kw-2">*</span><span class="ident">ret</span> <span class="op">+</span><span class="op">=</span> <span class="ident">v</span>,
-                <span class="kw">_</span> =&gt; <span class="macro">panic!</span>(),
+    <span class="doccomment">/// Add `value` to the range `[l, r)`.
+    </span><span class="kw">pub fn </span>update_range(<span class="kw-2">&amp;mut </span><span class="self">self</span>, <span class="kw-2">mut </span>l: usize, <span class="kw-2">mut </span>r: usize, value: i64) {
+        <span class="kw">if let </span>Mode::RangeUpdate(op) = <span class="kw-2">&amp;</span><span class="self">self</span>.mode {
+            <span class="kw">let </span>operate_and_assign_one = <span class="kw">match </span>op {
+                Op::Add =&gt; |ret: <span class="kw-2">&amp;mut </span>i64, v: i64| <span class="kw-2">*</span>ret += v,
+                <span class="kw">_ </span>=&gt; <span class="macro">panic!</span>(),
             };
 
-            <span class="ident">l</span> <span class="op">+</span><span class="op">=</span> <span class="ident">SegmentTree::SEQ_LEN</span>;
-            <span class="ident">r</span> <span class="op">+</span><span class="op">=</span> <span class="ident">SegmentTree::SEQ_LEN</span>;
+            l += SegmentTree::SEQ_LEN;
+            r += SegmentTree::SEQ_LEN;
 
-            <span class="kw">while</span> <span class="ident">l</span> <span class="op">&lt;</span> <span class="ident">r</span> {
-                <span class="kw">if</span> <span class="ident">l</span> <span class="op">%</span> <span class="number">2</span> <span class="op">==</span> <span class="number">1</span> {
-                    <span class="ident">operate_and_assign_one</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>.<span class="ident">data</span>[<span class="ident">l</span>], <span class="ident">value</span>);
-                    <span class="ident">l</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
+            <span class="kw">while </span>l &lt; r {
+                <span class="kw">if </span>l % <span class="number">2 </span>== <span class="number">1 </span>{
+                    operate_and_assign_one(<span class="kw-2">&amp;mut </span><span class="self">self</span>.data[l], value);
+                    l += <span class="number">1</span>;
                 }
-                <span class="ident">l</span> <span class="op">/</span><span class="op">=</span> <span class="number">2</span>;
+                l /= <span class="number">2</span>;
 
-                <span class="kw">if</span> <span class="ident">r</span> <span class="op">%</span> <span class="number">2</span> <span class="op">==</span> <span class="number">1</span> {
-                    <span class="ident">operate_and_assign_one</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>.<span class="ident">data</span>[<span class="ident">r</span> <span class="op">-</span> <span class="number">1</span>], <span class="ident">value</span>);
-                    <span class="ident">r</span> <span class="op">-</span><span class="op">=</span> <span class="number">1</span>;
+                <span class="kw">if </span>r % <span class="number">2 </span>== <span class="number">1 </span>{
+                    operate_and_assign_one(<span class="kw-2">&amp;mut </span><span class="self">self</span>.data[r - <span class="number">1</span>], value);
+                    r -= <span class="number">1</span>;
                 }
-                <span class="ident">r</span> <span class="op">/</span><span class="op">=</span> <span class="number">2</span>;
+                r /= <span class="number">2</span>;
             }
-        } <span class="kw">else</span> {
+        } <span class="kw">else </span>{
             <span class="macro">panic!</span>(<span class="string">&quot;Unsupported&quot;</span>);
         }
     }
 }
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
-<span class="kw">mod</span> <span class="ident">test_segment_tree</span> {
-    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::tree::segment_tree::Mode</span>;
-    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::tree::segment_tree::Op</span>;
-    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::tree::segment_tree::SegmentTree</span>;
+<span class="attribute">#[cfg(test)]
+</span><span class="kw">mod </span>test_segment_tree {
+    <span class="kw">use </span><span class="kw">crate</span>::tree::segment_tree::Mode;
+    <span class="kw">use </span><span class="kw">crate</span>::tree::segment_tree::Op;
+    <span class="kw">use </span><span class="kw">crate</span>::tree::segment_tree::SegmentTree;
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">it_works_raq</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">raq</span> <span class="op">=</span> <span class="ident">SegmentTree::new</span>(<span class="ident">Mode::RangeUpdate</span>(<span class="ident">Op::Add</span>));
-        <span class="ident">raq</span>.<span class="ident">update_range</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">1</span>);
-        <span class="ident">raq</span>.<span class="ident">update_range</span>(<span class="number">2</span>, <span class="number">4</span>, <span class="number">2</span>);
-        <span class="ident">raq</span>.<span class="ident">update_range</span>(<span class="number">3</span>, <span class="number">4</span>, <span class="number">3</span>);
-        <span class="macro">assert_eq!</span>(<span class="ident">raq</span>.<span class="ident">get_one</span>(<span class="number">0</span>), <span class="number">0</span>);
-        <span class="macro">assert_eq!</span>(<span class="ident">raq</span>.<span class="ident">get_one</span>(<span class="number">2</span>), <span class="number">2</span>);
-        <span class="macro">assert_eq!</span>(<span class="ident">raq</span>.<span class="ident">get_one</span>(<span class="number">3</span>), <span class="number">5</span>);
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>it_works_raq() {
+        <span class="kw">let </span><span class="kw-2">mut </span>raq = SegmentTree::new(Mode::RangeUpdate(Op::Add));
+        raq.update_range(<span class="number">1</span>, <span class="number">2</span>, <span class="number">1</span>);
+        raq.update_range(<span class="number">2</span>, <span class="number">4</span>, <span class="number">2</span>);
+        raq.update_range(<span class="number">3</span>, <span class="number">4</span>, <span class="number">3</span>);
+        <span class="macro">assert_eq!</span>(raq.get_one(<span class="number">0</span>), <span class="number">0</span>);
+        <span class="macro">assert_eq!</span>(raq.get_one(<span class="number">2</span>), <span class="number">2</span>);
+        <span class="macro">assert_eq!</span>(raq.get_one(<span class="number">3</span>), <span class="number">5</span>);
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">it_works_rsq</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rsq</span> <span class="op">=</span> <span class="ident">SegmentTree::new</span>(<span class="ident">Mode::RangeGet</span>(<span class="ident">Op::Add</span>));
-        <span class="ident">rsq</span>.<span class="ident">update_one</span>(<span class="number">0</span>, <span class="number">3</span>);
-        <span class="ident">rsq</span>.<span class="ident">update_one</span>(<span class="number">2</span>, <span class="number">3</span>);
-        <span class="ident">rsq</span>.<span class="ident">update_one</span>(<span class="number">3</span>, <span class="number">1</span>);
-        <span class="ident">rsq</span>.<span class="ident">update_one</span>(<span class="number">4</span>, <span class="number">4</span>);
-        <span class="macro">assert_eq!</span>(<span class="ident">rsq</span>.<span class="ident">get_range</span>(<span class="number">0</span>, <span class="number">3</span>), <span class="number">6</span>);
-        <span class="macro">assert_eq!</span>(<span class="ident">rsq</span>.<span class="ident">get_range</span>(<span class="number">1</span>, <span class="number">3</span>), <span class="number">3</span>);
-        <span class="macro">assert_eq!</span>(<span class="ident">rsq</span>.<span class="ident">get_range</span>(<span class="number">2</span>, <span class="number">4</span>), <span class="number">4</span>);
-        <span class="macro">assert_eq!</span>(<span class="ident">rsq</span>.<span class="ident">get_range</span>(<span class="number">3</span>, <span class="number">4</span>), <span class="number">1</span>);
-        <span class="macro">assert_eq!</span>(<span class="ident">rsq</span>.<span class="ident">get_range</span>(<span class="number">1</span>, <span class="number">6</span>), <span class="number">8</span>);
-        <span class="macro">assert_eq!</span>(<span class="ident">rsq</span>.<span class="ident">get_range</span>(<span class="number">0</span>, <span class="number">0</span>), <span class="number">0</span>);
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>it_works_rsq() {
+        <span class="kw">let </span><span class="kw-2">mut </span>rsq = SegmentTree::new(Mode::RangeGet(Op::Add));
+        rsq.update_one(<span class="number">0</span>, <span class="number">3</span>);
+        rsq.update_one(<span class="number">2</span>, <span class="number">3</span>);
+        rsq.update_one(<span class="number">3</span>, <span class="number">1</span>);
+        rsq.update_one(<span class="number">4</span>, <span class="number">4</span>);
+        <span class="macro">assert_eq!</span>(rsq.get_range(<span class="number">0</span>, <span class="number">3</span>), <span class="number">6</span>);
+        <span class="macro">assert_eq!</span>(rsq.get_range(<span class="number">1</span>, <span class="number">3</span>), <span class="number">3</span>);
+        <span class="macro">assert_eq!</span>(rsq.get_range(<span class="number">2</span>, <span class="number">4</span>), <span class="number">4</span>);
+        <span class="macro">assert_eq!</span>(rsq.get_range(<span class="number">3</span>, <span class="number">4</span>), <span class="number">1</span>);
+        <span class="macro">assert_eq!</span>(rsq.get_range(<span class="number">1</span>, <span class="number">6</span>), <span class="number">8</span>);
+        <span class="macro">assert_eq!</span>(rsq.get_range(<span class="number">0</span>, <span class="number">0</span>), <span class="number">0</span>);
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">it_works_rmaxq</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rmaxq</span> <span class="op">=</span> <span class="ident">SegmentTree::new</span>(<span class="ident">Mode::RangeGet</span>(<span class="ident">Op::Max</span>));
-        <span class="ident">rmaxq</span>.<span class="ident">update_one</span>(<span class="number">0</span>, <span class="number">10</span>);
-        <span class="ident">rmaxq</span>.<span class="ident">update_one</span>(<span class="number">2</span>, <span class="number">101</span>);
-        <span class="ident">rmaxq</span>.<span class="ident">update_one</span>(<span class="number">100</span>, <span class="number">1001</span>);
-        <span class="macro">assert_eq!</span>(<span class="ident">rmaxq</span>.<span class="ident">get_range</span>(<span class="number">0</span>, <span class="number">1</span>), <span class="number">10</span>);
-        <span class="macro">assert_eq!</span>(<span class="ident">rmaxq</span>.<span class="ident">get_range</span>(<span class="number">0</span>, <span class="number">2</span>), <span class="number">10</span>);
-        <span class="macro">assert_eq!</span>(<span class="ident">rmaxq</span>.<span class="ident">get_range</span>(<span class="number">0</span>, <span class="number">3</span>), <span class="number">101</span>);
-        <span class="macro">assert_eq!</span>(<span class="ident">rmaxq</span>.<span class="ident">get_range</span>(<span class="number">0</span>, <span class="number">100100</span>), <span class="number">1001</span>);
-        <span class="macro">assert_eq!</span>(<span class="ident">rmaxq</span>.<span class="ident">get_range</span>(<span class="number">101</span>, <span class="number">1000</span>), <span class="ident">SegmentTree::MIN</span>);
-        <span class="macro">assert_eq!</span>(<span class="ident">rmaxq</span>.<span class="ident">get_range</span>(<span class="number">0</span>, <span class="number">0</span>), <span class="ident">SegmentTree::MIN</span>);
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>it_works_rmaxq() {
+        <span class="kw">let </span><span class="kw-2">mut </span>rmaxq = SegmentTree::new(Mode::RangeGet(Op::Max));
+        rmaxq.update_one(<span class="number">0</span>, <span class="number">10</span>);
+        rmaxq.update_one(<span class="number">2</span>, <span class="number">101</span>);
+        rmaxq.update_one(<span class="number">100</span>, <span class="number">1001</span>);
+        <span class="macro">assert_eq!</span>(rmaxq.get_range(<span class="number">0</span>, <span class="number">1</span>), <span class="number">10</span>);
+        <span class="macro">assert_eq!</span>(rmaxq.get_range(<span class="number">0</span>, <span class="number">2</span>), <span class="number">10</span>);
+        <span class="macro">assert_eq!</span>(rmaxq.get_range(<span class="number">0</span>, <span class="number">3</span>), <span class="number">101</span>);
+        <span class="macro">assert_eq!</span>(rmaxq.get_range(<span class="number">0</span>, <span class="number">100100</span>), <span class="number">1001</span>);
+        <span class="macro">assert_eq!</span>(rmaxq.get_range(<span class="number">101</span>, <span class="number">1000</span>), SegmentTree::MIN);
+        <span class="macro">assert_eq!</span>(rmaxq.get_range(<span class="number">0</span>, <span class="number">0</span>), SegmentTree::MIN);
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">it_works_rminq</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rminq</span> <span class="op">=</span> <span class="ident">SegmentTree::new</span>(<span class="ident">Mode::RangeGet</span>(<span class="ident">Op::Min</span>));
-        <span class="ident">rminq</span>.<span class="ident">update_one</span>(<span class="number">0</span>, <span class="number">101</span>);
-        <span class="ident">rminq</span>.<span class="ident">update_one</span>(<span class="number">2</span>, <span class="number">10</span>);
-        <span class="ident">rminq</span>.<span class="ident">update_one</span>(<span class="number">100</span>, <span class="number">1001</span>);
-        <span class="macro">assert_eq!</span>(<span class="ident">rminq</span>.<span class="ident">get_range</span>(<span class="number">0</span>, <span class="number">1</span>), <span class="number">101</span>);
-        <span class="macro">assert_eq!</span>(<span class="ident">rminq</span>.<span class="ident">get_range</span>(<span class="number">0</span>, <span class="number">2</span>), <span class="number">101</span>);
-        <span class="macro">assert_eq!</span>(<span class="ident">rminq</span>.<span class="ident">get_range</span>(<span class="number">0</span>, <span class="number">3</span>), <span class="number">10</span>);
-        <span class="macro">assert_eq!</span>(<span class="ident">rminq</span>.<span class="ident">get_range</span>(<span class="number">0</span>, <span class="number">100100</span>), <span class="number">10</span>);
-        <span class="macro">assert_eq!</span>(<span class="ident">rminq</span>.<span class="ident">get_range</span>(<span class="number">101</span>, <span class="number">1000</span>), <span class="ident">SegmentTree::MAX</span>);
-        <span class="macro">assert_eq!</span>(<span class="ident">rminq</span>.<span class="ident">get_range</span>(<span class="number">0</span>, <span class="number">0</span>), <span class="ident">SegmentTree::MAX</span>);
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>it_works_rminq() {
+        <span class="kw">let </span><span class="kw-2">mut </span>rminq = SegmentTree::new(Mode::RangeGet(Op::Min));
+        rminq.update_one(<span class="number">0</span>, <span class="number">101</span>);
+        rminq.update_one(<span class="number">2</span>, <span class="number">10</span>);
+        rminq.update_one(<span class="number">100</span>, <span class="number">1001</span>);
+        <span class="macro">assert_eq!</span>(rminq.get_range(<span class="number">0</span>, <span class="number">1</span>), <span class="number">101</span>);
+        <span class="macro">assert_eq!</span>(rminq.get_range(<span class="number">0</span>, <span class="number">2</span>), <span class="number">101</span>);
+        <span class="macro">assert_eq!</span>(rminq.get_range(<span class="number">0</span>, <span class="number">3</span>), <span class="number">10</span>);
+        <span class="macro">assert_eq!</span>(rminq.get_range(<span class="number">0</span>, <span class="number">100100</span>), <span class="number">10</span>);
+        <span class="macro">assert_eq!</span>(rminq.get_range(<span class="number">101</span>, <span class="number">1000</span>), SegmentTree::MAX);
+        <span class="macro">assert_eq!</span>(rminq.get_range(<span class="number">0</span>, <span class="number">0</span>), SegmentTree::MAX);
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="algorithm_rs" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0 (a55dd71d5 2022-09-19)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="algorithm_rs" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0 (897e37553 2022-11-02)" ></div></body></html>

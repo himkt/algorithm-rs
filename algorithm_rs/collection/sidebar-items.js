@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":[["bitset",""],["iterator",""],["union_find",""]]};
+window.SIDEBAR_ITEMS = {"mod":[["bitset",""],["iterator",""],["ndarray",""],["union_find",""]]};
