@@ -62,8 +62,8 @@ pub fn prime_factorize(mut n: usize) -> Vec<(usize, usize)> {
 
 #[cfg(test)]
 mod test_prime_factorization {
-    use crate::math::prime_factorization::SequentialPrimeFactorization;
     use crate::math::prime_factorization::prime_factorize;
+    use crate::math::prime_factorization::SequentialPrimeFactorization;
 
     #[test]
     fn it_works_sequential_prime_factorization() {
