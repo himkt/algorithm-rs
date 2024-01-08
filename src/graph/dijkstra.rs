@@ -25,23 +25,20 @@ impl Dijkstra {
     pub fn search(&mut self, src: usize) {
         self.source = src;
 
-        let mut dist = vec![Dijkstra::INF; self.graph.n];
+        let mut dist = vec![Self::INF; self.graph.n];
         dist[src] = 0;
 
         let mut queue = std::collections::BinaryHeap::new();
         queue.push((std::cmp::Reverse(0), src));
 
         while let Some((std::cmp::Reverse(current_cost), current_v)) = queue.pop() {
-            if dist[current_v] < current_cost {
-                continue;
-            }
-
             for &(v, cost) in self.graph.graph[current_v].iter() {
-                if dist[v] > current_cost + cost {
-                    dist[v] = current_cost + cost;
-                    queue.push((std::cmp::Reverse(dist[v]), v));
-                    self.backptrs[v] = current_v;
+                if dist[v] <= current_cost + cost {
+                    continue;
                 }
+                dist[v] = current_cost + cost;
+                queue.push((std::cmp::Reverse(dist[v]), v));
+                self.backptrs[v] = current_v;
             }
         }
 

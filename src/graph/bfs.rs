@@ -14,24 +14,23 @@ impl BreadthFirstSearch {
         let n = graph.n;
         Self {
             graph,
-            seen: vec![false; n],
-            dist: vec![BreadthFirstSearch::INF; n],
+            dist: vec![Self::INF; n],
         }
     }
 
     pub fn search(&mut self, root: usize) {
         let mut queue = std::collections::VecDeque::new();
-        queue.push_back((root, 0));
+        queue.push_back(root);
+        self.dist[root] = 0;
 
-        while let Some((cur, dist)) = queue.pop_front() {
-            if self.seen[cur] {
-                continue;
-            }
-
-            self.seen[cur] = true;
-            self.dist[cur] = self.dist[cur].min(dist);
+        while let Some(cur) = queue.pop_front() {
             for &(next, _) in self.graph.graph[cur].iter() {
-                queue.push_back((next, self.dist[cur] + 1));
+                if self.dist[next] <= self.dist[cur] + 1 {
+                    continue;
+                }
+
+                self.dist[next] = self.dist[next].min(self.dist[cur] + 1);
+                queue.push_back(next);
             }
         }
     }
