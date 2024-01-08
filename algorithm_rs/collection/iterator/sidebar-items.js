@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":[["CollectionType",""],["Item",""]],"struct":[["CollectionIter",""]]};
+window.SIDEBAR_ITEMS = {"enum":["CollectionType","Item"],"struct":["CollectionIter"]};

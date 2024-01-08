@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":[["LowestCommonAncestor",""]]};
+window.SIDEBAR_ITEMS = {"struct":["LowestCommonAncestor"]};

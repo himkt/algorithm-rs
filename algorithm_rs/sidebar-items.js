@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"macro":[["ndarray",""]],"mod":[["collection",""],["geometry",""],["graph",""],["math",""],["search",""],["string",""],["tree",""]]};
+window.SIDEBAR_ITEMS = {"macro":["ndarray"],"mod":["collection","geometry","graph","math","search","string","tree"]};

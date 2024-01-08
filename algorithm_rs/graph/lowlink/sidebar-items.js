@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":[["Lowlink",""]]};
+window.SIDEBAR_ITEMS = {"struct":["Lowlink"]};

@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":[["BreadthFirstSearch",""]]};
+window.SIDEBAR_ITEMS = {"struct":["BreadthFirstSearch"]};

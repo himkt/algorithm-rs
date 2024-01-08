@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":[["SequentialPrimeFactorization",""]]};
+window.SIDEBAR_ITEMS = {"fn":["prime_factorize"],"struct":["SequentialPrimeFactorization"]};

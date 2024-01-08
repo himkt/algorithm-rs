@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":[["modinv",""],["phi",""]]};
+window.SIDEBAR_ITEMS = {"fn":["modinv","phi"]};

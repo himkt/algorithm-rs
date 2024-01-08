@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":[["segment_tree",""]]};
+window.SIDEBAR_ITEMS = {"mod":["segment_tree"]};

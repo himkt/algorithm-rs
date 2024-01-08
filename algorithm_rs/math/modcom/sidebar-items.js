@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":[["modcom",""]]};
+window.SIDEBAR_ITEMS = {"fn":["modcom"]};

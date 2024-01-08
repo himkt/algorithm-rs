@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":[["TopologicalSort",""]]};
+window.SIDEBAR_ITEMS = {"struct":["TopologicalSort"]};

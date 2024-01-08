@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":[["EulerTour",""]]};
+window.SIDEBAR_ITEMS = {"struct":["EulerTour"]};

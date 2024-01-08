@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":[["com",""],["eratosthenes",""],["gcd",""],["modcom",""],["modinv",""],["modpow",""],["prime_factorization",""]]};
+window.SIDEBAR_ITEMS = {"mod":["com","eratosthenes","gcd","modcom","modinv","modpow","prime_factorization"]};

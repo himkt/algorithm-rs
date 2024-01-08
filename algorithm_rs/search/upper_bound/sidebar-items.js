@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":[["upper_bound",""]]};
+window.SIDEBAR_ITEMS = {"fn":["upper_bound"]};
