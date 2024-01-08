@@ -11,9 +11,9 @@ impl EulerTour {
     const INF: usize = 100_000_000_000_000_000;
 
     pub fn new(n: usize, graph: Graph) -> Self {
-        let l = vec![EulerTour::INF; n];
-        let r = vec![EulerTour::INF; n];
-        EulerTour { graph, l, r, t: 1 }
+        let l = vec![Self::INF; n];
+        let r = vec![Self::INF; n];
+        Self { graph, l, r, t: 1 }
     }
 
     /// Euler tour entrypoint that returns two vectors `(&l, &r)`.
@@ -25,7 +25,7 @@ impl EulerTour {
         self._dfs(root, None);
 
         for i in 0..self.l.len() {
-            if self.r[i] == EulerTour::INF {
+            if self.r[i] == Self::INF {
                 self.r[i] = self.l[i];
             }
         }

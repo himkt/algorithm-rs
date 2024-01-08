@@ -12,10 +12,10 @@ impl Dijkstra {
     const INF: usize = 100_000_000_000_000_000;
 
     pub fn new(graph: Graph) -> Self {
-        let dist: Vec<usize> = vec![Dijkstra::INF; graph.n];
+        let dist: Vec<usize> = vec![Self::INF; graph.n];
         let backptrs: Vec<usize> = (0..graph.n).collect();
         Self {
-            source: Dijkstra::INF,
+            source: Self::INF,
             graph,
             dist,
             backptrs,
@@ -48,7 +48,7 @@ impl Dijkstra {
     pub fn shortest_path(&self, u: usize, v: usize) -> Vec<(usize, usize)> {
         assert_eq!(u, self.source);
 
-        if self.dist[v] == Dijkstra::INF {
+        if self.dist[v] == Self::INF {
             return vec![];
         }
 

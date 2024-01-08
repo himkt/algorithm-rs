@@ -12,9 +12,9 @@ impl LowestCommonAncestor {
 
     pub fn new(graph: Graph) -> Self {
         let n = graph.n;
-        let parents = vec![vec![LowestCommonAncestor::ROOT; n]; LowestCommonAncestor::LOGV];
-        let depth = vec![LowestCommonAncestor::ROOT; n];
-        LowestCommonAncestor {
+        let parents = vec![vec![Self::ROOT; n]; Self::LOGV];
+        let depth = vec![Self::ROOT; n];
+        Self {
             parents,
             depth,
             graph,
@@ -22,9 +22,9 @@ impl LowestCommonAncestor {
     }
 
     pub fn init(&mut self) {
-        self.dfs(LowestCommonAncestor::ROOT, LowestCommonAncestor::ROOT, 0);
+        self.dfs(Self::ROOT, Self::ROOT, 0);
 
-        for k in 0..LowestCommonAncestor::LOGV - 1 {
+        for k in 0..Self::LOGV - 1 {
             for v in 0..self.graph.n {
                 self.parents[k + 1][v] = self.parents[k][self.parents[k][v]];
             }
@@ -49,7 +49,7 @@ impl LowestCommonAncestor {
             std::mem::swap(&mut u, &mut v);
         }
 
-        for k in 0..LowestCommonAncestor::LOGV {
+        for k in 0..Self::LOGV {
             if (((self.depth[v] - self.depth[u]) >> k) & 1) == 1 {
                 v = self.parents[k][v];
             }
@@ -59,7 +59,7 @@ impl LowestCommonAncestor {
             return u;
         }
 
-        for k in (0..LowestCommonAncestor::LOGV).rev() {
+        for k in (0..Self::LOGV).rev() {
             if self.parents[k][u] != self.parents[k][v] {
                 u = self.parents[k][u];
                 v = self.parents[k][v];

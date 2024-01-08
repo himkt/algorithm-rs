@@ -7,12 +7,12 @@ pub struct FordFullkerson {
 }
 
 impl FordFullkerson {
-    const INF: usize = 1001001001;
+    const INF: usize = 100_000_000_000_000_000;
 
     pub fn new(graph: Graph) -> Self {
         let used = vec![false; graph.n];
-        let flow = FordFullkerson::INF;
-        FordFullkerson { graph, used, flow }
+        let flow = Self::INF;
+        Self { graph, used, flow }
     }
 
     pub fn dfs(&mut self, v: usize, t: usize, f: usize) -> usize {
