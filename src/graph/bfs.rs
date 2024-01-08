@@ -3,7 +3,6 @@ use crate::graph::graph::Graph;
 #[derive(Debug, Clone)]
 pub struct BreadthFirstSearch {
     graph: Graph,
-    seen: Vec<bool>,
     dist: Vec<usize>,
 }
 
@@ -50,7 +49,6 @@ mod test_bfs {
 
         let mut bfs = BreadthFirstSearch::new(graph);
         bfs.search(0);
-        assert_eq!(bfs.seen, vec![true, true, true, false, true]);
         assert_eq!(bfs.dist, vec![0, 1, 2, BreadthFirstSearch::INF, 3]);
     }
 }
