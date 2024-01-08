@@ -37,12 +37,36 @@ impl SequentialPrimeFactorization {
     }
 }
 
+pub fn prime_factorize(mut n: usize) -> Vec<(usize, usize)> {
+    let mut ret = vec![];
+    let mut p = 2;
+
+    while p * p <= n {
+        if n % p == 0 {
+            let mut k = 0;
+            while n % p == 0 {
+                k += 1;
+                n /= p;
+            }
+            ret.push((p, k));
+        }
+
+        p += 1;
+    }
+
+    if n != 1 {
+        ret.push((n, 1));
+    }
+    ret
+}
+
 #[cfg(test)]
-mod test_eratosthenes_sieve {
+mod test_prime_factorization {
+    use crate::math::prime_factorization::prime_factorize;
     use crate::math::prime_factorization::SequentialPrimeFactorization;
 
     #[test]
-    fn it_works() {
+    fn it_works_sequential_prime_factorization() {
         let prime_factorizer = SequentialPrimeFactorization::new(100);
 
         assert_eq!(prime_factorizer.factorize(1), vec![]);
@@ -51,5 +75,16 @@ mod test_eratosthenes_sieve {
         assert_eq!(prime_factorizer.factorize(7), vec![7]);
         assert_eq!(prime_factorizer.factorize(30), vec![2, 3, 5]);
         assert_eq!(prime_factorizer.factorize(23), vec![23]);
+    }
+
+    #[test]
+    fn it_works_prime_factorization() {
+        assert_eq!(prime_factorize(1), vec![]);
+        assert_eq!(prime_factorize(2), vec![(2, 1)]);
+        assert_eq!(prime_factorize(4), vec![(2, 2)]);
+        assert_eq!(prime_factorize(7), vec![(7, 1)]);
+        assert_eq!(prime_factorize(30), vec![(2, 1), (3, 1), (5, 1)]);
+        assert_eq!(prime_factorize(23), vec![(23, 1)]);
+        assert_eq!(prime_factorize(512), vec![(2, 9)]);
     }
 }
