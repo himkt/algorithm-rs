@@ -131,9 +131,9 @@
 
     <span class="kw">pub fn </span>new(graph: Graph) -&gt; <span class="self">Self </span>{
         <span class="kw">let </span>n = graph.n;
-        <span class="kw">let </span>parents = <span class="macro">vec!</span>[<span class="macro">vec!</span>[LowestCommonAncestor::ROOT; n]; LowestCommonAncestor::LOGV];
-        <span class="kw">let </span>depth = <span class="macro">vec!</span>[LowestCommonAncestor::ROOT; n];
-        LowestCommonAncestor {
+        <span class="kw">let </span>parents = <span class="macro">vec!</span>[<span class="macro">vec!</span>[<span class="self">Self</span>::ROOT; n]; <span class="self">Self</span>::LOGV];
+        <span class="kw">let </span>depth = <span class="macro">vec!</span>[<span class="self">Self</span>::ROOT; n];
+        <span class="self">Self </span>{
             parents,
             depth,
             graph,
@@ -141,9 +141,9 @@
     }
 
     <span class="kw">pub fn </span>init(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
-        <span class="self">self</span>.dfs(LowestCommonAncestor::ROOT, LowestCommonAncestor::ROOT, <span class="number">0</span>);
+        <span class="self">self</span>.dfs(<span class="self">Self</span>::ROOT, <span class="self">Self</span>::ROOT, <span class="number">0</span>);
 
-        <span class="kw">for </span>k <span class="kw">in </span><span class="number">0</span>..LowestCommonAncestor::LOGV - <span class="number">1 </span>{
+        <span class="kw">for </span>k <span class="kw">in </span><span class="number">0</span>..<span class="self">Self</span>::LOGV - <span class="number">1 </span>{
             <span class="kw">for </span>v <span class="kw">in </span><span class="number">0</span>..<span class="self">self</span>.graph.n {
                 <span class="self">self</span>.parents[k + <span class="number">1</span>][v] = <span class="self">self</span>.parents[k][<span class="self">self</span>.parents[k][v]];
             }
@@ -168,7 +168,7 @@
             std::mem::swap(<span class="kw-2">&amp;mut </span>u, <span class="kw-2">&amp;mut </span>v);
         }
 
-        <span class="kw">for </span>k <span class="kw">in </span><span class="number">0</span>..LowestCommonAncestor::LOGV {
+        <span class="kw">for </span>k <span class="kw">in </span><span class="number">0</span>..<span class="self">Self</span>::LOGV {
             <span class="kw">if </span>(((<span class="self">self</span>.depth[v] - <span class="self">self</span>.depth[u]) &gt;&gt; k) &amp; <span class="number">1</span>) == <span class="number">1 </span>{
                 v = <span class="self">self</span>.parents[k][v];
             }
@@ -178,7 +178,7 @@
             <span class="kw">return </span>u;
         }
 
-        <span class="kw">for </span>k <span class="kw">in </span>(<span class="number">0</span>..LowestCommonAncestor::LOGV).rev() {
+        <span class="kw">for </span>k <span class="kw">in </span>(<span class="number">0</span>..<span class="self">Self</span>::LOGV).rev() {
             <span class="kw">if </span><span class="self">self</span>.parents[k][u] != <span class="self">self</span>.parents[k][v] {
                 u = <span class="self">self</span>.parents[k][u];
                 v = <span class="self">self</span>.parents[k][v];

@@ -52,15 +52,11 @@
 <a href="#52" id="52">52</a>
 <a href="#53" id="53">53</a>
 <a href="#54" id="54">54</a>
-<a href="#55" id="55">55</a>
-<a href="#56" id="56">56</a>
-<a href="#57" id="57">57</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::graph::graph::Graph;
 
 <span class="attr">#[derive(Debug, Clone)]
 </span><span class="kw">pub struct </span>BreadthFirstSearch {
     graph: Graph,
-    seen: Vec&lt;bool&gt;,
     dist: Vec&lt;usize&gt;,
 }
 
@@ -71,24 +67,23 @@
         <span class="kw">let </span>n = graph.n;
         <span class="self">Self </span>{
             graph,
-            seen: <span class="macro">vec!</span>[<span class="bool-val">false</span>; n],
-            dist: <span class="macro">vec!</span>[BreadthFirstSearch::INF; n],
+            dist: <span class="macro">vec!</span>[<span class="self">Self</span>::INF; n],
         }
     }
 
     <span class="kw">pub fn </span>search(<span class="kw-2">&amp;mut </span><span class="self">self</span>, root: usize) {
         <span class="kw">let </span><span class="kw-2">mut </span>queue = std::collections::VecDeque::new();
-        queue.push_back((root, <span class="number">0</span>));
+        queue.push_back(root);
+        <span class="self">self</span>.dist[root] = <span class="number">0</span>;
 
-        <span class="kw">while let </span><span class="prelude-val">Some</span>((cur, dist)) = queue.pop_front() {
-            <span class="kw">if </span><span class="self">self</span>.seen[cur] {
-                <span class="kw">continue</span>;
-            }
-
-            <span class="self">self</span>.seen[cur] = <span class="bool-val">true</span>;
-            <span class="self">self</span>.dist[cur] = <span class="self">self</span>.dist[cur].min(dist);
+        <span class="kw">while let </span><span class="prelude-val">Some</span>(cur) = queue.pop_front() {
             <span class="kw">for </span><span class="kw-2">&amp;</span>(next, <span class="kw">_</span>) <span class="kw">in </span><span class="self">self</span>.graph.graph[cur].iter() {
-                queue.push_back((next, <span class="self">self</span>.dist[cur] + <span class="number">1</span>));
+                <span class="kw">if </span><span class="self">self</span>.dist[next] &lt;= <span class="self">self</span>.dist[cur] + <span class="number">1 </span>{
+                    <span class="kw">continue</span>;
+                }
+
+                <span class="self">self</span>.dist[next] = <span class="self">self</span>.dist[next].min(<span class="self">self</span>.dist[cur] + <span class="number">1</span>);
+                queue.push_back(next);
             }
         }
     }
@@ -108,7 +103,6 @@
 
         <span class="kw">let </span><span class="kw-2">mut </span>bfs = BreadthFirstSearch::new(graph);
         bfs.search(<span class="number">0</span>);
-        <span class="macro">assert_eq!</span>(bfs.seen, <span class="macro">vec!</span>[<span class="bool-val">true</span>, <span class="bool-val">true</span>, <span class="bool-val">true</span>, <span class="bool-val">false</span>, <span class="bool-val">true</span>]);
         <span class="macro">assert_eq!</span>(bfs.dist, <span class="macro">vec!</span>[<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, BreadthFirstSearch::INF, <span class="number">3</span>]);
     }
 }

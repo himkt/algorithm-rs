@@ -79,7 +79,7 @@
 <span class="attr">#[allow(clippy::needless_range_loop)]
 </span><span class="kw">impl </span>TopologicalSort {
     <span class="kw">pub fn </span>new(graph: Graph) -&gt; <span class="self">Self </span>{
-        TopologicalSort { graph }
+        <span class="self">Self </span>{ graph }
     }
 
     <span class="kw">pub fn </span>sort(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; Vec&lt;usize&gt; {

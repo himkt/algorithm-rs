@@ -73,25 +73,25 @@
         <span class="self">Self </span>{
             graph,
             seen: <span class="macro">vec!</span>[<span class="bool-val">false</span>; n],
-            dist: <span class="macro">vec!</span>[DepthFirstSearch::INF; n],
+            dist: <span class="macro">vec!</span>[<span class="self">Self</span>::INF; n],
         }
     }
 
     <span class="kw">pub fn </span>search(<span class="kw-2">&amp;mut </span><span class="self">self</span>, root: usize) {
+        <span class="self">self</span>.seen[root] = <span class="bool-val">true</span>;
+        <span class="self">self</span>.dist[root] = <span class="number">0</span>;
         <span class="self">self</span>.dfs(root, <span class="number">0</span>);
     }
 
-    <span class="kw">pub fn </span>dfs(<span class="kw-2">&amp;mut </span><span class="self">self</span>, v: usize, dist: usize) {
-        <span class="kw">if </span><span class="self">self</span>.seen[v] {
-            <span class="kw">return</span>;
-        }
-
-        <span class="self">self</span>.seen[v] = <span class="bool-val">true</span>;
-        <span class="self">self</span>.dist[v] = <span class="self">self</span>.dist[v].min(dist);
-
-        <span class="kw">for </span>i <span class="kw">in </span><span class="number">0</span>..<span class="self">self</span>.graph.graph[v].len() {
-            <span class="kw">let </span>(nv, <span class="kw">_</span>) = <span class="self">self</span>.graph.graph[v][i];
-            <span class="self">self</span>.dfs(nv, dist + <span class="number">1</span>);
+    <span class="kw">pub fn </span>dfs(<span class="kw-2">&amp;mut </span><span class="self">self</span>, u: usize, dist: usize) {
+        <span class="kw">for </span>i <span class="kw">in </span><span class="number">0</span>..<span class="self">self</span>.graph.graph[u].len() {
+            <span class="kw">let </span>(v, <span class="kw">_</span>) = <span class="self">self</span>.graph.graph[u][i];
+            <span class="kw">if </span><span class="self">self</span>.seen[v] {
+                <span class="kw">continue</span>;
+            }
+            <span class="self">self</span>.seen[v] = <span class="bool-val">true</span>;
+            <span class="self">self</span>.dist[v] = <span class="self">self</span>.dist[v].min(dist + <span class="number">1</span>);
+            <span class="self">self</span>.dfs(v, dist + <span class="number">1</span>);
         }
     }
 }

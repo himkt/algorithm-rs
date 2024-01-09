@@ -79,12 +79,12 @@
 }
 
 <span class="kw">impl </span>FordFullkerson {
-    <span class="kw">const </span>INF: usize = <span class="number">1001001001</span>;
+    <span class="kw">const </span>INF: usize = <span class="number">100_000_000_000_000_000</span>;
 
     <span class="kw">pub fn </span>new(graph: Graph) -&gt; <span class="self">Self </span>{
         <span class="kw">let </span>used = <span class="macro">vec!</span>[<span class="bool-val">false</span>; graph.n];
-        <span class="kw">let </span>flow = FordFullkerson::INF;
-        FordFullkerson { graph, used, flow }
+        <span class="kw">let </span>flow = <span class="self">Self</span>::INF;
+        <span class="self">Self </span>{ graph, used, flow }
     }
 
     <span class="kw">pub fn </span>dfs(<span class="kw-2">&amp;mut </span><span class="self">self</span>, v: usize, t: usize, f: usize) -&gt; usize {

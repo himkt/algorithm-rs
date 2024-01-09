@@ -83,9 +83,9 @@
     <span class="kw">const </span>INF: usize = <span class="number">100_000_000_000_000_000</span>;
 
     <span class="kw">pub fn </span>new(n: usize, graph: Graph) -&gt; <span class="self">Self </span>{
-        <span class="kw">let </span>l = <span class="macro">vec!</span>[EulerTour::INF; n];
-        <span class="kw">let </span>r = <span class="macro">vec!</span>[EulerTour::INF; n];
-        EulerTour { graph, l, r, t: <span class="number">1 </span>}
+        <span class="kw">let </span>l = <span class="macro">vec!</span>[<span class="self">Self</span>::INF; n];
+        <span class="kw">let </span>r = <span class="macro">vec!</span>[<span class="self">Self</span>::INF; n];
+        <span class="self">Self </span>{ graph, l, r, t: <span class="number">1 </span>}
     }
 
     <span class="doccomment">/// Euler tour entrypoint that returns two vectors `(&amp;l, &amp;r)`.
@@ -97,7 +97,7 @@
         <span class="self">self</span>._dfs(root, <span class="prelude-val">None</span>);
 
         <span class="kw">for </span>i <span class="kw">in </span><span class="number">0</span>..<span class="self">self</span>.l.len() {
-            <span class="kw">if </span><span class="self">self</span>.r[i] == EulerTour::INF {
+            <span class="kw">if </span><span class="self">self</span>.r[i] == <span class="self">Self</span>::INF {
                 <span class="self">self</span>.r[i] = <span class="self">self</span>.l[i];
             }
         }
