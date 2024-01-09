@@ -7,7 +7,7 @@ pub struct TopologicalSort {
 #[allow(clippy::needless_range_loop)]
 impl TopologicalSort {
     pub fn new(graph: Graph) -> Self {
-        TopologicalSort { graph }
+        Self { graph }
     }
 
     pub fn sort(&mut self) -> Vec<usize> {

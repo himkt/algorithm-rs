@@ -15,25 +15,25 @@ impl DepthFirstSearch {
         Self {
             graph,
             seen: vec![false; n],
-            dist: vec![DepthFirstSearch::INF; n],
+            dist: vec![Self::INF; n],
         }
     }
 
     pub fn search(&mut self, root: usize) {
+        self.seen[root] = true;
+        self.dist[root] = 0;
         self.dfs(root, 0);
     }
 
-    pub fn dfs(&mut self, v: usize, dist: usize) {
-        if self.seen[v] {
-            return;
-        }
-
-        self.seen[v] = true;
-        self.dist[v] = self.dist[v].min(dist);
-
-        for i in 0..self.graph.graph[v].len() {
-            let (nv, _) = self.graph.graph[v][i];
-            self.dfs(nv, dist + 1);
+    pub fn dfs(&mut self, u: usize, dist: usize) {
+        for i in 0..self.graph.graph[u].len() {
+            let (v, _) = self.graph.graph[u][i];
+            if self.seen[v] {
+                continue;
+            }
+            self.seen[v] = true;
+            self.dist[v] = self.dist[v].min(dist + 1);
+            self.dfs(v, dist + 1);
         }
     }
 }
