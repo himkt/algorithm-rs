@@ -1,86 +1,85 @@
 use crate::graph::graph::Graph;
 
 pub struct StoronglyConnectedComponent {
-    fgraph: Graph,
-    rgraph: Graph,
-    fused: Vec<bool>,
-    rused: Vec<bool>,
-    fhistory: Vec<usize>,
-    topological_ranks: Vec<usize>,
+    forward_graph: Graph,
+    forward_seen: Vec<bool>,
+    forward_visited_nodes: Vec<usize>,
+    backward_graph: Graph,
+    backward_seen: Vec<bool>,
+    component_ids: Vec<usize>,
 }
 
 impl StoronglyConnectedComponent {
     pub fn new(graph: Graph) -> Self {
         let n = graph.n;
-        let fgraph = graph;
-        let mut rgraph = Graph::new(n, true);
+        let forward_graph = graph;
+        let mut backward_graph = Graph::new(n, true);
 
         for u in 0..n {
-            for &(v, _) in fgraph.graph[u].iter() {
-                rgraph.connect_unweighted(v, u);
+            for &(v, _) in forward_graph.graph[u].iter() {
+                backward_graph.connect_unweighted(v, u);
             }
         }
 
         Self {
-            fgraph,
-            rgraph,
-            fused: vec![false; n],
-            rused: vec![false; n],
-            fhistory: vec![],
-            topological_ranks: vec![0; n],
+            forward_graph,
+            forward_seen: vec![false; n],
+            forward_visited_nodes: vec![],
+            backward_graph,
+            backward_seen: vec![false; n],
+            component_ids: vec![0; n],
         }
     }
 
     pub fn scc(&mut self) -> usize {
-        for u in 0..self.fgraph.n {
-            if self.fused[u] {
+        for u in 0..self.forward_graph.n {
+            if self.forward_seen[u] {
                 continue;
             }
 
             self.fdfs(u);
         }
 
-        let mut k = 0;
-        let m = self.fhistory.len();
+        let mut component_id = 0;
+        let mut revisit_orders = self.forward_visited_nodes.clone();
+        revisit_orders.reverse();
 
-        for i in (0..m).rev() {
-            let u = self.fhistory[i];
-
-            if self.rused[u] {
+        for u in revisit_orders {
+            if self.backward_seen[u] {
                 continue;
             }
 
-            self.rdfs(u, k);
-            k += 1;
+            self.rdfs(u, component_id);
+            component_id += 1;
         }
 
-        k
+        component_id
     }
 
     fn fdfs(&mut self, u: usize) {
-        self.fused[u] = true;
+        self.forward_seen[u] = true;
 
-        for i in 0..self.fgraph.graph[u].len() {
-            let (v, _) = self.fgraph.graph[u][i];
+        for i in 0..self.forward_graph.graph[u].len() {
+            let (v, _) = self.forward_graph.graph[u][i];
 
-            if self.fused[v] {
+            if self.forward_seen[v] {
                 continue;
             }
 
             self.fdfs(v);
         }
 
-        self.fhistory.push(u);
+        self.forward_visited_nodes.push(u);
     }
 
     fn rdfs(&mut self, u: usize, k: usize) {
-        self.rused[u] = true;
-        self.topological_ranks[u] = k;
+        self.backward_seen[u] = true;
+        self.component_ids[u] = k;
 
-        for i in 0..self.rgraph.graph[u].len() {
-            let (v, _) = self.rgraph.graph[u][i];
+        for i in 0..self.backward_graph.graph[u].len() {
+            let (v, _) = self.backward_graph.graph[u][i];
 
-            if self.rused[v] {
+            if self.backward_seen[v] {
                 continue;
             }
 
@@ -107,6 +106,6 @@ mod test_scc {
 
         let mut scc = StoronglyConnectedComponent::new(graph);
         assert_eq!(scc.scc(), 4);
-        assert_eq!(scc.topological_ranks, vec![3, 1, 2, 3, 1, 0]);
+        assert_eq!(scc.component_ids, vec![3, 1, 2, 3, 1, 0]);
     }
 }
