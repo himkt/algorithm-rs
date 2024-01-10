@@ -15,21 +15,21 @@ impl FordFullkerson {
         Self { graph, used, flow }
     }
 
-    pub fn dfs(&mut self, v: usize, t: usize, f: usize) -> usize {
-        if v == t {
+    pub fn dfs(&mut self, u: usize, t: usize, f: usize) -> usize {
+        if u == t {
             return f;
         }
 
-        self.used[v] = true;
-        for i in 0..self.graph.graph[v].len() {
-            let (u, cap) = self.graph.graph[v][i];
-            let rev = self.graph.rev[v][i];
-            if !self.used[u] && cap > 0 {
-                let d = self.dfs(u, t, f.min(cap));
+        self.used[u] = true;
+        for i in 0..self.graph.graph[u].len() {
+            let (v, cap) = self.graph.graph[u][i];
+            let r = self.graph.rev[u][i];
+            if !self.used[v] && cap > 0 {
+                let d = self.dfs(v, t, f.min(cap));
 
                 if d > 0 {
-                    self.graph.graph[v][i].1 -= d;
-                    self.graph.graph[u][rev].1 += d;
+                    self.graph.graph[u][i].1 -= d;
+                    self.graph.graph[v][r].1 += d;
                     return d;
                 }
             }
