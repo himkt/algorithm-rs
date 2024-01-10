@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":["DepthFirstSearch"]};
+window.SIDEBAR_ITEMS = {"enum":["NodeType"],"struct":["DepthFirstSearch"]};
