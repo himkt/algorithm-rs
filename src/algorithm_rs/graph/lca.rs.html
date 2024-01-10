@@ -117,7 +117,16 @@
 <a href="#117" id="117">117</a>
 <a href="#118" id="118">118</a>
 <a href="#119" id="119">119</a>
-</pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::graph::graph::Graph;
+<a href="#120" id="120">120</a>
+<a href="#121" id="121">121</a>
+<a href="#122" id="122">122</a>
+<a href="#123" id="123">123</a>
+<a href="#124" id="124">124</a>
+<a href="#125" id="125">125</a>
+<a href="#126" id="126">126</a>
+</pre></div><pre class="rust"><code><span class="kw">use </span>std::collections::VecDeque;
+
+<span class="kw">use </span><span class="kw">crate</span>::graph::graph::Graph;
 
 <span class="kw">pub struct </span>LowestCommonAncestor {
     parents: Vec&lt;Vec&lt;usize&gt;&gt;,
@@ -141,7 +150,7 @@
     }
 
     <span class="kw">pub fn </span>init(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
-        <span class="self">self</span>.dfs(<span class="self">Self</span>::ROOT, <span class="self">Self</span>::ROOT, <span class="number">0</span>);
+        <span class="self">self</span>.dfs(<span class="self">Self</span>::ROOT);
 
         <span class="kw">for </span>k <span class="kw">in </span><span class="number">0</span>..<span class="self">Self</span>::LOGV - <span class="number">1 </span>{
             <span class="kw">for </span>v <span class="kw">in </span><span class="number">0</span>..<span class="self">self</span>.graph.n {
@@ -150,15 +159,20 @@
         }
     }
 
-    <span class="kw">fn </span>dfs(<span class="kw-2">&amp;mut </span><span class="self">self</span>, v: usize, p: usize, d: usize) {
-        <span class="self">self</span>.parents[<span class="number">0</span>][v] = p;
-        <span class="self">self</span>.depth[v] = d;
+    <span class="kw">fn </span>dfs(<span class="kw-2">&amp;mut </span><span class="self">self</span>, u: usize) {
+        <span class="kw">let </span><span class="kw-2">mut </span>stack = VecDeque::new();
+        <span class="self">self</span>.parents[<span class="number">0</span>][u] = u;
+        <span class="self">self</span>.depth[u] = <span class="number">0</span>;
+        stack.push_front((u, u, <span class="number">1</span>));
 
-        <span class="kw">for </span>i <span class="kw">in </span><span class="number">0</span>..<span class="self">self</span>.graph.graph[v].len() {
-            <span class="kw">let </span>(nv, <span class="kw">_</span>) = <span class="self">self</span>.graph.graph[v][i];
-
-            <span class="kw">if </span>nv != p {
-                <span class="self">self</span>.dfs(nv, v, d + <span class="number">1</span>);
+        <span class="kw">while let </span><span class="prelude-val">Some</span>((u, p, d)) = stack.pop_front() {
+            <span class="kw">for </span><span class="kw-2">&amp;</span>(v, <span class="kw">_</span>) <span class="kw">in </span><span class="self">self</span>.graph.graph[u].iter() {
+                <span class="kw">if </span>v == p {
+                    <span class="kw">continue</span>;
+                }
+                <span class="self">self</span>.parents[<span class="number">0</span>][v] = u;
+                <span class="self">self</span>.depth[v] = d + <span class="number">1</span>;
+                stack.push_front((v, u, d + <span class="number">1</span>));
             }
         }
     }
