@@ -87,21 +87,21 @@
         <span class="self">Self </span>{ graph, used, flow }
     }
 
-    <span class="kw">pub fn </span>dfs(<span class="kw-2">&amp;mut </span><span class="self">self</span>, v: usize, t: usize, f: usize) -&gt; usize {
-        <span class="kw">if </span>v == t {
+    <span class="kw">pub fn </span>dfs(<span class="kw-2">&amp;mut </span><span class="self">self</span>, u: usize, t: usize, f: usize) -&gt; usize {
+        <span class="kw">if </span>u == t {
             <span class="kw">return </span>f;
         }
 
-        <span class="self">self</span>.used[v] = <span class="bool-val">true</span>;
-        <span class="kw">for </span>i <span class="kw">in </span><span class="number">0</span>..<span class="self">self</span>.graph.graph[v].len() {
-            <span class="kw">let </span>(u, cap) = <span class="self">self</span>.graph.graph[v][i];
-            <span class="kw">let </span>rev = <span class="self">self</span>.graph.rev[v][i];
-            <span class="kw">if </span>!<span class="self">self</span>.used[u] &amp;&amp; cap &gt; <span class="number">0 </span>{
-                <span class="kw">let </span>d = <span class="self">self</span>.dfs(u, t, f.min(cap));
+        <span class="self">self</span>.used[u] = <span class="bool-val">true</span>;
+        <span class="kw">for </span>i <span class="kw">in </span><span class="number">0</span>..<span class="self">self</span>.graph.graph[u].len() {
+            <span class="kw">let </span>(v, cap) = <span class="self">self</span>.graph.graph[u][i];
+            <span class="kw">let </span>r = <span class="self">self</span>.graph.rev[u][i];
+            <span class="kw">if </span>!<span class="self">self</span>.used[v] &amp;&amp; cap &gt; <span class="number">0 </span>{
+                <span class="kw">let </span>d = <span class="self">self</span>.dfs(v, t, f.min(cap));
 
                 <span class="kw">if </span>d &gt; <span class="number">0 </span>{
-                    <span class="self">self</span>.graph.graph[v][i].<span class="number">1 </span>-= d;
-                    <span class="self">self</span>.graph.graph[u][rev].<span class="number">1 </span>+= d;
+                    <span class="self">self</span>.graph.graph[u][i].<span class="number">1 </span>-= d;
+                    <span class="self">self</span>.graph.graph[v][r].<span class="number">1 </span>+= d;
                     <span class="kw">return </span>d;
                 }
             }
