@@ -1,3 +1,5 @@
+use std::collections::VecDeque;
+
 use crate::graph::graph::Graph;
 
 pub struct LowestCommonAncestor {
@@ -22,7 +24,7 @@ impl LowestCommonAncestor {
     }
 
     pub fn init(&mut self) {
-        self.dfs(Self::ROOT, Self::ROOT, 0);
+        self.dfs(Self::ROOT);
 
         for k in 0..Self::LOGV - 1 {
             for v in 0..self.graph.n {
@@ -31,15 +33,20 @@ impl LowestCommonAncestor {
         }
     }
 
-    fn dfs(&mut self, v: usize, p: usize, d: usize) {
-        self.parents[0][v] = p;
-        self.depth[v] = d;
+    fn dfs(&mut self, u: usize) {
+        let mut stack = VecDeque::new();
+        self.parents[0][u] = u;
+        self.depth[u] = 0;
+        stack.push_front((u, u, 1));
 
-        for i in 0..self.graph.graph[v].len() {
-            let (nv, _) = self.graph.graph[v][i];
-
-            if nv != p {
-                self.dfs(nv, v, d + 1);
+        while let Some((u, p, d)) = stack.pop_front() {
+            for &(v, _) in self.graph.graph[u].iter() {
+                if v == p {
+                    continue;
+                }
+                self.parents[0][v] = u;
+                self.depth[v] = d + 1;
+                stack.push_front((v, u, d + 1));
             }
         }
     }
