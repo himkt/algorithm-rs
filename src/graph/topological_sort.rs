@@ -37,7 +37,7 @@ impl TopologicalSort {
             }
         }
 
-        if ans.len() == degrees.len() {
+        if ans.len() == self.graph.n {
             ans
         } else {
             vec![]
