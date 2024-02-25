@@ -1,6 +1,6 @@
 use crate::graph::graph::Graph;
 
-pub struct StoronglyConnectedComponent {
+pub struct StronglyConnectedComponent {
     forward_graph: Graph,
     forward_seen: Vec<bool>,
     forward_visited_nodes: Vec<usize>,
@@ -9,7 +9,7 @@ pub struct StoronglyConnectedComponent {
     component_ids: Vec<usize>,
 }
 
-impl StoronglyConnectedComponent {
+impl StronglyConnectedComponent {
     pub fn new(graph: Graph) -> Self {
         let n = graph.n;
         let forward_graph = graph;
@@ -91,7 +91,7 @@ impl StoronglyConnectedComponent {
 #[cfg(test)]
 mod test_scc {
     use crate::graph::graph::Graph;
-    use crate::graph::scc::StoronglyConnectedComponent;
+    use crate::graph::scc::StronglyConnectedComponent;
 
     #[test]
     fn it_works() {
@@ -104,7 +104,7 @@ mod test_scc {
         graph.connect_unweighted(0, 3);
         graph.connect_unweighted(4, 2);
 
-        let mut scc = StoronglyConnectedComponent::new(graph);
+        let mut scc = StronglyConnectedComponent::new(graph);
         assert_eq!(scc.scc(), 4);
         assert_eq!(scc.component_ids, vec![3, 1, 2, 3, 1, 0]);
     }
