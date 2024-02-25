@@ -1,12 +1,16 @@
 use crate::graph::graph::Graph;
+use std::collections::{BinaryHeap, VecDeque};
+
+pub enum VisitType {
+    Forward(usize),
+    Backtrack(usize),
+}
 
 pub struct StoronglyConnectedComponent {
+    n: usize,
     forward_graph: Graph,
-    forward_seen: Vec<bool>,
-    forward_visited_nodes: Vec<usize>,
     backward_graph: Graph,
-    backward_seen: Vec<bool>,
-    component_ids: Vec<usize>,
+    topological_ranks: Vec::<usize>,
 }
 
 impl StoronglyConnectedComponent {
@@ -22,70 +26,76 @@ impl StoronglyConnectedComponent {
         }
 
         Self {
+            n,
             forward_graph,
-            forward_seen: vec![false; n],
-            forward_visited_nodes: vec![],
             backward_graph,
-            backward_seen: vec![false; n],
-            component_ids: vec![0; n],
+            topological_ranks: vec![0; n],
         }
     }
 
     pub fn scc(&mut self) -> usize {
+        let mut heap = BinaryHeap::new();
+        let mut priority: usize = 0;
+
+        let mut forward_visited = vec![false; self.n];
+        let mut stack = VecDeque::new();
         for u in 0..self.forward_graph.n {
-            if self.forward_seen[u] {
+            if forward_visited[u] {
                 continue;
             }
 
-            self.fdfs(u);
+            stack.push_front(VisitType::Backtrack(u));
+            stack.push_front(VisitType::Forward(u));
+
+            while let Some(node) = stack.pop_front() {
+                match node {
+                    VisitType::Forward(u) => {
+                        for &(v, _) in self.forward_graph.graph[u].iter() {
+                            if forward_visited[v] {
+                                continue;
+                            }
+                            stack.push_front(VisitType::Backtrack(v));
+                            stack.push_front(VisitType::Forward(v));
+                            forward_visited[v] = true;
+                        }
+                    }
+                    VisitType::Backtrack(u) => {
+                        heap.push((priority, u));
+                        priority += 1;
+                    }
+                }
+            }
         }
 
-        let mut component_id = 0;
-        let mut revisit_orders = self.forward_visited_nodes.clone();
-        revisit_orders.reverse();
-
-        for u in revisit_orders {
-            if self.backward_seen[u] {
+        let mut topological_rank = 0;
+        let mut backward_visited = vec![false; self.n];
+        while let Some((_, u)) = heap.pop() {
+            if backward_visited[u] {
                 continue;
             }
 
-            self.rdfs(u, component_id);
-            component_id += 1;
+            let mut stack = VecDeque::new();
+            stack.push_front(u);
+            self.topological_ranks[u] = topological_rank;
+            backward_visited[u] = true;
+
+            while let Some(v) = stack.pop_front() {
+                for &(r, _) in self.backward_graph.graph[v].iter() {
+                    if backward_visited[r] {
+                        continue;
+                    }
+                    stack.push_front(r);
+                    self.topological_ranks[r] = topological_rank;
+                    backward_visited[r] = true;
+                }
+            }
+
+            topological_rank += 1;
         }
 
-        component_id
+        topological_rank
     }
 
-    fn fdfs(&mut self, u: usize) {
-        self.forward_seen[u] = true;
-
-        for i in 0..self.forward_graph.graph[u].len() {
-            let (v, _) = self.forward_graph.graph[u][i];
-
-            if self.forward_seen[v] {
-                continue;
-            }
-
-            self.fdfs(v);
-        }
-
-        self.forward_visited_nodes.push(u);
-    }
-
-    fn rdfs(&mut self, u: usize, k: usize) {
-        self.backward_seen[u] = true;
-        self.component_ids[u] = k;
-
-        for i in 0..self.backward_graph.graph[u].len() {
-            let (v, _) = self.backward_graph.graph[u][i];
-
-            if self.backward_seen[v] {
-                continue;
-            }
-
-            self.rdfs(v, k);
-        }
-    }
 }
 
 #[cfg(test)]
@@ -106,6 +116,6 @@ mod test_scc {
 
         let mut scc = StoronglyConnectedComponent::new(graph);
         assert_eq!(scc.scc(), 4);
-        assert_eq!(scc.component_ids, vec![3, 1, 2, 3, 1, 0]);
+        assert_eq!(scc.topological_ranks, vec![3, 1, 2, 3, 1, 0]);
     }
 }
