@@ -6,7 +6,7 @@ pub struct StronglyConnectedComponent {
     forward_visited_nodes: Vec<usize>,
     backward_graph: Graph,
     backward_seen: Vec<bool>,
-    component_ids: Vec<usize>,
+    topological_ranks: Vec<usize>,
 }
 
 impl StronglyConnectedComponent {
@@ -27,7 +27,7 @@ impl StronglyConnectedComponent {
             forward_visited_nodes: vec![],
             backward_graph,
             backward_seen: vec![false; n],
-            component_ids: vec![0; n],
+            topological_ranks: vec![0; n],
         }
     }
 
@@ -74,7 +74,7 @@ impl StronglyConnectedComponent {
 
     fn rdfs(&mut self, u: usize, k: usize) {
         self.backward_seen[u] = true;
-        self.component_ids[u] = k;
+        self.topological_ranks[u] = k;
 
         for i in 0..self.backward_graph.graph[u].len() {
             let (v, _) = self.backward_graph.graph[u][i];
@@ -106,6 +106,6 @@ mod test_scc {
 
         let mut scc = StronglyConnectedComponent::new(graph);
         assert_eq!(scc.scc(), 4);
-        assert_eq!(scc.component_ids, vec![3, 1, 2, 3, 1, 0]);
+        assert_eq!(scc.topological_ranks, vec![3, 1, 2, 3, 1, 0]);
     }
 }
