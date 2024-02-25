@@ -1,11 +1,13 @@
 use crate::graph::graph::Graph;
 
+use std::collections::VecDeque;
+
 pub struct StronglyConnectedComponent {
     forward_graph: Graph,
-    forward_seen: Vec<bool>,
-    forward_visited_nodes: Vec<usize>,
+    forward_visited: Vec<bool>,
+    forward_visited_nodes: VecDeque<usize>,
     backward_graph: Graph,
-    backward_seen: Vec<bool>,
+    backward_visited: Vec<bool>,
     topological_ranks: Vec<usize>,
 }
 
@@ -23,67 +25,64 @@ impl StronglyConnectedComponent {
 
         Self {
             forward_graph,
-            forward_seen: vec![false; n],
-            forward_visited_nodes: vec![],
+            forward_visited: vec![false; n],
+            forward_visited_nodes: VecDeque::new(),
             backward_graph,
-            backward_seen: vec![false; n],
+            backward_visited: vec![false; n],
             topological_ranks: vec![0; n],
         }
     }
 
     pub fn scc(&mut self) -> usize {
         for u in 0..self.forward_graph.n {
-            if self.forward_seen[u] {
+            if self.forward_visited[u] {
                 continue;
             }
 
             self.fdfs(u);
         }
 
-        let mut component_id = 0;
-        let mut revisit_orders = self.forward_visited_nodes.clone();
-        revisit_orders.reverse();
-
-        for u in revisit_orders {
-            if self.backward_seen[u] {
+        let mut topological_rank = 0;
+        while let Some(u) = self.forward_visited_nodes.pop_back() {
+            if self.backward_visited[u] {
                 continue;
             }
 
-            self.rdfs(u, component_id);
-            component_id += 1;
+            self.rdfs(u, topological_rank);
+            topological_rank += 1;
         }
 
-        component_id
+        topological_rank
     }
 
     fn fdfs(&mut self, u: usize) {
-        self.forward_seen[u] = true;
+        self.forward_visited[u] = true;
 
         for i in 0..self.forward_graph.graph[u].len() {
             let (v, _) = self.forward_graph.graph[u][i];
 
-            if self.forward_seen[v] {
+            if self.forward_visited[v] {
                 continue;
             }
 
             self.fdfs(v);
         }
 
-        self.forward_visited_nodes.push(u);
+        self.forward_visited_nodes.push_back(u);
     }
 
-    fn rdfs(&mut self, u: usize, k: usize) {
-        self.backward_seen[u] = true;
-        self.topological_ranks[u] = k;
+    fn rdfs(&mut self, u: usize, topological_rank: usize) {
+        self.backward_visited[u] = true;
+        self.topological_ranks[u] = topological_rank;
 
         for i in 0..self.backward_graph.graph[u].len() {
             let (v, _) = self.backward_graph.graph[u][i];
 
-            if self.backward_seen[v] {
+            if self.backward_visited[v] {
                 continue;
             }
 
-            self.rdfs(v, k);
+            self.rdfs(v, topological_rank);
         }
     }
 }
