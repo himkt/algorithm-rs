@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":["StoronglyConnectedComponent"]};
+window.SIDEBAR_ITEMS = {"struct":["StronglyConnectedComponent"]};

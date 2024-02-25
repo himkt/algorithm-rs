@@ -109,19 +109,20 @@
 <a href="#108" id="108">108</a>
 <a href="#109" id="109">109</a>
 <a href="#110" id="110">110</a>
-<a href="#111" id="111">111</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::graph::graph::Graph;
 
-<span class="kw">pub struct </span>StoronglyConnectedComponent {
+<span class="kw">use </span>std::collections::VecDeque;
+
+<span class="kw">pub struct </span>StronglyConnectedComponent {
     forward_graph: Graph,
-    forward_seen: Vec&lt;bool&gt;,
-    forward_visited_nodes: Vec&lt;usize&gt;,
+    forward_visited: Vec&lt;bool&gt;,
+    forward_visited_nodes: VecDeque&lt;usize&gt;,
     backward_graph: Graph,
-    backward_seen: Vec&lt;bool&gt;,
-    component_ids: Vec&lt;usize&gt;,
+    backward_visited: Vec&lt;bool&gt;,
+    topological_ranks: Vec&lt;usize&gt;,
 }
 
-<span class="kw">impl </span>StoronglyConnectedComponent {
+<span class="kw">impl </span>StronglyConnectedComponent {
     <span class="kw">pub fn </span>new(graph: Graph) -&gt; <span class="self">Self </span>{
         <span class="kw">let </span>n = graph.n;
         <span class="kw">let </span>forward_graph = graph;
@@ -135,67 +136,64 @@
 
         <span class="self">Self </span>{
             forward_graph,
-            forward_seen: <span class="macro">vec!</span>[<span class="bool-val">false</span>; n],
-            forward_visited_nodes: <span class="macro">vec!</span>[],
+            forward_visited: <span class="macro">vec!</span>[<span class="bool-val">false</span>; n],
+            forward_visited_nodes: VecDeque::new(),
             backward_graph,
-            backward_seen: <span class="macro">vec!</span>[<span class="bool-val">false</span>; n],
-            component_ids: <span class="macro">vec!</span>[<span class="number">0</span>; n],
+            backward_visited: <span class="macro">vec!</span>[<span class="bool-val">false</span>; n],
+            topological_ranks: <span class="macro">vec!</span>[<span class="number">0</span>; n],
         }
     }
 
     <span class="kw">pub fn </span>scc(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; usize {
         <span class="kw">for </span>u <span class="kw">in </span><span class="number">0</span>..<span class="self">self</span>.forward_graph.n {
-            <span class="kw">if </span><span class="self">self</span>.forward_seen[u] {
+            <span class="kw">if </span><span class="self">self</span>.forward_visited[u] {
                 <span class="kw">continue</span>;
             }
 
             <span class="self">self</span>.fdfs(u);
         }
 
-        <span class="kw">let </span><span class="kw-2">mut </span>component_id = <span class="number">0</span>;
-        <span class="kw">let </span><span class="kw-2">mut </span>revisit_orders = <span class="self">self</span>.forward_visited_nodes.clone();
-        revisit_orders.reverse();
-
-        <span class="kw">for </span>u <span class="kw">in </span>revisit_orders {
-            <span class="kw">if </span><span class="self">self</span>.backward_seen[u] {
+        <span class="kw">let </span><span class="kw-2">mut </span>topological_rank = <span class="number">0</span>;
+        <span class="kw">while let </span><span class="prelude-val">Some</span>(u) = <span class="self">self</span>.forward_visited_nodes.pop_back() {
+            <span class="kw">if </span><span class="self">self</span>.backward_visited[u] {
                 <span class="kw">continue</span>;
             }
 
-            <span class="self">self</span>.rdfs(u, component_id);
-            component_id += <span class="number">1</span>;
+            <span class="self">self</span>.rdfs(u, topological_rank);
+            topological_rank += <span class="number">1</span>;
         }
 
-        component_id
+        topological_rank
     }
 
     <span class="kw">fn </span>fdfs(<span class="kw-2">&amp;mut </span><span class="self">self</span>, u: usize) {
-        <span class="self">self</span>.forward_seen[u] = <span class="bool-val">true</span>;
+        <span class="self">self</span>.forward_visited[u] = <span class="bool-val">true</span>;
 
         <span class="kw">for </span>i <span class="kw">in </span><span class="number">0</span>..<span class="self">self</span>.forward_graph.graph[u].len() {
             <span class="kw">let </span>(v, <span class="kw">_</span>) = <span class="self">self</span>.forward_graph.graph[u][i];
 
-            <span class="kw">if </span><span class="self">self</span>.forward_seen[v] {
+            <span class="kw">if </span><span class="self">self</span>.forward_visited[v] {
                 <span class="kw">continue</span>;
             }
 
             <span class="self">self</span>.fdfs(v);
         }
 
-        <span class="self">self</span>.forward_visited_nodes.push(u);
+        <span class="self">self</span>.forward_visited_nodes.push_back(u);
     }
 
-    <span class="kw">fn </span>rdfs(<span class="kw-2">&amp;mut </span><span class="self">self</span>, u: usize, k: usize) {
-        <span class="self">self</span>.backward_seen[u] = <span class="bool-val">true</span>;
-        <span class="self">self</span>.component_ids[u] = k;
+    <span class="kw">fn </span>rdfs(<span class="kw-2">&amp;mut </span><span class="self">self</span>, u: usize, topological_rank: usize) {
+        <span class="self">self</span>.backward_visited[u] = <span class="bool-val">true</span>;
+        <span class="self">self</span>.topological_ranks[u] = topological_rank;
 
         <span class="kw">for </span>i <span class="kw">in </span><span class="number">0</span>..<span class="self">self</span>.backward_graph.graph[u].len() {
             <span class="kw">let </span>(v, <span class="kw">_</span>) = <span class="self">self</span>.backward_graph.graph[u][i];
 
-            <span class="kw">if </span><span class="self">self</span>.backward_seen[v] {
+            <span class="kw">if </span><span class="self">self</span>.backward_visited[v] {
                 <span class="kw">continue</span>;
             }
 
-            <span class="self">self</span>.rdfs(v, k);
+            <span class="self">self</span>.rdfs(v, topological_rank);
         }
     }
 }
@@ -203,7 +201,7 @@
 <span class="attr">#[cfg(test)]
 </span><span class="kw">mod </span>test_scc {
     <span class="kw">use </span><span class="kw">crate</span>::graph::graph::Graph;
-    <span class="kw">use </span><span class="kw">crate</span>::graph::scc::StoronglyConnectedComponent;
+    <span class="kw">use </span><span class="kw">crate</span>::graph::scc::StronglyConnectedComponent;
 
     <span class="attr">#[test]
     </span><span class="kw">fn </span>it_works() {
@@ -216,9 +214,9 @@
         graph.connect_unweighted(<span class="number">0</span>, <span class="number">3</span>);
         graph.connect_unweighted(<span class="number">4</span>, <span class="number">2</span>);
 
-        <span class="kw">let </span><span class="kw-2">mut </span>scc = StoronglyConnectedComponent::new(graph);
+        <span class="kw">let </span><span class="kw-2">mut </span>scc = StronglyConnectedComponent::new(graph);
         <span class="macro">assert_eq!</span>(scc.scc(), <span class="number">4</span>);
-        <span class="macro">assert_eq!</span>(scc.component_ids, <span class="macro">vec!</span>[<span class="number">3</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">0</span>]);
+        <span class="macro">assert_eq!</span>(scc.topological_ranks, <span class="macro">vec!</span>[<span class="number">3</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">0</span>]);
     }
 }
 </code></pre></div></section></main></body></html>
