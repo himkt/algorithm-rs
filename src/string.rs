@@ -35,7 +35,7 @@ pub fn z(s: &str) -> Vec<usize> {
 
 #[cfg(test)]
 mod test_z_algorithm {
-    use crate::string::z::z;
+    use crate::string::z;
 
     #[test]
     fn it_works() {
