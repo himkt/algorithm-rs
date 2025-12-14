@@ -193,9 +193,9 @@ impl SegmentTree {
 
 #[cfg(test)]
 mod test_segment_tree {
-    use crate::tree::segment_tree::Mode;
-    use crate::tree::segment_tree::Op;
-    use crate::tree::segment_tree::SegmentTree;
+    use crate::tree::Mode;
+    use crate::tree::Op;
+    use crate::tree::SegmentTree;
 
     #[test]
     fn it_works_raq() {

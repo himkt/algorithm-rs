@@ -1,5 +1,59 @@
 use std::{collections::VecDeque, ops::Range};
 
+pub struct Bitset<T: Copy> {
+    curr: usize,
+    array: Vec<T>,
+    len: usize,
+}
+
+impl<T: Copy> Iterator for Bitset<T> {
+    type Item = Vec<T>;
+
+    fn next(&mut self) -> Option<Vec<T>> {
+        if self.curr == (1 << self.len) {
+            return None;
+        }
+
+        let mut ret = Vec::<T>::new();
+        for (i, &ai) in self.array.iter().enumerate() {
+            if (self.curr >> i & 1) == 1 {
+                ret.push(ai);
+            }
+        }
+
+        self.curr += 1;
+        Some(ret)
+    }
+}
+
+pub fn bitset<T: Copy>(a: Vec<T>) -> Bitset<T> {
+    let len = a.len();
+    Bitset {
+        curr: 0,
+        array: a,
+        len,
+    }
+}
+
+#[cfg(test)]
+mod test_bitset {
+    use crate::collection::bitset;
+
+    #[test]
+    fn it_works() {
+        let mut bitset = bitset(vec![1, 2, 3]);
+        assert_eq!(bitset.next(), Some(vec![]));
+        assert_eq!(bitset.next(), Some(vec![1]));
+        assert_eq!(bitset.next(), Some(vec![2]));
+        assert_eq!(bitset.next(), Some(vec![1, 2]));
+        assert_eq!(bitset.next(), Some(vec![3]));
+        assert_eq!(bitset.next(), Some(vec![1, 3]));
+        assert_eq!(bitset.next(), Some(vec![2, 3]));
+        assert_eq!(bitset.next(), Some(vec![1, 2, 3]));
+        assert!(bitset.next().is_none());
+    }
+}
+
 #[derive(Debug)]
 pub enum Item {
     Pre(usize),
@@ -125,7 +179,7 @@ impl Iterator for CollectionIter<'_> {
 
 #[cfg(test)]
 mod test_iterator {
-    use crate::collection::iterator::CollectionIter;
+    use crate::collection::CollectionIter;
     fn check(iterator: CollectionIter, num_expected: usize, expected: Vec<Vec<usize>>) {
         let mut num_count = 0;
         for perm in iterator {
@@ -136,7 +190,7 @@ mod test_iterator {
     }
 
     mod with_duplication {
-        use crate::collection::iterator::{test_iterator::check, CollectionIter};
+        use crate::collection::{test_iterator::check, CollectionIter};
 
         #[test]
         fn it_works_permutation() {
@@ -199,7 +253,7 @@ mod test_iterator {
     }
 
     mod without_duplication {
-        use crate::collection::iterator::{test_iterator::check, CollectionIter};
+        use crate::collection::{test_iterator::check, CollectionIter};
 
         #[test]
         fn it_works_permutation() {
@@ -244,5 +298,129 @@ mod test_iterator {
             let expected = vec![vec![1, 2, 4], vec![1, 2, 8], vec![1, 4, 8], vec![2, 4, 8]];
             check(iterator, num_expected, expected);
         }
+    }
+}
+
+#[macro_export]
+macro_rules! ndarray {
+    // ndarray!(val; *shape)
+    ($x:expr;) => { $x };
+    ($x:expr; $size:expr $( , $rest:expr )*) => {
+        vec![ndarray!($x; $($rest),*); $size]
+    };
+}
+
+#[cfg(test)]
+mod test_ndarray {
+
+    #[test]
+    fn it_works() {
+        // ndarray!(val; 1) => [val]
+        assert_eq!(ndarray!(5; 1), vec![5]);
+        // ndarray!(val; 1, 2) => [[val, val]]
+        assert_eq!(ndarray!(5; 1, 2), vec![vec![5, 5]]);
+        // ndarray!(val; 2, 1) => [[val], [val]]
+        assert_eq!(ndarray!(5; 2, 1), vec![vec![5], vec![5]]);
+    }
+}
+
+#[derive(Debug, Clone)]
+pub struct UnionFind {
+    parents: Vec<usize>,
+    sizes: Vec<usize>,
+}
+
+#[allow(clippy::needless_range_loop)]
+impl UnionFind {
+    pub fn new(n: usize) -> Self {
+        Self {
+            parents: (0..n).collect(),
+            sizes: vec![1usize; n],
+        }
+    }
+
+    pub fn parent(&mut self, x: usize) -> usize {
+        if self.parents[x] == x {
+            x
+        } else {
+            self.parents[x] = self.parent(self.parents[x]);
+            self.parents[x]
+        }
+    }
+
+    pub fn unite(&mut self, x: usize, y: usize) {
+        let mut px = self.parent(x);
+        let mut py = self.parent(y);
+
+        if px == py {
+            return;
+        }
+
+        if self.sizes[px] < self.sizes[py] {
+            std::mem::swap(&mut px, &mut py);
+        }
+
+        self.sizes[px] += self.sizes[py];
+        self.parents[py] = px;
+    }
+
+    pub fn size(&mut self, x: usize) -> usize {
+        let x = self.parent(x);
+        self.sizes[x]
+    }
+
+    pub fn same(&mut self, x: usize, y: usize) -> bool {
+        let px = self.parent(x);
+        let py = self.parent(y);
+        px == py
+    }
+}
+
+#[cfg(test)]
+mod test_union_find {
+    use crate::collection::UnionFind;
+
+    // helper function
+    fn sizes(uf: &mut UnionFind, n: usize) -> Vec<usize> {
+        (0..n).map(|i| uf.size(i)).collect()
+    }
+
+    #[test]
+    fn it_works() {
+        let n: usize = 5;
+        let mut uf = UnionFind::new(n);
+        assert_eq!(sizes(&mut uf, n), [1, 1, 1, 1, 1]);
+
+        uf.unite(0, 1);
+        assert_eq!(uf.parent(0), uf.parent(1));
+        assert!(uf.same(0, 1));
+        assert_ne!(uf.parent(0), uf.parent(2));
+        assert!(!uf.same(0, 2));
+        assert_eq!(sizes(&mut uf, n), [2, 2, 1, 1, 1]);
+
+        // check noop
+        uf.unite(0, 1);
+        assert_eq!(uf.parent(0), uf.parent(1));
+        assert!(uf.same(0, 1));
+        assert_ne!(uf.parent(0), uf.parent(2));
+        assert!(!uf.same(0, 2));
+        assert_eq!(sizes(&mut uf, n), [2, 2, 1, 1, 1]);
+
+        uf.unite(0, 2);
+        assert_eq!(uf.parent(0), uf.parent(2));
+        assert!(uf.same(0, 2));
+        assert_eq!(sizes(&mut uf, n), [3, 3, 3, 1, 1]);
+
+        uf.unite(3, 4);
+        assert_ne!(uf.parent(0), uf.parent(3));
+        assert!(!uf.same(0, 3));
+        assert_eq!(sizes(&mut uf, n), [3, 3, 3, 2, 2]);
+
+        uf.unite(0, 3);
+        assert_eq!(uf.parent(0), uf.parent(3));
+        assert!(uf.same(0, 3));
+        assert_eq!(uf.parent(0), uf.parent(4));
+        assert!(uf.same(0, 4));
+        assert_eq!(sizes(&mut uf, n), [5, 5, 5, 5, 5]);
     }
 }
