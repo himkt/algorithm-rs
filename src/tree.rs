@@ -68,32 +68,6 @@ impl SegmentTree {
         ret
     }
 
-    fn range_query_recursive(
-        &self,
-        op: &Op,
-        ql: usize,
-        qr: usize,
-        sl: usize,
-        sr: usize,
-        pos: usize,
-    ) -> i64 {
-        if qr <= sl || sr <= ql {
-            return SegmentTree::default(op);
-        }
-        if ql <= sl && sr <= qr {
-            return self.data[pos];
-        }
-
-        let sm = (sl + sr) / 2;
-        let lv = self.range_query_recursive(op, ql, qr, sl, sm, pos * 2);
-        let rv = self.range_query_recursive(op, ql, qr, sm, sr, pos * 2 + 1);
-        match op {
-            Op::Add => lv + rv,
-            Op::Max => lv.max(rv),
-            Op::Min => lv.min(rv),
-        }
-    }
-
     pub fn get_range(&self, l: usize, r: usize) -> i64 {
         if let Mode::RangeGet(op) = &self.mode {
             self.range_query_recursive(op, l, r, 0, SegmentTree::SEQ_LEN, 1)
@@ -152,6 +126,32 @@ impl SegmentTree {
             }
         } else {
             panic!("Mode {:?} is not supported.", &self.mode);
+        }
+    }
+
+    fn range_query_recursive(
+        &self,
+        op: &Op,
+        ql: usize,
+        qr: usize,
+        sl: usize,
+        sr: usize,
+        pos: usize,
+    ) -> i64 {
+        if qr <= sl || sr <= ql {
+            return SegmentTree::default(op);
+        }
+        if ql <= sl && sr <= qr {
+            return self.data[pos];
+        }
+
+        let sm = (sl + sr) / 2;
+        let lv = self.range_query_recursive(op, ql, qr, sl, sm, pos * 2);
+        let rv = self.range_query_recursive(op, ql, qr, sm, sr, pos * 2 + 1);
+        match op {
+            Op::Add => lv + rv,
+            Op::Max => lv.max(rv),
+            Op::Min => lv.min(rv),
         }
     }
 }
