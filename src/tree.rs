@@ -129,15 +129,7 @@ impl SegmentTree {
         }
     }
 
-    fn range_query_recursive(
-        &self,
-        op: &Op,
-        ql: usize,
-        qr: usize,
-        sl: usize,
-        sr: usize,
-        pos: usize,
-    ) -> i64 {
+    fn range_query_recursive(&self, op: &Op, ql: usize, qr: usize, sl: usize, sr: usize, pos: usize) -> i64 {
         if qr <= sl || sr <= ql {
             return SegmentTree::default(op);
         }

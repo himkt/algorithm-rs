@@ -249,9 +249,7 @@ impl SequentialPrimeFactorization {
             i += 1;
         }
 
-        Self {
-            smallest_prime_factors,
-        }
+        Self { smallest_prime_factors }
     }
 
     pub fn factorize(&self, mut x: usize) -> Vec<usize> {

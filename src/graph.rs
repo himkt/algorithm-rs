@@ -51,10 +51,7 @@ impl Graph {
     }
 
     pub fn connect_with_residual(&mut self, from: usize, to: usize, weight: usize) {
-        assert!(
-            self.directed,
-            "connect_with_residual only works in directed graph."
-        );
+        assert!(self.directed, "connect_with_residual only works in directed graph.");
 
         self.graph[from].push((to, weight));
         self.out_degrees[from] += 1;
@@ -93,14 +90,7 @@ mod test_graph {
         graph.connect(1, 0, 10);
         graph.connect(3, 4, 3);
 
-        let expected = vec![
-            vec![(1, 1)],
-            vec![(0, 10)],
-            vec![(5, 1)],
-            vec![(4, 3)],
-            vec![],
-            vec![],
-        ];
+        let expected = vec![vec![(1, 1)], vec![(0, 10)], vec![(5, 1)], vec![(4, 3)], vec![], vec![]];
         assert_eq!(graph.graph, expected);
 
         assert!(graph.connected(0, 1));
@@ -260,7 +250,7 @@ impl DepthFirstSearch {
 
         while let Some(node_type) = stack.pop_front() {
             match node_type {
-                NodeType::Forward(u)  => {
+                NodeType::Forward(u) => {
                     for &(v, _) in self.graph.graph[u].iter() {
                         if self.seen[v] {
                             continue;
@@ -408,10 +398,7 @@ mod test_dijkstra {
 
         let mut dijkstra = Dijkstra::new(graph);
         dijkstra.search(0);
-        assert_eq!(
-            dijkstra.dist,
-            vec![0, 1, 6, 3, 5, 8, 10, Dijkstra::INF, Dijkstra::INF]
-        );
+        assert_eq!(dijkstra.dist, vec![0, 1, 6, 3, 5, 8, 10, Dijkstra::INF, Dijkstra::INF]);
 
         assert_eq!(dijkstra.shortest_path(0, 3), vec![(0, 1), (1, 3)]);
         assert_eq!(dijkstra.shortest_path(0, 8), vec![]);
@@ -574,11 +561,7 @@ impl LowestCommonAncestor {
         let n = graph.n;
         let parents = vec![vec![Self::ROOT; n]; Self::LOGV];
         let depth = vec![Self::ROOT; n];
-        Self {
-            parents,
-            depth,
-            graph,
-        }
+        Self { parents, depth, graph }
     }
 
     pub fn init(&mut self) {
