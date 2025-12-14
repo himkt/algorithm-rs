@@ -1,3 +1,4 @@
+/// Returns the smallest index on [l, r) satisfying the condition.
 pub fn lower_bound(range: std::ops::Range<usize>, prop: &dyn Fn(usize) -> bool) -> Option<usize> {
     if prop(range.start) {
         return Some(range.start);
@@ -36,6 +37,7 @@ mod test_lower_bound {
     }
 }
 
+/// Returns the largest index on [l, r) satisfying the condition.
 pub fn upper_bound(range: std::ops::Range<usize>, prop: &dyn Fn(usize) -> bool) -> Option<usize> {
     if !prop(range.start) {
         return None;
