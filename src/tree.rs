@@ -53,7 +53,7 @@ impl SegmentTree {
         if let Mode::RangeUpdate(op) = &self.mode {
             let operator = match op {
                 Op::Add => |ret: &mut i64, v: i64| *ret += v,
-                _ => panic!(),
+                _ => panic!("Operator {:?} is not supported.", op),
             };
 
             operator(&mut ret, self.data[index]);
@@ -62,7 +62,7 @@ impl SegmentTree {
                 operator(&mut ret, self.data[index]);
             }
         } else {
-            panic!("Unsupported");
+            panic!("Mode {:?} is not supported.", &self.mode);
         }
 
         ret
@@ -80,38 +80,25 @@ impl SegmentTree {
         if qr <= sl || sr <= ql {
             return SegmentTree::default(op);
         }
-
         if ql <= sl && sr <= qr {
             return self.data[pos];
-        }
-
-        fn add(l: i64, r: i64) -> i64 {
-            l + r
-        }
-        fn max(l: i64, r: i64) -> i64 {
-            l.max(r)
-        }
-        fn min(l: i64, r: i64) -> i64 {
-            l.min(r)
         }
 
         let sm = (sl + sr) / 2;
         let lv = self.range_query_recursive(op, ql, qr, sl, sm, pos * 2);
         let rv = self.range_query_recursive(op, ql, qr, sm, sr, pos * 2 + 1);
-        let operate = match op {
-            Op::Add => add,
-            Op::Max => max,
-            Op::Min => min,
-        };
-        operate(lv, rv)
+        match op {
+            Op::Add => lv + rv,
+            Op::Max => lv.max(rv),
+            Op::Min => lv.min(rv),
+        }
     }
 
-    /// Run a range query.
     pub fn get_range(&self, l: usize, r: usize) -> i64 {
         if let Mode::RangeGet(op) = &self.mode {
             self.range_query_recursive(op, l, r, 0, SegmentTree::SEQ_LEN, 1)
         } else {
-            panic!("Unsupported");
+            panic!("Mode {:?} is not supported.", &self.mode);
         }
     }
 
@@ -119,45 +106,23 @@ impl SegmentTree {
     pub fn update_one(&mut self, mut index: usize, value: i64) {
         index += SegmentTree::SEQ_LEN;
 
-        fn add_assign_one(ret: &mut i64, v: i64) {
-            *ret += v;
-        }
-        fn max_assign_one(ret: &mut i64, v: i64) {
-            *ret = v;
-        }
-        fn min_assign_one(ret: &mut i64, v: i64) {
-            *ret = v;
-        }
-        fn add_assign(ret: &mut i64, l: i64, r: i64) {
-            *ret = l + r;
-        }
-        fn max_assign(ret: &mut i64, l: i64, r: i64) {
-            *ret = l.max(r);
-        }
-        fn min_assign(ret: &mut i64, l: i64, r: i64) {
-            *ret = l.min(r);
-        }
-
         if let Mode::RangeGet(op) = &self.mode {
-            let operate_and_assign_one = match op {
-                Op::Add => add_assign_one,
-                Op::Max => max_assign_one,
-                Op::Min => min_assign_one,
-            };
-            operate_and_assign_one(&mut self.data[index], value);
-
-            let operate_and_assign = match op {
-                Op::Add => add_assign,
-                Op::Max => max_assign,
-                Op::Min => min_assign,
-            };
-
+            match op {
+                Op::Add => self.data[index] += value,
+                _ => self.data[index] = value,
+            }
             while index > 0 {
                 index /= 2;
                 let lv = self.data[index * 2];
                 let rv = self.data[index * 2 + 1];
-                operate_and_assign(&mut self.data[index], lv, rv);
+                match op {
+                    Op::Add => self.data[index] = lv + rv,
+                    Op::Max => self.data[index] = lv.max(rv),
+                    Op::Min => self.data[index] = lv.min(rv),
+                };
             }
+        } else {
+            panic!("Mode {:?} is not supported.", &self.mode);
         }
     }
 
@@ -186,7 +151,7 @@ impl SegmentTree {
                 r /= 2;
             }
         } else {
-            panic!("Unsupported");
+            panic!("Mode {:?} is not supported.", &self.mode);
         }
     }
 }
