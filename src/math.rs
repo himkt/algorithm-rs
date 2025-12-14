@@ -216,11 +216,13 @@ mod test_modinv {
 
     #[test]
     fn it_works_prime() {
+        // 10^-1 mod 7
         assert_eq!(modinv(10, 7), inv_euler(10, 7));
     }
 
     #[test]
     fn it_works_composite() {
+        // 10^-1 mod 2019
         assert_eq!(modinv(10, 2019), inv_simple(10, 2019));
     }
 }

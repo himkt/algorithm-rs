@@ -434,6 +434,11 @@ impl EulerTour {
         Self { graph, l, r, t: 1 }
     }
 
+    /// Euler tour entrypoint that returns two vectors `(&l, &r)`.
+    /// Note that timestamp starts from `1`.
+    ///
+    /// - `l`: vector indicates the timestamp that visits a node `u` at the first time.
+    /// - `r`: vector indicates the timestamp that visits a node `u` at the last time.
     pub fn traverse(&mut self, root: usize) -> (&[usize], &[usize]) {
         self._dfs(root, None);
 

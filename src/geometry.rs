@@ -1,6 +1,7 @@
 use std::collections::VecDeque;
 use std::ops::{Add, Div, Mul, Sub};
 
+// FIXME (himkt): Eq for Point<f64> won't work as expected.
 #[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
 pub struct Point<T>(pub T, pub T);
 
@@ -72,6 +73,7 @@ pub trait LineAPI<T> {
     fn contains_point(&self, p: Point<T>) -> bool;
 }
 
+// i64
 impl LineAPI<i64> for Line<i64> {
     fn distance(&self, p: Point<i64>) -> f64 {
         let v1 = self.1 - self.0;
@@ -88,6 +90,7 @@ impl LineAPI<i64> for Line<i64> {
     }
 }
 
+// f64
 impl LineAPI<f64> for Line<f64> {
     fn distance(&self, p: Point<f64>) -> f64 {
         let v1 = self.1 - self.0;
@@ -139,6 +142,7 @@ mod test_line {
         let expected = (d_truth * 1_000_000_000.0) as i64;
         assert_eq!(result, expected);
 
+        // contain
         assert!(line.contains_point(Point(4, 6)));
         assert!(line.contains_point(Point(-2, -3)));
         assert!(!line.contains_point(Point(1, 1)));

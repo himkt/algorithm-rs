@@ -195,7 +195,7 @@ mod test_iterator {
         #[test]
         fn it_works_permutation() {
             let data = vec![1, 2, 4];
-            let num_expected = 27;
+            let num_expected = 27; // n^3
             let iterator = CollectionIter::permutation(&data, true);
             let expected = vec![
                 vec![1, 1, 1],
@@ -233,7 +233,7 @@ mod test_iterator {
         fn it_works_combination() {
             let k: usize = 3;
             let data = vec![1, 2, 4];
-            let num_expected = 10;
+            let num_expected = 10; // c(n + k - 1, k)
             let iterator = CollectionIter::combination(&data, k, true);
 
             let expected = vec![
@@ -258,7 +258,7 @@ mod test_iterator {
         #[test]
         fn it_works_permutation() {
             let data = vec![1, 2, 4, 8];
-            let num_expected = 24;
+            let num_expected = 24; // 4!
             let iterator = CollectionIter::permutation(&data, false);
             let expected = vec![
                 vec![1, 2, 4, 8],
@@ -292,7 +292,7 @@ mod test_iterator {
         #[test]
         fn it_works_combination() {
             let k: usize = 3;
-            let num_expected = 4;
+            let num_expected = 4; // c(n, k)
             let data = vec![1, 2, 4, 8];
             let iterator = CollectionIter::combination(&data, k, false);
             let expected = vec![vec![1, 2, 4], vec![1, 2, 8], vec![1, 4, 8], vec![2, 4, 8]];
@@ -303,6 +303,7 @@ mod test_iterator {
 
 #[macro_export]
 macro_rules! ndarray {
+    // ndarray!(val; *shape)
     ($x:expr;) => { $x };
     ($x:expr; $size:expr $( , $rest:expr )*) => {
         vec![ndarray!($x; $($rest),*); $size]
@@ -314,8 +315,11 @@ mod test_ndarray {
 
     #[test]
     fn it_works() {
+        // ndarray!(val; 1) => [val]
         assert_eq!(ndarray!(5; 1), vec![5]);
+        // ndarray!(val; 1, 2) => [[val, val]]
         assert_eq!(ndarray!(5; 1, 2), vec![vec![5, 5]]);
+        // ndarray!(val; 2, 1) => [[val], [val]]
         assert_eq!(ndarray!(5; 2, 1), vec![vec![5], vec![5]]);
     }
 }
@@ -376,6 +380,7 @@ impl UnionFind {
 mod test_union_find {
     use crate::collection::UnionFind;
 
+    // helper function
     fn sizes(uf: &mut UnionFind, n: usize) -> Vec<usize> {
         (0..n).map(|i| uf.size(i)).collect()
     }
@@ -393,6 +398,7 @@ mod test_union_find {
         assert!(!uf.same(0, 2));
         assert_eq!(sizes(&mut uf, n), [2, 2, 1, 1, 1]);
 
+        // check noop
         uf.unite(0, 1);
         assert_eq!(uf.parent(0), uf.parent(1));
         assert!(uf.same(0, 1));

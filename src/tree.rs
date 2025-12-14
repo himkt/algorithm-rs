@@ -17,6 +17,8 @@ pub enum Op {
     Add,
 }
 
+// Segment tree implementation. All operations are 0-origin.
+// Note that a half-open interval [l, r) is used as a range representation.
 impl SegmentTree {
     const SEQ_LEN: usize = 1 << 20;
     const MAX: i64 = 1_000_000_000_000;
@@ -34,6 +36,7 @@ impl SegmentTree {
         }
     }
 
+    /// Return an appropriate default value for the given operation.
     pub fn default(op: &Op) -> i64 {
         match op {
             Op::Add => 0,
@@ -42,6 +45,7 @@ impl SegmentTree {
         }
     }
 
+    /// Get an i-th element of from the tree.
     pub fn get_one(&mut self, mut index: usize) -> i64 {
         index += SegmentTree::SEQ_LEN;
         let mut ret = 0;
@@ -102,6 +106,7 @@ impl SegmentTree {
         operate(lv, rv)
     }
 
+    /// Run a range query.
     pub fn get_range(&self, l: usize, r: usize) -> i64 {
         if let Mode::RangeGet(op) = &self.mode {
             self.range_query_recursive(op, l, r, 0, SegmentTree::SEQ_LEN, 1)
@@ -110,6 +115,7 @@ impl SegmentTree {
         }
     }
 
+    /// Update an i-th element to `value`.
     pub fn update_one(&mut self, mut index: usize, value: i64) {
         index += SegmentTree::SEQ_LEN;
 
@@ -155,6 +161,7 @@ impl SegmentTree {
         }
     }
 
+    /// Add `value` to the range `[l, r)`.
     pub fn update_range(&mut self, mut l: usize, mut r: usize, value: i64) {
         if let Mode::RangeUpdate(op) = &self.mode {
             let operate_and_assign_one = match op {
