@@ -179,11 +179,7 @@ pub fn convex_hull(ps: Vec<(i64, i64)>) -> Vec<(i64, i64)> {
         k += 1;
     }
 
-    let mut ret: Vec<(i64, i64)> = deque
-        .into_iter()
-        .take(k - 1)
-        .map(|pair| (pair.0, pair.1))
-        .collect();
+    let mut ret: Vec<(i64, i64)> = deque.into_iter().take(k - 1).map(|pair| (pair.0, pair.1)).collect();
 
     ret.sort_unstable();
     ret

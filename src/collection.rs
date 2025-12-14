@@ -28,11 +28,7 @@ impl<T: Copy> Iterator for Bitset<T> {
 
 pub fn bitset<T: Copy>(a: Vec<T>) -> Bitset<T> {
     let len = a.len();
-    Bitset {
-        curr: 0,
-        array: a,
-        len,
-    }
+    Bitset { curr: 0, array: a, len }
 }
 
 #[cfg(test)]

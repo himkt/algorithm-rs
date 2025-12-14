@@ -15,7 +15,7 @@ pub fn lower_bound(range: std::ops::Range<usize>, prop: &dyn Fn(usize) -> bool) 
     }
 
     match ok.eq(&range.end) {
-        true  => None,
+        true => None,
         false => Some(ok),
     }
 }
