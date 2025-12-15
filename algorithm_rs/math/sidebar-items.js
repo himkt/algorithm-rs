@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":["com","eratosthenes","gcd","modcom","modinv","modpow","prime_factorization"]};
+window.SIDEBAR_ITEMS = {"fn":["com","eratosthenes_sieve","gcd","modcom","modinv","modpow","phi","prime_factorize"],"struct":["SequentialPrimeFactorization"]};

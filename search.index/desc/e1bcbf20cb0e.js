@@ -1,0 +1,1 @@
+rd_("AoReturns the argument unchanged.000000000000000000000BaCalls <code>U::from(self)</code>.000000000000000000000EaEuler tour entrypoint that returns two vectors <code>(&amp;l, &amp;r)</code>. \xe2\x80\xa6CgReturns the smallest index on [l, r) satisfying the \xe2\x80\xa6CfReturns the largest index on [l, r) satisfying the \xe2\x80\xa6")

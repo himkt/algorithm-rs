@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":["lower_bound","upper_bound"]};
+window.SIDEBAR_ITEMS = {"fn":["lower_bound","upper_bound"]};

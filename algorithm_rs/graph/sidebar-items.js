@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":["bfs","dfs","dijkstra","euler_tour","ford_fullkerson","graph","lca","lowlink","scc","topological_sort"]};
+window.SIDEBAR_ITEMS = {"enum":["NodeType"],"struct":["BreadthFirstSearch","DepthFirstSearch","Dijkstra","EulerTour","FordFullkerson","Graph","LowestCommonAncestor","Lowlink","StronglyConnectedComponent","TopologicalSort"]};
