@@ -202,8 +202,7 @@ where
 
     pub fn get(&self, mut index: usize) -> T {
         index += Self::SEQ_LEN;
-        let mut ret = self.identity();
-        ret = self.operate(ret, self.data[index].clone());
+        let mut ret = self.operate(self.identity(), self.data[index].clone());
         while index > 1 {
             index /= 2;
             ret = self.operate(ret, self.data[index].clone());
