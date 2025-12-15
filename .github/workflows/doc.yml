@@ -1,4 +1,4 @@
-name: GitHub Pages
+name: CD
 
 on:
   push:
@@ -10,19 +10,13 @@ env:
 
 jobs:
   deploy:
-    runs-on: ubuntu-20.04
-
+    runs-on: ubuntu-latest
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
-
     steps:
-      - uses: actions/checkout@v3
-
-      - name: Run doc --no-deps
-        run: cargo doc
-
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3
+      - uses: actions/checkout@v6
+      - run: cargo doc
+      - uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./target/doc
